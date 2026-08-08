@@ -35,6 +35,11 @@
     --color-accent-dim: #065f46;
     --color-on-accent: #04120c;
 
+    /* G8Suite's own indigo (#3b5998), lightened for this dark ground. It names
+       the parent brand and nothing else — emerald is G8Deck's mark and already
+       means "healthy", so it must never be borrowed to label another product. */
+    --color-suite: #8ba3dd;
+
     /* State — hue is always paired with a label and a dot shape. */
     --color-ok: #10b981;
     --color-run: #38bdf8;
@@ -53,6 +58,10 @@
     :root {
         color-scheme: dark;
         --spine: 0px;
+        /* Lets `height: auto` be a transition endpoint, which is what makes the
+           FAQ's <details> open to its own height instead of snapping. Ignored
+           by browsers that do not support it — those simply snap. */
+        interpolate-size: allow-keywords;
     }
 
     @media (min-width: 1024px) {

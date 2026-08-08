@@ -4,6 +4,10 @@ import StatusPill from '../components/StatusPill.astro';
 import { footerLinks, site } from '../data/site';
 
 const year = new Date().getFullYear();
+
+/* Anything that leaves g8deck.app opens in its own tab — the in-page links are
+   all fragments, so a new tab would be wrong for them. */
+const isExternal = (href: string) => href.startsWith('http') || href.startsWith('mailto:');
 ---
 
 <footer class="border-line border-t">
@@ -15,9 +19,12 @@ const year = new Date().getFullYear();
                     {site.description}
                 </p>
                 <p class="mono-label text-idle mt-6">
-                    Console → <a href={site.consoleUrl} class="hover:text-accent transition-colors"
-                        >console.g8deck.app</a
-                    >
+                    A <a
+                        href={site.suite.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="text-suite hover:text-fg transition-colors">{site.suite.name}</a
+                    > product
                 </p>
             </div>
 
@@ -31,6 +38,12 @@ const year = new Date().getFullYear();
                                     <li>
                                         <a
                                             href={link.href}
+                                            target={isExternal(link.href) ? '_blank' : undefined}
+                                            rel={
+                                                isExternal(link.href)
+                                                    ? 'noopener noreferrer'
+                                                    : undefined
+                                            }
                                             class="text-muted hover:text-fg text-sm transition-colors"
                                         >
                                             {link.label}
@@ -49,7 +62,12 @@ const year = new Date().getFullYear();
             class="content border-line mt-14 flex flex-wrap items-center gap-x-8 gap-y-3 border-t pt-6"
         >
             <p class="mono-label text-idle">
-                {site.company.name.toUpperCase()} · {site.company.country.toUpperCase()}
+                <a
+                    href={site.company.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="hover:text-fg transition-colors">{site.company.name.toUpperCase()}</a
+                > · {site.company.country.toUpperCase()}
             </p>
             <p class="mono-label text-idle">© {year}</p>
             <p class="mono-label text-idle ml-auto">Platform</p>

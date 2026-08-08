@@ -31,6 +31,32 @@ import { faqs } from '../../data/site';
     </div>
 </Section>
 
+<style>
+    /*
+     * A native <details> snaps open. `::details-content` is the box that grows,
+     * so it is the one handle that animates the disclosure without JavaScript —
+     * `allow-discrete` keeps the content rendered for the length of the
+     * transition instead of being switched off on the first frame, and
+     * `interpolate-size` (set on :root) is what allows `auto` as an endpoint.
+     *
+     * Engines without the pseudo-element ignore the block and keep the instant
+     * open: the answer is never hidden, only un-animated.
+     */
+    @media (prefers-reduced-motion: no-preference) {
+        details::details-content {
+            block-size: 0;
+            overflow: hidden;
+            transition:
+                block-size 220ms ease,
+                content-visibility 220ms allow-discrete;
+        }
+
+        details[open]::details-content {
+            block-size: auto;
+        }
+    }
+</style>
+
 <script
     type="application/ld+json"
     is:inline

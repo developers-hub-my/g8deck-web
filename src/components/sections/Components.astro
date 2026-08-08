@@ -10,7 +10,7 @@ const total = componentMatrix.reduce((n, group) => n + group.items.length, 0);
     <SectionHead
         eyebrow="Breadth"
         title="Everything below your container, accounted for."
-        lede={`${total} component types provision through one contract, and ${providers.length} provider drivers place them. Adding a component or a provider is a new driver, not a change to the core.`}
+        lede={`${total} component types provision through one contract, and ${providers.shipped.length} provider drivers place them today. Adding a component or a provider is a new driver, not a change to the core.`}
     />
 
     <div class="mt-14 space-y-px">
@@ -43,8 +43,19 @@ const total = componentMatrix.reduce((n, group) => n + group.items.length, 0);
         </p>
         <ul class="mt-6 flex flex-wrap gap-1.5">
             {
-                providers.map((provider) => (
-                    <li class="border-line-strong/60 rounded-[2px] border px-2.5 py-1.5 font-mono text-xs">
+                providers.shipped.map((provider) => (
+                    <li class="border-accent/40 text-fg rounded-[2px] border px-2.5 py-1.5 font-mono text-xs">
+                        {provider}
+                    </li>
+                ))
+            }
+        </ul>
+
+        <p class="mono-label text-idle mt-8">Modelled, driver in progress</p>
+        <ul class="mt-4 flex flex-wrap gap-1.5">
+            {
+                providers.modelled.map((provider) => (
+                    <li class="border-line/80 text-idle rounded-[2px] border border-dashed px-2.5 py-1.5 font-mono text-xs">
                         {provider}
                     </li>
                 ))

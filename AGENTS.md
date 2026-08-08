@@ -47,9 +47,24 @@ scripts/                  one-off generators; their output is committed
 - **Colour means state.** Emerald = healthy/primary, cyan = in flight, slate =
   pending, rose = failed, amber = warning. Never use a state colour decoratively.
   The focus ring is cyan on purpose — emerald already means "healthy".
-- **Numbers must be true.** The pipeline is 20 steps, there are 13 provider
-  drivers and 63 component types, all derived from `platform/g8deck-app`. If the
-  product changes, change `site.ts` — do not round for effect.
+- **Nothing on the site that is not in the app.** Every claim — a number, an
+  integration, a supported engine, a deployment mode — must be checkable in
+  `platform/g8deck-app` before it is written. Verify against code, not against
+  the app's own `CLAUDE.md`: that file describes the intended product and runs
+  ahead of it (it lists Oracle and 14 provider types; the code has neither).
+  Count the enum cases, the driver directories, the seeder rows. An
+  implementation named `Fake*` is a test double and does not count as shipped.
+- **Numbers must be true.** The pipeline is 20 steps (`DeploymentPipeline::defaultSteps()`),
+  63 component types (`ComponentTypeSeeder`), 4 provider drivers
+  (`app/Services/Infra/Drivers`, less `Fake`), 11 SOC 2 controls
+  (`DatabaseComplianceReporter`). If the product changes, change `site.ts` — do
+  not round for effect.
+- **Roadmap is labelled as roadmap.** Where the site names something unbuilt —
+  the ten provider types with no driver — it sits under its own heading, in
+  `text-idle` with a dashed border, never mixed in with what ships today.
+- **`--color-suite` is G8Suite's indigo**, used only to name the parent brand.
+  Emerald is G8Deck's own mark and already means "healthy"; it must never label
+  another product.
 - Every animation is wrapped in a `prefers-reduced-motion` guard, and no content
   is ever hidden behind one.
 - Section components take their rail coordinate via `<Section index label>`;

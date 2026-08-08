@@ -45,15 +45,6 @@ const rowLabel =
                                     column.featured ? 'border-t-accent' : 'border-t-line',
                                 ]}
                             >
-                                {/* The badge sits above the name, and its slot is
-                                    reserved in both columns, so the two mode names
-                                    share one baseline. */}
-                                <span
-                                    class="mono-label text-accent mb-3 block text-[0.5625rem] whitespace-nowrap sm:text-[0.6875rem]"
-                                    aria-hidden={!column.featured}
-                                >
-                                    {column.featured ? 'Most deployed' : ' '}
-                                </span>
                                 {/* nowrap: "On-Premise" otherwise breaks at its
                                     hyphen in a narrow column. */}
                                 <span class="h3 block text-[1.0625rem] whitespace-nowrap sm:text-[1.375rem]">

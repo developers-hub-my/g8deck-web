@@ -1,7 +1,7 @@
 ---
 import Section from '../Section.astro';
 import SectionHead from '../SectionHead.astro';
-import { compliance, ecosystem } from '../../data/site';
+import { compliance } from '../../data/site';
 ---
 
 <Section id="compliance" index="07" label="COMPLIANCE">
@@ -45,18 +45,4 @@ import { compliance, ecosystem } from '../../data/site';
             ))
         }
     </ul>
-
-    <div class="border-line mt-14 border-t pt-10">
-        <p class="mono-label text-accent">G8 ecosystem — optional, never mandatory</p>
-        <dl class="mt-6 grid gap-6 sm:grid-cols-3">
-            {
-                ecosystem.map((item) => (
-                    <div class="border-line/70 border-l pl-4">
-                        <dt class="font-semibold">{item.name}</dt>
-                        <dd class="text-muted mt-1.5 text-sm text-pretty">{item.role}</dd>
-                    </div>
-                ))
-            }
-        </dl>
-    </div>
 </Section>

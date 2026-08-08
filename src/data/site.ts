@@ -10,11 +10,16 @@ export const site = {
     consoleUrl: 'https://console.g8deck.app',
     tagline: 'Architecture-first infrastructure deployment',
     description:
-        'G8Deck turns an architecture blueprint into running infrastructure — provisioned, scaled, reconciled and audited on your own hardware, your cloud, or fully air-gapped.',
+        'G8Deck turns an architecture blueprint into running infrastructure — provisioned, scaled, reconciled and audited on your own hardware or your own cloud.',
     company: {
         name: 'Developers Hub Sdn Bhd',
         url: 'https://devhub.my',
         country: 'Malaysia',
+    },
+    /** G8Deck is one product in the G8Suite family. */
+    suite: {
+        name: 'G8Suite',
+        url: 'https://g8suite.com',
     },
     social: {
         github: 'https://github.com/developers-hub-my',
@@ -46,14 +51,17 @@ export const hero = {
     eyebrow: 'Architecture-first infrastructure platform',
     title: 'Describe the architecture.',
     titleAccent: 'Ship the infrastructure.',
-    body: 'G8Deck takes an architecture blueprint — three-tier, HA cluster, microservices — and provisions, operates, scales and reconciles the whole system on infrastructure you control. On-premise, cloud, or fully air-gapped. Any containerised workload, in any language.',
+    body: 'G8Deck takes an architecture blueprint — three-tier, HA cluster, microservices — and provisions, operates, scales and reconciles the whole system on infrastructure you control. On-premise or in your own cloud. Any containerised workload, in any language.',
     primaryCta: { label: 'Open the console', href: site.consoleUrl },
     secondaryCta: { label: 'See how it works', href: '#platform' },
+    /* Every figure here is counted from platform/g8deck-app, not estimated:
+       DeploymentPipeline::defaultSteps(), Services/Infra/Drivers (excluding the
+       Fake test double), ComponentTypeSeeder, DatabaseComplianceReporter. */
     stats: [
         { value: '20', label: 'pipeline steps, each idempotent' },
-        { value: '13', label: 'infrastructure provider drivers' },
         { value: '63', label: 'provisionable component types' },
-        { value: '0', label: 'external egress in air-gapped mode' },
+        { value: '4', label: 'provider drivers implemented' },
+        { value: '11', label: 'SOC 2 controls mapped to evidence' },
     ],
 } as const;
 
@@ -98,7 +106,7 @@ export const problems = [
     },
     {
         title: 'Data that cannot leave the country',
-        body: 'Regulated industry, government and GLC workloads cannot sit on foreign hosted control planes. G8Deck runs inside your perimeter — or with no perimeter exit at all.',
+        body: 'Regulated industry, government and GLC workloads cannot sit on foreign hosted control planes. G8Deck runs inside your perimeter, on infrastructure you already own.',
     },
 ] as const;
 
@@ -207,12 +215,12 @@ export const capabilities = [
     },
     {
         title: 'Secrets encrypted end to end',
-        body: 'AES-256-GCM at rest in an Infisical or HashiCorp Vault backend, rotated on schedule, resolved into workloads at deploy time and redacted out of every log line.',
+        body: 'Encrypted at rest in G8Deck’s own vault — no external secret service to stand up first — rotated on schedule, resolved into workloads at deploy time and redacted out of every log line.',
         tag: 'Security',
     },
     {
         title: 'Observability wired in, not bolted on',
-        body: 'Prometheus, Grafana, Loki, Tempo and Jaeger are provisioned as part of the deployment, with alert rules evaluated against health samples collected every minute.',
+        body: 'Prometheus, Grafana, Loki, Tempo and Jaeger provision as components of the deployment itself. The pipeline records scrape targets per deployment, and alert rules are evaluated against health samples collected every minute.',
         tag: 'Operations',
     },
     {
@@ -230,7 +238,17 @@ export const capabilities = [
 export const componentMatrix = [
     {
         group: 'Networking',
-        items: ['HAProxy', 'Nginx', 'Caddy', 'Traefik', 'Kong', 'Envoy', 'Cloudflare', 'WireGuard'],
+        items: [
+            'HAProxy',
+            'Nginx',
+            'Caddy',
+            'Traefik',
+            'Kong',
+            'Envoy',
+            'Keepalived',
+            'Cloudflare',
+            'WireGuard',
+        ],
     },
     {
         group: 'Compute',
@@ -257,7 +275,7 @@ export const componentMatrix = [
     },
     {
         group: 'Queue & stream',
-        items: ['Redis Queue', 'RabbitMQ', 'Kafka', 'NATS', 'ActiveMQ'],
+        items: ['RabbitMQ', 'Kafka', 'NATS', 'ActiveMQ'],
     },
     {
         group: 'Storage',
@@ -281,21 +299,27 @@ export const componentMatrix = [
     },
 ] as const;
 
-export const providers = [
-    'Bare metal',
-    'Proxmox',
-    'VMware',
-    'KVM',
-    'Kubernetes',
-    'k3s',
-    'Docker Swarm',
-    'Nomad',
-    'AWS',
-    'GCP',
-    'Azure',
-    'Hetzner',
-    'DigitalOcean',
-] as const;
+/**
+ * Only drivers that exist in app/Services/Infra/Drivers belong in `shipped` —
+ * the Fake driver is a test double and is not one of them. `modelled` are the
+ * remaining InfraProviderType cases: the registry accepts them, the driver is
+ * not written yet. Never move a name up a list before the driver lands.
+ */
+export const providers = {
+    shipped: ['Docker', 'Docker Swarm', 'Kubernetes', 'Proxmox'],
+    modelled: [
+        'Bare metal',
+        'VMware',
+        'KVM',
+        'k3s',
+        'Nomad',
+        'AWS',
+        'GCP',
+        'Azure',
+        'Hetzner',
+        'DigitalOcean',
+    ],
+} as const;
 
 /**
  * The two deployment modes, compared property by property. Rows read across:
@@ -312,7 +336,7 @@ export const deployment: {
     rows: [
         {
             label: 'Control plane',
-            values: ['Hosted by Developers Hub', 'Yours — Docker Compose or Helm'],
+            values: ['Hosted by Developers Hub', 'Yours — Docker Compose'],
         },
         {
             label: 'Workloads and data',
@@ -324,11 +348,11 @@ export const deployment: {
         },
         {
             label: 'Database',
-            values: ['Managed for you', 'MySQL, MariaDB, PostgreSQL, MSSQL or Oracle'],
+            values: ['Managed for you', 'MySQL, MariaDB, PostgreSQL or MSSQL'],
         },
         {
             label: 'Identity',
-            values: ['G8ID or your own IdP', 'LDAP / AD, Keycloak or G8ID'],
+            values: ['Built-in accounts, or SSO', 'Built-in accounts, or SSO'],
         },
         {
             label: 'Upgrades',
@@ -341,16 +365,12 @@ export const deployment: {
                 'Control plane never leaves your network',
             ],
         },
-        {
-            label: 'Air-gapped',
-            values: ['—', 'Supported'],
-        },
     ],
     commercial: {
         label: 'Commercial',
         values: ['Subscription + usage', 'Licence + support, per installation'],
     },
-    note: 'Air-gapped is not a third product — it is on-premise with the perimeter closed: internal registry, internal PKI, internal DNS, and no external egress. Whether you need it is a property of your environment, not of the platform.',
+    note: 'Both modes run the same build. On-premise adds nothing to operate that the platform does not already carry — the internal CA, the certificate issuer and the secret vault are all part of it, not services you stand up alongside it.',
 };
 
 export const compliance = {
@@ -360,12 +380,12 @@ export const compliance = {
         {
             code: 'CC6',
             name: 'Logical access',
-            detail: 'RBAC across four scopes, MFA required for every user, scheduled access reviews',
+            detail: 'Role-based access across organisation, team and user scopes, two-factor authentication, scheduled access reviews',
         },
         {
             code: 'CC7',
             name: 'System monitoring',
-            detail: 'Anomalous access alerting on an immutable audit log',
+            detail: 'Alert rules and incident records over an audited access trail',
         },
         {
             code: 'CC8',
@@ -380,28 +400,16 @@ export const compliance = {
         {
             code: 'C1',
             name: 'Confidentiality',
-            detail: 'AES-256-GCM at rest, enforced mTLS in transit',
+            detail: 'AES-256-CBC at rest, mTLS in transit from an internal CA the platform issues itself',
         },
     ],
     guarantees: [
-        'PDPA-aligned: data residency enforced per deployment, no cross-region leakage',
-        'CVE scanning with Trivy or Grype on every component image before it deploys',
-        'Audit records are append-only — no updates, no deletes, one year minimum retention',
+        'Evidence maps to SOC 2, ISO 27001, PDPA and GDPR from the same audit trail',
+        'Every pipeline step and drift detection is recorded as change-management evidence',
+        'Audit and activity records are retained for at least a year',
         'Secrets and PII scrubbed from logs before they are written',
     ],
 } as const;
-
-export const ecosystem = [
-    {
-        name: 'G8Stack',
-        role: 'Kong API gateway — deployed app routes registered and removed automatically.',
-    },
-    { name: 'G8ID', role: 'Keycloak — SSO for the console and OIDC for the apps you deploy.' },
-    {
-        name: 'Nadi',
-        role: 'Error monitoring — the agent is injected per workload when you want it.',
-    },
-] as const;
 
 interface PlanTier {
     name: string;
@@ -419,7 +427,7 @@ export const plans: {
 } = {
     title: 'Plans that scale with the estate, not the seat count',
     body: 'Every tier gets the full pipeline, every provider driver and the complete audit trail. What changes is quota, governance depth and the support you can call on.',
-    note: 'Pricing is being finalised and will be published in USD. On-premise deployments, air-gapped or not, are licensed per installation — talk to us for a quote in the meantime.',
+    note: 'Pricing is being finalised and will be published in USD. On-premise deployments are licensed per installation — talk to us for a quote in the meantime.',
     tiers: [
         {
             name: 'Starter',
@@ -447,8 +455,8 @@ export const plans: {
             for: 'Multi-project engineering organisations',
             points: [
                 'Per-team and per-user resource quotas',
-                'Observability stack provisioning',
-                'SSO via G8ID or your own IdP',
+                'Observability components provisioned with the deployment',
+                'SSO integration',
                 'Priority support with an SLA',
             ],
         },
@@ -456,9 +464,9 @@ export const plans: {
             name: 'Enterprise',
             for: 'Regulated, government and GLC estates',
             points: [
-                'On-premise licensing, air-gapped on request',
+                'On-premise licensing, per installation',
                 'SOC 2 evidence export and access reviews',
-                'HashiCorp Vault, LDAP / AD integration',
+                'Compliance evidence for ISO 27001, PDPA and GDPR',
                 'Named support engineer',
             ],
         },
@@ -480,15 +488,15 @@ export const faqs = [
     },
     {
         q: 'Which database does the platform itself need?',
-        a: 'Whichever you already run. G8Deck supports MySQL, MariaDB, PostgreSQL, MSSQL and Oracle, and behaves identically on all five. It also needs Redis, a secret vault, queue workers and a scheduler.',
+        a: 'Whichever you already run. G8Deck supports MySQL, MariaDB, PostgreSQL and MSSQL, and behaves identically on all four. It also needs queue workers and a scheduler; the secret vault is built in.',
     },
     {
-        q: 'How does air-gapped mode actually work?',
-        a: 'The control plane makes zero outbound external calls by default, the licence is activated offline, and DNS, PKI and the container registry are all internal. Nothing about the platform assumes it can reach the internet.',
+        q: 'Which providers can it actually provision today?',
+        a: 'Four drivers are implemented: Docker, Docker Swarm, Kubernetes and Proxmox. The other provider types are modelled in the registry — bare metal, VMware, KVM, k3s, Nomad, AWS, GCP, Azure, Hetzner and DigitalOcean — but their drivers are still being written, and we would rather say so than let you find out during an evaluation.',
     },
     {
         q: 'Can I keep my existing Kubernetes cluster?',
-        a: 'Yes. Kubernetes and k3s are provider drivers like any other, so an existing cluster becomes a target for deployments rather than something G8Deck replaces.',
+        a: 'Yes. Kubernetes is a provider driver like any other, so an existing cluster becomes a target for deployments rather than something G8Deck replaces.',
     },
 ] as const;
 
@@ -522,6 +530,7 @@ export const footerLinks = [
         heading: 'Company',
         links: [
             { label: 'Developers Hub', href: site.company.url },
+            { label: 'G8Suite', href: site.suite.url },
             { label: 'GitHub', href: site.social.github },
             { label: 'Sales enquiry', href: mailto('Sales enquiry') },
             { label: 'Support', href: mailto('Support request') },
