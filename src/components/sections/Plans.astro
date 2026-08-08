@@ -20,7 +20,9 @@ import { mailto, plans } from '../../data/site';
                         <h3 class="h3">{tier.name}</h3>
                         {tier.featured && <span class="mono-label text-accent">Popular</span>}
                     </div>
-                    <p class="text-muted mt-2 text-sm">{tier.for}</p>
+                    {/* Two lines reserved so the price row lines up across all
+                        four cards regardless of where the descriptor wraps. */}
+                    <p class="text-muted mt-2 min-h-[2.875rem] text-sm">{tier.for}</p>
 
                     {/* Stated rather than left blank: an empty price reads as hidden. */}
                     <p class="mt-5 flex items-baseline gap-2">
