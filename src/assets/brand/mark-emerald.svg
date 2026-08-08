@@ -1,0 +1,13 @@
+<!--
+  G8Deck — icon mark, fixed emerald-600 (#059669).
+  Identical geometry to mark.svg. Use where `currentColor` cannot resolve:
+  og:image composition, e-mail signatures, partner/procurement listings.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" role="img" aria-label="G8Deck">
+  <path
+    fill="#059669"
+    fill-rule="evenodd"
+    d="M14 6 h20 a8 8 0 0 1 8 8 v6 h-4 v6 h4 v8 a8 8 0 0 1 -8 8 h-20 a8 8 0 0 1 -8 -8 v-8 h4 v-6 h-4 v-6 a8 8 0 0 1 8 -8 z
+       M14 12 h20 a2 2 0 0 1 2 2 v4 a2 2 0 0 1 -2 2 h-20 a2 2 0 0 1 -2 -2 v-4 a2 2 0 0 1 2 -2 z
+       M14 26 h20 a2 2 0 0 1 2 2 v6 a2 2 0 0 1 -2 2 h-20 a2 2 0 0 1 -2 -2 v-6 a2 2 0 0 1 2 -2 z" />
+</svg>

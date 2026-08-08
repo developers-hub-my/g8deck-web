@@ -1,0 +1,53 @@
+---
+import Section from '../Section.astro';
+import SectionHead from '../SectionHead.astro';
+import EgressDiagram from '../EgressDiagram.astro';
+import { modes } from '../../data/site';
+---
+
+<Section id="deployment" index="06" label="DEPLOYMENT">
+    <SectionHead
+        eyebrow="Where it runs"
+        title="Three ways to run it. One control plane."
+        lede="The same platform, the same blueprints and the same pipeline in every mode. What changes is how much of it crosses your perimeter."
+    />
+
+    <div class="mt-14 grid gap-px lg:grid-cols-3">
+        {
+            modes.map((mode) => (
+                <article
+                    class:list={[
+                        'border-line bg-surface/40 flex flex-col border border-t-2 p-6',
+                        mode.featured ? 'border-t-accent' : 'border-t-transparent',
+                    ]}
+                >
+                    <div class="flex items-baseline justify-between gap-3">
+                        <h3 class="h3">{mode.name}</h3>
+                        {mode.featured && <span class="mono-label text-accent">Most deployed</span>}
+                    </div>
+                    <p class="text-muted mt-3 text-sm text-pretty">{mode.summary}</p>
+
+                    <div class="mt-6">
+                        <EgressDiagram egress={mode.egress} label={mode.egressLabel} />
+                    </div>
+
+                    <ul class="mt-6 mb-8 space-y-2.5 text-sm">
+                        {mode.points.map((point) => (
+                            <li class="flex gap-3">
+                                <span
+                                    class="bg-accent mt-[0.55rem] size-1 shrink-0 rounded-full"
+                                    aria-hidden="true"
+                                />
+                                <span class="text-pretty">{point}</span>
+                            </li>
+                        ))}
+                    </ul>
+
+                    <p class="border-line/70 mono-label text-idle mt-auto border-t pt-4">
+                        {mode.commercial}
+                    </p>
+                </article>
+            ))
+        }
+    </div>
+</Section>

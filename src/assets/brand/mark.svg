@@ -1,0 +1,18 @@
+<!--
+  G8Deck — icon mark: "The Deck Seam".
+  Two stacked deployment plates, registered against each other at a deck line.
+  The seam notched into both flanks pinches the waist, so the silhouette
+  simultaneously reads as the G8 family "8".
+
+  Grid 48x48. Ink 36x36 at (6,6). Bar weight 6u everywhere. Outer radius 8u,
+  counter radius 2u, seam 4u deep x 6u tall.
+  Colour inherits from surrounding text via `currentColor`.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" role="img" aria-label="G8Deck">
+  <path
+    fill="currentColor"
+    fill-rule="evenodd"
+    d="M14 6 h20 a8 8 0 0 1 8 8 v6 h-4 v6 h4 v8 a8 8 0 0 1 -8 8 h-20 a8 8 0 0 1 -8 -8 v-8 h4 v-6 h-4 v-6 a8 8 0 0 1 8 -8 z
+       M14 12 h20 a2 2 0 0 1 2 2 v4 a2 2 0 0 1 -2 2 h-20 a2 2 0 0 1 -2 -2 v-4 a2 2 0 0 1 2 -2 z
+       M14 26 h20 a2 2 0 0 1 2 2 v6 a2 2 0 0 1 -2 2 h-20 a2 2 0 0 1 -2 -2 v-6 a2 2 0 0 1 2 -2 z" />
+</svg>

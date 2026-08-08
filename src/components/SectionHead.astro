@@ -1,0 +1,16 @@
+---
+interface Props {
+    eyebrow: string;
+    title: string;
+    lede?: string;
+    class?: string;
+}
+
+const { eyebrow, title, lede, class: className = '' } = Astro.props;
+---
+
+<div class:list={['max-w-3xl', className]}>
+    <p class="mono-label text-accent">{eyebrow}</p>
+    <h2 class="h2 mt-5">{title}</h2>
+    {lede && <p class="body-lg text-muted mt-6 text-pretty">{lede}</p>}
+</div>

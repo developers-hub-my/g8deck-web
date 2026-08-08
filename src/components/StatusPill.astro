@@ -1,0 +1,52 @@
+---
+/**
+ * State is never colour alone: each variant pairs a hue with a distinct dot
+ * shape and a text label, so it survives greyscale and colour-blind viewing.
+ */
+type State = 'ok' | 'run' | 'idle' | 'fail' | 'warn';
+
+interface Props {
+    state: State;
+    label: string;
+    class?: string;
+}
+
+const { state, label, class: className = '' } = Astro.props;
+
+const hue: Record<State, string> = {
+    ok: 'var(--color-ok)',
+    run: 'var(--color-run)',
+    idle: 'var(--color-idle)',
+    fail: 'var(--color-fail)',
+    warn: 'var(--color-warn)',
+};
+
+const color = hue[state];
+---
+
+<span
+    class:list={['inline-flex items-center gap-1.5 rounded-full border px-2 py-[3px]', className]}
+    style={`border-color: color-mix(in oklab, ${color} 40%, transparent); background: color-mix(in oklab, ${color} 10%, transparent);`}
+>
+    <span class="relative flex size-[7px] shrink-0 items-center justify-center">
+        <span
+            class:list={[
+                'relative size-[7px] rounded-full',
+                (state === 'idle' || state === 'run') && 'border',
+            ]}
+            style={state === 'idle' || state === 'run'
+                ? `border-color: ${color}; background: transparent;`
+                : `background: ${color};`}
+            aria-hidden="true"></span>
+        {
+            state === 'fail' && (
+                <span
+                    class="absolute h-[9px] w-px rotate-45"
+                    style={`background: var(--color-ink)`}
+                    aria-hidden="true"
+                />
+            )
+        }
+    </span>
+    <span class="mono-label" style={`color: ${color}; font-size: 0.625rem;`}>{label}</span>
+</span>

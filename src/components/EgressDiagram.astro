@@ -1,0 +1,120 @@
+---
+/**
+ * The differentiator, drawn: a dashed perimeter and the arrows that cross it.
+ * Two for SaaS, one for on-premise, none — struck through — for air-gapped.
+ */
+interface Props {
+    egress: number;
+    label: string;
+}
+
+const { egress, label } = Astro.props;
+
+const alt =
+    egress === 0
+        ? 'A closed perimeter with a struck-through arrow: no outbound connections.'
+        : `A perimeter with ${egress} outbound ${egress === 1 ? 'connection' : 'connections'} crossing it.`;
+
+const arrowY = [26, 50];
+const accent = egress === 0 ? 'var(--color-ok)' : 'var(--color-muted)';
+---
+
+<div class="border-line/70 bg-ink/40 border p-4">
+    <svg viewBox="0 0 240 104" class="h-auto w-full" fill="none" role="img" aria-label={alt}>
+        <defs>
+            <marker
+                id={`egress-arrow-${egress}`}
+                viewBox="0 0 8 8"
+                refX="7"
+                refY="4"
+                markerWidth="6"
+                markerHeight="6"
+                orient="auto-start-reverse"
+            >
+                <path d="M0 1 L7 4 L0 7 z" fill={accent} stroke="none"></path>
+            </marker>
+        </defs>
+
+        <!-- Perimeter -->
+        <rect
+            x="8"
+            y="6"
+            width="128"
+            height="64"
+            rx="3"
+            stroke="var(--color-line-strong)"
+            stroke-width="1"
+            stroke-dasharray="4 3"
+            vector-effect="non-scaling-stroke"></rect>
+        <text
+            x="20"
+            y="32"
+            fill="var(--color-muted)"
+            font-family="var(--font-label)"
+            font-size="8"
+            letter-spacing="1.2">YOUR</text
+        >
+        <text
+            x="20"
+            y="46"
+            fill="var(--color-muted)"
+            font-family="var(--font-label)"
+            font-size="8"
+            letter-spacing="1.2">PERIMETER</text
+        >
+
+        <!-- Crossings -->
+        {
+            arrowY
+                .slice(0, egress)
+                .map((y) => (
+                    <line
+                        x1="136"
+                        y1={y}
+                        x2="216"
+                        y2={y}
+                        stroke={accent}
+                        stroke-width="1"
+                        vector-effect="non-scaling-stroke"
+                        marker-end={`url(#egress-arrow-${egress})`}
+                    />
+                ))
+        }
+
+        {
+            egress === 0 && (
+                <g>
+                    <line
+                        x1="140"
+                        y1="38"
+                        x2="204"
+                        y2="38"
+                        stroke="var(--color-idle)"
+                        stroke-width="1"
+                        stroke-dasharray="3 3"
+                        vector-effect="non-scaling-stroke"
+                    />
+                    <line
+                        x1="164"
+                        y1="24"
+                        x2="180"
+                        y2="52"
+                        stroke="var(--color-ok)"
+                        stroke-width="1.5"
+                        vector-effect="non-scaling-stroke"
+                    />
+                </g>
+            )
+        }
+
+        <text
+            x="232"
+            y="96"
+            text-anchor="end"
+            fill={accent}
+            font-family="var(--font-label)"
+            font-size="8"
+            letter-spacing="1.2">{label.toUpperCase()}</text
+        >
+    </svg>
+</div>

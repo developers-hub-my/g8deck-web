@@ -1,0 +1,72 @@
+---
+import Section from '../Section.astro';
+import SectionHead from '../SectionHead.astro';
+import { problems } from '../../data/site';
+
+const assumptions = [
+    {
+        assumed: 'Your control plane can live in someone else’s region',
+        required: 'Control plane inside the perimeter, residency enforced per deployment',
+    },
+    {
+        assumed: 'One language, one runtime, one opinion',
+        required: 'Any containerised workload, on the topology you actually run',
+    },
+    {
+        assumed: 'A server, configured once, is the product',
+        required: 'Scaling, drift, promotion, rollback and evidence, continuously',
+    },
+    {
+        assumed: 'Compliance is your problem, downstream',
+        required: 'Controls enforced by the platform, evidence exportable on demand',
+    },
+    {
+        assumed: 'Outbound internet is always available',
+        required: 'Air-gapped operation with zero external egress as a hard rule',
+    },
+];
+---
+
+<Section id="problem" index="01" label="PROBLEM">
+    <SectionHead
+        eyebrow="Why this exists"
+        title="Every hosted PaaS assumes your data can leave the building."
+        lede="For a bank, a ministry, a GLC or a university in this region, that assumption is where the evaluation ends. G8Deck starts from the opposite premise — the platform goes to the infrastructure, not the other way around."
+    />
+
+    <div class="scroller mt-14" tabindex="0" role="region" aria-label="Assumptions comparison">
+        <table class="w-full min-w-[42rem] border-collapse text-left">
+            <thead>
+                <tr class="border-line border-b">
+                    <th scope="col" class="mono-label text-muted w-1/2 pr-8 pb-3"
+                        >What hosted PaaS assumes</th
+                    >
+                    <th scope="col" class="mono-label text-accent pb-3"
+                        >What the deployment requires</th
+                    >
+                </tr>
+            </thead>
+            <tbody>
+                {
+                    assumptions.map((row) => (
+                        <tr class="border-line hover:bg-surface border-b transition-colors">
+                            <td class="text-muted py-4 pr-8 align-top">{row.assumed}</td>
+                            <td class="py-4 align-top">{row.required}</td>
+                        </tr>
+                    ))
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-16 grid gap-px sm:grid-cols-2">
+        {
+            problems.map((item) => (
+                <div class="border-line bg-surface/40 border p-6">
+                    <h3 class="h3">{item.title}</h3>
+                    <p class="text-muted mt-3 text-pretty">{item.body}</p>
+                </div>
+            ))
+        }
+    </div>
+</Section>

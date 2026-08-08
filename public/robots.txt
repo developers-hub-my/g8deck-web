@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://g8deck.app/sitemap-index.xml

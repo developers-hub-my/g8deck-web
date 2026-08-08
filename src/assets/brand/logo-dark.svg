@@ -1,0 +1,39 @@
+<!--
+  G8Deck — horizontal lockup for DARK backgrounds.
+  Mark in emerald-600 (#059669), wordmark in white.
+
+  No width/height attributes: set the size in CSS (e.g. `height: 32px`).
+  Wordmark is drawn geometrically as stroked paths on a 4u monoline —
+  no <text>, no font dependency, renders identically everywhere.
+
+  Metrics: mark ink 6..42. Wordmark ink 58..212. Cap height 26u (y 11..37),
+  x-height 20u (y 17..37), baseline y 37. Mark-to-word gap 16u.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 218 48" fill="none" role="img" aria-label="G8Deck">
+
+  <!-- mark -->
+  <path
+    fill="#059669"
+    fill-rule="evenodd"
+    d="M14 6 h20 a8 8 0 0 1 8 8 v6 h-4 v6 h4 v8 a8 8 0 0 1 -8 8 h-20 a8 8 0 0 1 -8 -8 v-8 h4 v-6 h-4 v-6 a8 8 0 0 1 8 -8 z
+       M14 12 h20 a2 2 0 0 1 2 2 v4 a2 2 0 0 1 -2 2 h-20 a2 2 0 0 1 -2 -2 v-4 a2 2 0 0 1 2 -2 z
+       M14 26 h20 a2 2 0 0 1 2 2 v6 a2 2 0 0 1 -2 2 h-20 a2 2 0 0 1 -2 -2 v-6 a2 2 0 0 1 2 -2 z" />
+
+  <!-- wordmark -->
+  <g stroke="#FFFFFF" stroke-width="4" stroke-linecap="butt" stroke-linejoin="miter">
+    <!-- G -->
+    <path d="M70 26 H80 V28 A7 7 0 0 1 73 35 H67 A7 7 0 0 1 60 28 V20 A7 7 0 0 1 67 13 H73 A7 7 0 0 1 80 20" />
+    <!-- 8 : stacked bowls, narrower on top — the mark's logic at text scale -->
+    <path d="M96 13 h4 a5 5 0 0 1 5 5 v1 a5 5 0 0 1 -5 5 h-4 a5 5 0 0 1 -5 -5 v-1 a5 5 0 0 1 5 -5 z
+             M94 24 h8 a5 5 0 0 1 5 5 v1 a5 5 0 0 1 -5 5 h-8 a5 5 0 0 1 -5 -5 v-1 a5 5 0 0 1 5 -5 z" />
+    <!-- D -->
+    <path d="M117 35 V13 H128 A8 8 0 0 1 136 21 V27 A8 8 0 0 1 128 35 Z" />
+    <!-- e -->
+    <path d="M160 34 A5 5 0 0 1 157 35 H150 A5 5 0 0 1 145 30 V24 A5 5 0 0 1 150 19 H157 A5 5 0 0 1 162 24 V27 H145" />
+    <!-- c -->
+    <path d="M186 21 A5 5 0 0 0 182 19 H176 A5 5 0 0 0 171 24 V30 A5 5 0 0 0 176 35 H182 A5 5 0 0 0 186 33" />
+    <!-- k -->
+    <path d="M196 13 V35 M196 28 L208 19 M200 25 L210 35" />
+  </g>
+
+</svg>

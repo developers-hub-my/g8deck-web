@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import StatusPill from '../components/StatusPill.astro';
+import { site } from '../data/site';
+---
+
+<Base title={`Not found — ${site.name}`} description="This page does not exist." noindex>
+    <Nav />
+    <main id="main" class="relative">
+        <div
+            class="drafting-grid pointer-events-none absolute inset-0 opacity-30"
+            aria-hidden="true"
+        >
+        </div>
+        <div class="page relative flex min-h-[62vh] items-center py-24">
+            <div class="content max-w-xl">
+                <StatusPill state="fail" label="404 · not found" />
+                <h1 class="h1 mt-6">No route to this resource.</h1>
+                <p class="body-lg text-muted mt-6 text-pretty">
+                    The page you asked for is not part of this deployment. The service registry has
+                    no record of it.
+                </p>
+                <div class="mt-9 flex flex-wrap gap-3">
+                    <a href="/" class="btn btn-primary">Back to g8deck.app</a>
+                    <a href={site.consoleUrl} class="btn btn-ghost">Open the console</a>
+                </div>
+            </div>
+        </div>
+    </main>
+    <Footer />
+</Base>

@@ -1,0 +1,82 @@
+---
+import Logo from './Logo.astro';
+import { nav, site } from '../data/site';
+---
+
+<header
+    class="border-line bg-ink/85 sticky top-0 z-40 border-b backdrop-blur-lg supports-[backdrop-filter]:bg-[color-mix(in_oklab,var(--color-ink)_85%,transparent)]"
+>
+    <div class="page">
+        <div class="content flex h-14 items-center justify-between gap-6">
+            <a href="/" class="flex shrink-0 items-center" aria-label={`${site.name} home`}>
+                <Logo class="h-6 w-auto" />
+            </a>
+
+            <nav class="hidden lg:block" aria-label="Primary">
+                <ul class="flex items-center gap-7">
+                    {
+                        nav.map((item) => (
+                            <li>
+                                <a
+                                    href={item.href}
+                                    class="mono-label text-muted hover:text-fg transition-colors"
+                                >
+                                    {item.label}
+                                </a>
+                            </li>
+                        ))
+                    }
+                </ul>
+            </nav>
+
+            <div class="flex items-center gap-2">
+                <a href={site.consoleUrl} class="btn btn-sm btn-ghost hidden sm:inline-flex">
+                    Sign in
+                </a>
+                <a
+                    href={`mailto:${site.contact.sales}?subject=G8Deck%20—%20talk%20to%20engineering`}
+                    class="btn btn-sm btn-primary hidden sm:inline-flex"
+                >
+                    Talk to engineering
+                </a>
+
+                <!-- Mobile menu: native disclosure, no JavaScript. -->
+                <details class="group relative lg:hidden">
+                    <summary
+                        class="btn btn-sm btn-ghost cursor-pointer list-none marker:content-none"
+                        aria-label="Open navigation menu"
+                    >
+                        <span class="mono-label">Menu</span>
+                    </summary>
+                    <div
+                        class="border-line bg-surface absolute right-0 z-50 mt-2 w-60 border p-2 shadow-2xl shadow-black/50"
+                    >
+                        <ul>
+                            {
+                                nav.map((item) => (
+                                    <li>
+                                        <a
+                                            href={item.href}
+                                            class="mono-label text-muted hover:bg-raised hover:text-fg block rounded-[2px] px-3 py-2.5 transition-colors"
+                                        >
+                                            {item.label}
+                                        </a>
+                                    </li>
+                                ))
+                            }
+                        </ul>
+                        <div class="border-line mt-2 grid gap-2 border-t pt-2 sm:hidden">
+                            <a href={site.consoleUrl} class="btn btn-sm btn-ghost">Sign in</a>
+                            <a
+                                href={`mailto:${site.contact.sales}?subject=G8Deck%20—%20talk%20to%20engineering`}
+                                class="btn btn-sm btn-primary"
+                            >
+                                Talk to engineering
+                            </a>
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </div>
+</header>

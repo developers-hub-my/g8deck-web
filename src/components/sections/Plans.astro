@@ -1,0 +1,51 @@
+---
+import Section from '../Section.astro';
+import SectionHead from '../SectionHead.astro';
+import { plans, site } from '../../data/site';
+---
+
+<Section id="plans" index="08" label="PLANS">
+    <SectionHead eyebrow="Commercials" title={plans.title} lede={plans.body} />
+
+    <div class="mt-14 grid gap-px lg:grid-cols-4">
+        {
+            plans.tiers.map((tier) => (
+                <article
+                    class:list={[
+                        'border-line bg-surface/40 flex flex-col border border-t-2 p-6',
+                        tier.featured ? 'border-t-accent' : 'border-t-transparent',
+                    ]}
+                >
+                    <div class="flex items-baseline justify-between gap-2">
+                        <h3 class="h3">{tier.name}</h3>
+                        {tier.featured && <span class="mono-label text-accent">Popular</span>}
+                    </div>
+                    <p class="text-muted mt-2 text-sm">{tier.for}</p>
+                    <ul class="border-line/70 mt-6 mb-8 space-y-2.5 border-t pt-6 text-sm">
+                        {tier.points.map((point) => (
+                            <li class="flex gap-3">
+                                <span
+                                    class="bg-accent mt-[0.55rem] size-1 shrink-0 rounded-full"
+                                    aria-hidden="true"
+                                />
+                                <span class="text-pretty">{point}</span>
+                            </li>
+                        ))}
+                    </ul>
+                    <a
+                        href={`mailto:${site.contact.sales}?subject=${encodeURIComponent(`G8Deck ${tier.name} — pricing`)}`}
+                        class:list={[
+                            'btn btn-sm mt-auto w-full',
+                            tier.featured ? 'btn-primary' : 'btn-ghost',
+                        ]}
+                    >
+                        Get pricing
+                    </a>
+                </article>
+            ))
+        }
+    </div>
+
+    <p class="text-muted mt-8 max-w-2xl text-sm text-pretty">{plans.note}</p>
+    <p class="mono-label text-idle mt-4">FPX · Touch ’n Go · Stripe · annual invoicing</p>
+</Section>

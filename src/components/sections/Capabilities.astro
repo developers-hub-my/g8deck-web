@@ -1,0 +1,25 @@
+---
+import Section from '../Section.astro';
+import SectionHead from '../SectionHead.astro';
+import { capabilities } from '../../data/site';
+---
+
+<Section id="lifecycle" index="04" label="LIFECYCLE">
+    <SectionHead
+        eyebrow="After the first deploy"
+        title="The hard part starts once it is running."
+        lede="Provisioning is a one-off. Scaling, drift, promotion, rollback, secrets and evidence are the work that never stops — so they are platform behaviour, not runbooks you maintain."
+    />
+
+    <div class="mt-14 grid gap-px sm:grid-cols-2 xl:grid-cols-4">
+        {
+            capabilities.map((item) => (
+                <article class="border-line bg-surface/40 hover:border-line-strong flex flex-col border p-6 transition-colors">
+                    <p class="mono-label text-idle">{item.tag}</p>
+                    <h3 class="mt-4 text-[1.0625rem] leading-snug font-semibold">{item.title}</h3>
+                    <p class="text-muted mt-3 text-sm text-pretty">{item.body}</p>
+                </article>
+            ))
+        }
+    </div>
+</Section>

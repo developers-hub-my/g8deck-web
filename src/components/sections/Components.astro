@@ -1,0 +1,54 @@
+---
+import Section from '../Section.astro';
+import SectionHead from '../SectionHead.astro';
+import { componentMatrix, providers } from '../../data/site';
+
+const total = componentMatrix.reduce((n, group) => n + group.items.length, 0);
+---
+
+<Section id="components" index="05" label="COMPONENTS">
+    <SectionHead
+        eyebrow="Breadth"
+        title="Everything below your container, accounted for."
+        lede={`${total} component types provision through one contract, and ${providers.length} provider drivers place them. Adding a component or a provider is a new driver, not a change to the core.`}
+    />
+
+    <div class="mt-14 space-y-px">
+        {
+            componentMatrix.map((group) => (
+                <div class="border-line bg-surface/40 grid border sm:grid-cols-[10rem_1fr]">
+                    <div class="border-line/70 px-5 py-4 sm:border-r">
+                        <p class="mono-label text-accent">{group.group}</p>
+                        <p class="text-idle mt-1.5 text-xs tabular-nums">
+                            {group.items.length} types
+                        </p>
+                    </div>
+                    <ul class="flex flex-wrap gap-1.5 px-5 py-4">
+                        {group.items.map((item) => (
+                            <li class="border-line-strong/60 text-muted rounded-[2px] border px-2 py-1 font-mono text-xs">
+                                {item}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            ))
+        }
+    </div>
+
+    <div class="border-line mt-14 border-t pt-10">
+        <p class="mono-label text-accent">Provider drivers</p>
+        <p class="text-muted mt-4 max-w-2xl text-pretty">
+            Drivers talk over SSH and REST — the two things that work identically on a rack in a
+            data centre and on a public cloud API. The blueprint never names any of them.
+        </p>
+        <ul class="mt-6 flex flex-wrap gap-1.5">
+            {
+                providers.map((provider) => (
+                    <li class="border-line-strong/60 rounded-[2px] border px-2.5 py-1.5 font-mono text-xs">
+                        {provider}
+                    </li>
+                ))
+            }
+        </ul>
+    </div>
+</Section>

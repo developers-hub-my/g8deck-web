@@ -1,0 +1,62 @@
+---
+/**
+ * The G8Deck lockup: mark + wordmark.
+ *
+ * The mark is the product's own drawing language — three stacked layers (edge,
+ * app, data) bound by the connector that runs through them. It is drawn on the
+ * same 1px geometry as the blueprint canvas so the identity and the diagrams
+ * read as one system, and it holds at 16px.
+ */
+interface Props {
+    /** Sizing is driven by height; the wordmark scales from the same em. */
+    class?: string;
+    markOnly?: boolean;
+}
+
+const { class: className = 'h-6 w-auto', markOnly = false } = Astro.props;
+---
+
+<span class:list={['inline-flex items-center gap-2.5', className]}>
+    <svg
+        viewBox="0 0 32 32"
+        class="h-full w-auto shrink-0"
+        fill="none"
+        aria-hidden="true"
+        focusable="false"
+    >
+        <!-- Deck layers -->
+        <rect x="4" y="5" width="24" height="6" rx="1.5" fill="var(--color-accent)"></rect>
+        <rect
+            x="4"
+            y="13"
+            width="24"
+            height="6"
+            rx="1.5"
+            stroke="var(--color-accent)"
+            stroke-width="1.5"></rect>
+        <rect
+            x="4"
+            y="21"
+            width="24"
+            height="6"
+            rx="1.5"
+            stroke="var(--color-accent)"
+            stroke-width="1.5"
+            opacity="0.55"></rect>
+        <!-- Connector running through the deck -->
+        <path d="M10 8 L10 24" stroke="var(--color-ink)" stroke-width="1.5"></path>
+        <path d="M10 11 L10 13 M10 19 L10 21" stroke="var(--color-accent)" stroke-width="1.5"
+        ></path>
+    </svg>
+
+    {
+        !markOnly && (
+            <span
+                class="text-fg text-[1.0625em] leading-none font-semibold tracking-[-0.02em]"
+                style="font-variation-settings: 'wdth' 108"
+            >
+                G8Deck
+            </span>
+        )
+    }
+</span>

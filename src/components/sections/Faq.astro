@@ -1,0 +1,46 @@
+---
+import Section from '../Section.astro';
+import SectionHead from '../SectionHead.astro';
+import { faqs } from '../../data/site';
+---
+
+<Section id="faq" index="09" label="FAQ">
+    <SectionHead
+        eyebrow="Questions"
+        title="The ones that decide the evaluation."
+        class="max-w-2xl"
+    />
+
+    <div class="border-line mt-12 max-w-3xl border-t">
+        {
+            faqs.map((faq) => (
+                <details class="border-line group border-b">
+                    <summary class="flex cursor-pointer list-none items-start gap-4 py-5 font-medium marker:content-none">
+                        <span
+                            class="text-accent mono-label mt-1.5 shrink-0 transition-transform duration-150 group-open:rotate-45"
+                            aria-hidden="true"
+                        >
+                            +
+                        </span>
+                        <span class="text-pretty">{faq.q}</span>
+                    </summary>
+                    <p class="text-muted pb-5 pl-8 text-pretty">{faq.a}</p>
+                </details>
+            ))
+        }
+    </div>
+</Section>
+
+<script
+    type="application/ld+json"
+    is:inline
+    set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: faqs.map((faq) => ({
+            '@type': 'Question',
+            name: faq.q,
+            acceptedAnswer: { '@type': 'Answer', text: faq.a },
+        })),
+    })}
+/>

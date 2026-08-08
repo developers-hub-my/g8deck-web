@@ -1,0 +1,347 @@
+@import 'tailwindcss';
+@import './fonts.css';
+
+/*
+ * G8Deck — "engineering drawing on a dark drafting table".
+ *
+ * The page is committed to a single dark register: colour is reserved for
+ * state (healthy / running / idle / failed / warn), never decoration. There is
+ * no light theme by design — a light counterpart would be a different drawing,
+ * not the same one inverted.
+ */
+
+@theme {
+    --font-sans: 'Archivo', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    --font-label: 'Martian Mono', 'IBM Plex Mono', ui-monospace, monospace;
+
+    /* Surfaces */
+    --color-ink: #080c10;
+    --color-surface: #0e141a;
+    --color-raised: #151d25;
+
+    /* Rules */
+    --color-line: #1f2a33;
+    --color-line-strong: #2e3d49;
+    --color-grid: #111a21;
+    --color-grid-major: #18242e;
+
+    /* Type */
+    --color-fg: #e6edf3;
+    --color-muted: #8fa3b0;
+
+    /* Brand — emerald is the recognition handle shared with the console. */
+    --color-accent: #10b981;
+    --color-accent-dim: #065f46;
+    --color-on-accent: #04120c;
+
+    /* State — hue is always paired with a label and a dot shape. */
+    --color-ok: #10b981;
+    --color-run: #38bdf8;
+    --color-idle: #64748b;
+    --color-fail: #fb7185;
+    --color-warn: #f59e0b;
+
+    --radius-card: 4px;
+    --radius-chip: 2px;
+
+    --container-page: 1280px;
+    --container-content: 1120px;
+}
+
+@layer base {
+    :root {
+        color-scheme: dark;
+        --spine: 0px;
+    }
+
+    @media (min-width: 1024px) {
+        :root {
+            --spine: 72px;
+        }
+    }
+
+    html {
+        -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+        background-color: var(--color-ink);
+        color: var(--color-fg);
+        font-family: var(--font-sans);
+        font-size: 1rem;
+        line-height: 1.65;
+        overflow-x: hidden;
+    }
+
+    ::selection {
+        background: var(--color-accent-dim);
+        color: var(--color-fg);
+    }
+
+    :focus-visible {
+        /* Cyan, not emerald: emerald already means "healthy" on this page. */
+        outline: 2px solid var(--color-run);
+        outline-offset: 2px;
+        border-radius: inherit;
+    }
+
+    /* Anchor targets clear the sticky nav. */
+    :where(section[id], div[id]) {
+        scroll-margin-top: 5rem;
+    }
+}
+
+@layer components {
+    /* ---- Type scale ------------------------------------------------- */
+
+    .h1 {
+        font-size: clamp(2.5rem, 1.5rem + 3vw, 4.25rem);
+        line-height: 0.98;
+        font-weight: 600;
+        letter-spacing: -0.03em;
+        font-variation-settings: 'wdth' 112;
+        text-wrap: balance;
+        /* "infrastructure." is long enough to escape a narrow column. */
+        overflow-wrap: break-word;
+    }
+
+    .h2 {
+        font-size: clamp(2rem, 1.4rem + 2.2vw, 3.25rem);
+        line-height: 1.05;
+        font-weight: 600;
+        letter-spacing: -0.025em;
+        font-variation-settings: 'wdth' 108;
+        text-wrap: balance;
+    }
+
+    .h3 {
+        font-size: 1.375rem;
+        line-height: 1.3;
+        font-weight: 600;
+        letter-spacing: -0.015em;
+    }
+
+    .body-lg {
+        font-size: 1.125rem;
+        line-height: 1.6;
+        letter-spacing: -0.005em;
+    }
+
+    .mono-label {
+        font-family: var(--font-label);
+        font-size: 0.6875rem;
+        line-height: 1;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+    }
+
+    .code {
+        font-family: var(--font-mono);
+        font-size: 0.8125rem;
+        line-height: 1.7;
+    }
+
+    /* ---- Layout ------------------------------------------------------ */
+
+    .page {
+        width: 100%;
+        max-width: var(--container-page);
+        margin-inline: auto;
+        padding-inline: 1.5rem;
+    }
+
+    @media (min-width: 1024px) {
+        .page {
+            padding-inline: 2.5rem;
+        }
+    }
+
+    /* Content sits to the right of the provisioning rail on wide screens. */
+    .content {
+        max-width: var(--container-content);
+        margin-inline-start: var(--spine);
+    }
+
+    .section {
+        border-top: 1px solid var(--color-line);
+        padding-block: 5rem;
+    }
+
+    @media (min-width: 1024px) {
+        .section {
+            padding-block: 8rem;
+        }
+    }
+
+    /* ---- Drafting grid ----------------------------------------------- */
+
+    .drafting-grid {
+        background-image:
+            linear-gradient(to right, var(--color-grid-major) 1px, transparent 1px),
+            linear-gradient(to bottom, var(--color-grid-major) 1px, transparent 1px),
+            linear-gradient(to right, var(--color-grid) 1px, transparent 1px),
+            linear-gradient(to bottom, var(--color-grid) 1px, transparent 1px);
+        background-size:
+            80px 80px,
+            80px 80px,
+            16px 16px,
+            16px 16px;
+    }
+
+    /* ---- Buttons ----------------------------------------------------- */
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        height: 2.75rem;
+        padding-inline: 1.125rem;
+        border-radius: var(--radius-card);
+        border: 1px solid transparent;
+        font-size: 0.9375rem;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        white-space: nowrap;
+        transition:
+            background-color 120ms ease,
+            border-color 120ms ease,
+            color 120ms ease;
+    }
+
+    .btn-primary {
+        background: var(--color-accent);
+        color: var(--color-on-accent);
+    }
+
+    .btn-primary:hover {
+        background: #34d399;
+    }
+
+    .btn-ghost {
+        border-color: var(--color-line-strong);
+        color: var(--color-fg);
+    }
+
+    .btn-ghost:hover {
+        border-color: var(--color-muted);
+        background: var(--color-surface);
+    }
+
+    .btn-sm {
+        height: 2.25rem;
+        padding-inline: 0.875rem;
+        font-size: 0.875rem;
+    }
+
+    /* ---- Surfaces ---------------------------------------------------- */
+
+    .card {
+        background: var(--color-surface);
+        border: 1px solid var(--color-line);
+        border-radius: var(--radius-card);
+        /* See .scroller below — a card holding one must be able to shrink. */
+        min-width: 0;
+        transition: border-color 120ms ease;
+    }
+
+    .card:hover {
+        border-color: var(--color-line-strong);
+    }
+
+    /* Horizontal scrollers get a keyboard affordance, never a body overflow.
+       `min-width: 0` matters: as a flex or grid child the default `auto`
+       minimum lets the widest row push the whole page sideways instead of
+       scrolling inside the box. */
+    .scroller {
+        overflow-x: auto;
+        min-width: 0;
+        scrollbar-width: thin;
+        scrollbar-color: var(--color-line-strong) transparent;
+    }
+}
+
+@layer utilities {
+    .text-balance {
+        text-wrap: balance;
+    }
+
+    .text-pretty {
+        text-wrap: pretty;
+    }
+}
+
+/* ---- Motion --------------------------------------------------------- */
+
+@keyframes rise {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes draw {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes ping-ring {
+    from {
+        transform: scale(1);
+        opacity: 0.45;
+    }
+    to {
+        transform: scale(1.9);
+        opacity: 0;
+    }
+}
+
+.animate-rise {
+    animation: rise 400ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.animate-draw path,
+.animate-draw line,
+.animate-draw rect,
+.animate-draw polyline {
+    stroke-dasharray: var(--draw-len, 600);
+    stroke-dashoffset: var(--draw-len, 600);
+    animation: draw 900ms cubic-bezier(0.4, 0, 0.2, 1) 200ms forwards;
+}
+
+.animate-ping-ring {
+    transform-origin: center;
+    animation: ping-ring 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    /* Content must never depend on an animation having run. */
+    .animate-draw path,
+    .animate-draw line,
+    .animate-draw rect,
+    .animate-draw polyline {
+        stroke-dasharray: none;
+        stroke-dashoffset: 0;
+    }
+
+    .animate-ping-ring {
+        animation: none;
+        opacity: 0.45;
+    }
+}

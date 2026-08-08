@@ -1,0 +1,59 @@
+---
+import Logo from './Logo.astro';
+import StatusPill from '../components/StatusPill.astro';
+import { footerLinks, site } from '../data/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="border-line border-t">
+    <div class="page py-16">
+        <div class="content grid gap-12 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,2fr)]">
+            <div>
+                <Logo class="h-6 w-auto" />
+                <p class="text-muted mt-5 max-w-xs text-sm text-pretty">
+                    {site.description}
+                </p>
+                <p class="mono-label text-idle mt-6">
+                    Console → <a href={site.consoleUrl} class="hover:text-accent transition-colors"
+                        >console.g8deck.app</a
+                    >
+                </p>
+            </div>
+
+            <nav class="grid grid-cols-2 gap-8 sm:grid-cols-4" aria-label="Footer">
+                {
+                    footerLinks.map((group) => (
+                        <div>
+                            <p class="mono-label text-muted">{group.heading}</p>
+                            <ul class="mt-4 space-y-2.5">
+                                {group.links.map((link) => (
+                                    <li>
+                                        <a
+                                            href={link.href}
+                                            class="text-muted hover:text-fg text-sm transition-colors"
+                                        >
+                                            {link.label}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))
+                }
+            </nav>
+        </div>
+
+        <!-- Revision block, in the manner of a drawing sheet. -->
+        <div
+            class="content border-line mt-14 flex flex-wrap items-center gap-x-8 gap-y-3 border-t pt-6"
+        >
+            <p class="mono-label text-idle">
+                {site.company.name.toUpperCase()} · {site.company.country.toUpperCase()}
+            </p>
+            <p class="mono-label text-idle">© {year}</p>
+            <p class="mono-label text-idle ml-auto">Platform</p>
+            <StatusPill state="ok" label="operational" />
+        </div>
+    </div>
+</footer>

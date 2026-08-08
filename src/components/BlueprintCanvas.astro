@@ -1,0 +1,190 @@
+---
+/**
+ * The hero drawing: a three-tier blueprint on a drafting sheet.
+ *
+ * Every stroke is 1px and non-scaling, layers are labelled bands, and the
+ * dimension line on the left annotates the app layer the way a drawing would.
+ * Decorative — the same facts are stated in the surrounding copy — so the SVG
+ * is hidden from assistive tech behind a single summarising label.
+ */
+interface Props {
+    class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+
+const nodes = {
+    edge: [
+        { x: 168, label: 'haproxy-01' },
+        { x: 312, label: 'haproxy-02' },
+    ],
+    app: [
+        { x: 100, label: 'app-01' },
+        { x: 240, label: 'app-02' },
+        { x: 380, label: 'app-03' },
+    ],
+    data: [
+        { x: 100, label: 'postgres-01' },
+        { x: 240, label: 'postgres-02' },
+        { x: 380, label: 'redis-01' },
+    ],
+};
+
+const NODE_W = 120;
+const NODE_H = 40;
+---
+
+<div
+    class:list={['drafting-grid card animate-draw relative overflow-hidden p-4 sm:p-6', className]}
+    style="--draw-len: 900"
+>
+    <svg
+        viewBox="0 0 560 440"
+        class="h-auto w-full text-[var(--color-line-strong)]"
+        fill="none"
+        role="img"
+        aria-label="A three-tier blueprint: an edge layer of two HAProxy nodes, an application layer of three nodes, and a data layer of two PostgreSQL nodes and one Redis node."
+    >
+        <defs>
+            <marker
+                id="arrow"
+                viewBox="0 0 8 8"
+                refX="7"
+                refY="4"
+                markerWidth="6"
+                markerHeight="6"
+                orient="auto-start-reverse"
+            >
+                <path d="M0 1 L7 4 L0 7 z" fill="currentColor" stroke="none"></path>
+            </marker>
+        </defs>
+
+        <g stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke">
+            <!-- Layer bands -->
+            <rect x="56" y="48" width="488" height="76" rx="3" stroke-dasharray="3 3" opacity="0.65"
+            ></rect>
+            <rect
+                x="56"
+                y="168"
+                width="488"
+                height="88"
+                rx="3"
+                stroke-dasharray="3 3"
+                opacity="0.65"></rect>
+            <rect
+                x="56"
+                y="300"
+                width="488"
+                height="88"
+                rx="3"
+                stroke-dasharray="3 3"
+                opacity="0.65"></rect>
+
+            <!-- Edge → app bus -->
+            <line x1="228" y1="106" x2="228" y2="146"></line>
+            <line x1="372" y1="106" x2="372" y2="146"></line>
+            <line x1="160" y1="146" x2="440" y2="146"></line>
+            <line x1="160" y1="146" x2="160" y2="188" marker-end="url(#arrow)"></line>
+            <line x1="300" y1="146" x2="300" y2="188" marker-end="url(#arrow)"></line>
+            <line x1="440" y1="146" x2="440" y2="188" marker-end="url(#arrow)"></line>
+
+            <!-- App → data bus -->
+            <line x1="160" y1="232" x2="160" y2="266"></line>
+            <line x1="300" y1="232" x2="300" y2="266"></line>
+            <line x1="440" y1="232" x2="440" y2="266"></line>
+            <line x1="160" y1="266" x2="440" y2="266"></line>
+            <line x1="160" y1="266" x2="160" y2="320" marker-end="url(#arrow)"></line>
+            <line x1="300" y1="266" x2="300" y2="320" marker-end="url(#arrow)"></line>
+            <line x1="440" y1="266" x2="440" y2="320" marker-end="url(#arrow)"></line>
+
+            <!-- Dimension line annotating the app layer -->
+            <line x1="34" y1="168" x2="46" y2="168"></line>
+            <line x1="34" y1="256" x2="46" y2="256"></line>
+            <line x1="40" y1="168" x2="40" y2="256"></line>
+        </g>
+
+        <!-- Nodes -->
+        {
+            (
+                [
+                    ['edge', 66, 'var(--color-ok)'],
+                    ['app', 192, 'var(--color-ok)'],
+                    ['data', 324, 'var(--color-run)'],
+                ] as const
+            ).map(([layer, y, dot]) =>
+                nodes[layer].map((node) => (
+                    <g>
+                        <rect
+                            x={node.x}
+                            y={y}
+                            width={NODE_W}
+                            height={NODE_H}
+                            rx="3"
+                            fill="var(--color-raised)"
+                            stroke="var(--color-line-strong)"
+                            stroke-width="1"
+                            vector-effect="non-scaling-stroke"
+                        />
+                        <circle cx={node.x + 14} cy={y + NODE_H / 2} r="3" fill={dot} />
+                        <text
+                            x={node.x + 26}
+                            y={y + NODE_H / 2 + 4}
+                            fill="var(--color-fg)"
+                            font-family="var(--font-mono)"
+                            font-size="11"
+                        >
+                            {node.label}
+                        </text>
+                    </g>
+                ))
+            )
+        }
+
+        <!-- Labels -->
+        <g font-family="var(--font-label)" font-size="9" letter-spacing="1.4">
+            <text x="56" y="38" fill="var(--color-muted)">LAYER · EDGE</text>
+            <text x="544" y="38" fill="var(--color-muted)" text-anchor="end">2 NODES · HA</text>
+
+            <text x="56" y="158" fill="var(--color-muted)">LAYER · APP</text>
+            <text x="544" y="158" fill="var(--color-muted)" text-anchor="end"
+                >3 NODES · AUTOSCALE</text
+            >
+
+            <text x="56" y="290" fill="var(--color-muted)">LAYER · DATA</text>
+            <text x="544" y="290" fill="var(--color-muted)" text-anchor="end"
+                >PRIMARY + REPLICA</text
+            >
+
+            <text
+                x="24"
+                y="212"
+                fill="var(--color-muted)"
+                text-anchor="middle"
+                transform="rotate(-90 24 212)">×3</text
+            >
+        </g>
+
+        <!-- Title block, bottom right -->
+        <g font-family="var(--font-label)" font-size="9" letter-spacing="1.4">
+            <line
+                x1="56"
+                y1="412"
+                x2="544"
+                y2="412"
+                stroke="var(--color-line)"
+                stroke-width="1"
+                vector-effect="non-scaling-stroke"></line>
+            <text x="56" y="430" fill="var(--color-muted)">BLUEPRINT · THREE-TIER-HA</text>
+            <text x="544" y="430" fill="var(--color-accent)" text-anchor="end"
+                >PROVIDER-AGNOSTIC</text
+            >
+        </g>
+    </svg>
+</div>
+
+<style>
+    /* Text must never be dash-animated — only the drawn geometry. */
+    text {
+        stroke: none;
+    }
+</style>

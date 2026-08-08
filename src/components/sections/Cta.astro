@@ -1,0 +1,29 @@
+---
+import Section from '../Section.astro';
+import { site } from '../../data/site';
+---
+
+<Section id="start" index="10" label="END" terminal>
+    <div class="max-w-3xl">
+        <p class="mono-label text-accent">Get started</p>
+        <h2 class="h2 mt-5">Bring the architecture. We’ll provision it.</h2>
+        <p class="body-lg text-muted mt-6 text-pretty">
+            Sign in to the console to author your first blueprint, or talk to the engineers who
+            built the pipeline about an on-premise or air-gapped installation.
+        </p>
+
+        <div class="mt-10 flex flex-wrap gap-3">
+            <a href={site.consoleUrl} class="btn btn-primary">Open the console</a>
+            <a
+                href={`mailto:${site.contact.sales}?subject=G8Deck%20—%20talk%20to%20engineering`}
+                class="btn btn-ghost"
+            >
+                Talk to engineering
+            </a>
+        </div>
+
+        <p class="mono-label text-idle mt-8">
+            console.g8deck.app · sales@g8deck.app · Kuala Lumpur, Malaysia
+        </p>
+    </div>
+</Section>

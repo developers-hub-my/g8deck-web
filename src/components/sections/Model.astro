@@ -1,0 +1,100 @@
+---
+import Section from '../Section.astro';
+import SectionHead from '../SectionHead.astro';
+import { model, tokenExample } from '../../data/site';
+
+const blueprint = [
+    { text: 'kind: blueprint', tone: 'key' },
+    { text: 'name: three-tier-ha', tone: 'key' },
+    { text: 'layers:', tone: 'key' },
+    { text: '  - name: edge', tone: 'sub' },
+    { text: '    component: haproxy', tone: 'sub' },
+    { text: '    replicas: 2', tone: 'sub' },
+    { text: '    ha: true', tone: 'sub' },
+    { text: '  - name: app', tone: 'sub' },
+    { text: '    runtime: container', tone: 'sub' },
+    { text: '    replicas: { min: 3, max: 12 }', tone: 'sub' },
+    { text: '    scale_on: { cpu: 0.7 }', tone: 'sub' },
+    { text: '  - name: data', tone: 'sub' },
+    { text: '    component: postgres', tone: 'sub' },
+    { text: '    topology: primary-replica', tone: 'sub' },
+    { text: 'connections:', tone: 'key' },
+    { text: '  - edge -> app', tone: 'sub' },
+    { text: '  - app  -> data', tone: 'sub' },
+];
+---
+
+<Section id="platform" index="02" label="MODEL">
+    <SectionHead
+        eyebrow="The model"
+        title="Architecture first. Everything else is derived."
+        lede="Four nouns carry the whole platform. You author the first one; G8Deck derives the rest and holds them to it for as long as the system runs."
+    />
+
+    <div class="mt-14 grid items-start gap-10 lg:grid-cols-2">
+        <!-- The authored artefact -->
+        <div class="card overflow-hidden">
+            <div class="border-line bg-raised flex items-center gap-3 border-b px-4 py-2.5">
+                <span class="bg-idle/60 size-2 rounded-full"></span>
+                <span class="code text-muted">blueprints/three-tier-ha.yaml</span>
+            </div>
+            <div class="scroller p-4 sm:p-5">
+                <pre
+                    class="code text-fg"><code>{
+                    blueprint.map((line, i) => (
+                        <span class="grid grid-cols-[2.25rem_1fr]">
+                            <span class="text-idle select-none tabular-nums">{String(i + 1).padStart(2, '0')}</span>
+                            <span class={line.tone === 'key' ? 'text-accent' : 'text-fg'}>{line.text}</span>
+                        </span>
+                    ))
+                }</code></pre>
+            </div>
+        </div>
+
+        <!-- The derived chain -->
+        <ol class="relative space-y-3">
+            {
+                model.map((item, i) => (
+                    <li class="card relative p-5">
+                        <div class="flex items-baseline gap-3">
+                            <span class="mono-label text-idle tabular-nums">
+                                {String(i + 1).padStart(2, '0')}
+                            </span>
+                            <h3 class="h3">{item.term}</h3>
+                        </div>
+                        <p class="mt-2 text-pretty">{item.summary}</p>
+                        <p class="text-muted mt-2 text-sm text-pretty">{item.detail}</p>
+                        {i < model.length - 1 && (
+                            <span
+                                class="bg-line absolute -bottom-3 left-8 h-3 w-px"
+                                aria-hidden="true"
+                            />
+                        )}
+                    </li>
+                ))
+            }
+        </ol>
+    </div>
+
+    <!-- Token injection -->
+    <div class="border-line mt-16 grid gap-8 border-t pt-10 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
+        <div>
+            <p class="mono-label text-accent">{tokenExample.caption}</p>
+            <p class="text-muted mt-4 text-pretty">{tokenExample.body}</p>
+        </div>
+        <div class="card p-4 sm:p-5">
+            <div class="scroller">
+                <pre
+                    class="code"><code>{
+                    tokenExample.lines.map((line) => (
+                        <span class="block whitespace-pre">
+                            <span class="text-fg">{line.key}</span>
+                            <span class="text-idle">=</span>
+                            <span class="text-run">{line.value}</span>
+                        </span>
+                    ))
+                }</code></pre>
+            </div>
+        </div>
+    </div>
+</Section>

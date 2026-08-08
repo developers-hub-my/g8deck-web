@@ -1,0 +1,149 @@
+---
+/**
+ * The provisioning rail — the page's signature device.
+ *
+ * A hairline runs the full height of every section in the left spine gutter,
+ * carrying one node per section. As a section scrolls into view its node fills
+ * and the segment above it turns emerald, so the page reads as a single
+ * provisioning run completing top to bottom.
+ *
+ * Purely decorative: hidden from assistive tech, hidden below 1024px, and
+ * rendered in its completed state wherever scroll-driven animations or reduced
+ * motion apply.
+ */
+interface Props {
+    /** Section coordinate, e.g. "03". */
+    index: string;
+    /** Section name shown alongside the coordinate. */
+    label: string;
+    /** The last node on the page renders solid and skips the trailing line. */
+    terminal?: boolean;
+}
+
+const { index, label, terminal = false } = Astro.props;
+---
+
+<div class="rail" aria-hidden="true">
+    <div class:list={['rail-line', terminal && 'rail-line--terminal']}></div>
+    <span class:list={['rail-node', terminal && 'rail-node--terminal']}></span>
+    <span class="rail-coord mono-label">§{index} / {label}</span>
+</div>
+
+<style>
+    .rail {
+        display: none;
+    }
+
+    @media (min-width: 1024px) {
+        .rail {
+            display: block;
+            position: absolute;
+            /* The rail's offset parent is the content box, so it has to reach
+               back out through the section's 8rem padding to stay unbroken
+               from one section to the next. */
+            top: -8rem;
+            bottom: -8rem;
+            left: 2.5rem;
+            width: 72px;
+            pointer-events: none;
+        }
+    }
+
+    .rail-line {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 4px;
+        width: 1px;
+        background: var(--color-line);
+        overflow: hidden;
+    }
+
+    .rail-line--terminal {
+        bottom: auto;
+        height: 12rem;
+    }
+
+    /* The emerald progress fill riding on top of the hairline. */
+    .rail-line::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: var(--color-accent-dim);
+        transform-origin: top;
+    }
+
+    .rail-node {
+        position: absolute;
+        top: 8rem;
+        left: 0;
+        width: 9px;
+        height: 9px;
+        border-radius: 999px;
+        border: 1px solid var(--color-ok);
+        background: var(--color-ok);
+    }
+
+    .rail-node--terminal {
+        box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-ok) 18%, transparent);
+    }
+
+    .rail-coord {
+        position: absolute;
+        top: calc(8rem + 22px);
+        left: 0;
+        width: 9px;
+        text-align: center;
+        writing-mode: vertical-rl;
+        color: var(--color-muted);
+        font-size: 0.625rem;
+        white-space: nowrap;
+    }
+
+    /* Where the browser can drive animation from scroll, start from "pending"
+       and let the rail complete as the reader moves down the page. */
+    @supports (animation-timeline: view()) {
+        .rail-node {
+            border-color: var(--color-idle);
+            background: var(--color-ink);
+            animation: rail-fill linear both;
+            animation-timeline: view();
+            animation-range: entry 55% entry 85%;
+        }
+
+        .rail-line::after {
+            animation: rail-progress linear both;
+            animation-timeline: view();
+            animation-range: cover 0% cover 55%;
+        }
+    }
+
+    @keyframes rail-fill {
+        to {
+            border-color: var(--color-ok);
+            background: var(--color-ok);
+        }
+    }
+
+    @keyframes rail-progress {
+        from {
+            transform: scaleY(0);
+        }
+        to {
+            transform: scaleY(1);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .rail-node {
+            border-color: var(--color-ok);
+            background: var(--color-ok);
+            animation: none;
+        }
+
+        .rail-line::after {
+            animation: none;
+            transform: none;
+        }
+    }
+</style>

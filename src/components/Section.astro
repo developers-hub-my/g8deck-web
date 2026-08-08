@@ -1,0 +1,24 @@
+---
+import Rail from './Rail.astro';
+
+interface Props {
+    id: string;
+    /** Rail coordinate, e.g. "03". */
+    index: string;
+    /** Rail label — the section's short name. */
+    label: string;
+    terminal?: boolean;
+    class?: string;
+}
+
+const { id, index, label, terminal = false, class: className = '' } = Astro.props;
+---
+
+<section id={id} class:list={['section relative', className]}>
+    <div class="page relative">
+        <Rail index={index} label={label} terminal={terminal} />
+        <div class="content">
+            <slot />
+        </div>
+    </div>
+</section>

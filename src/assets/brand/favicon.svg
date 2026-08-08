@@ -1,0 +1,21 @@
+<!--
+  G8Deck — favicon.
+  Browser tabs sit on unpredictable chrome (light, dark, high-contrast), so the
+  outline mark alone cannot be trusted to hold contrast. This version ships the
+  brand colour as a solid emerald tile with the mark reversed out in white,
+  which guarantees a fixed contrast ratio on any tab background and puts the
+  emerald itself on screen at 16px, where the silhouette alone is hard to read.
+
+  Grid 48x48, full bleed. Tile radius 11u. Mark geometry identical to mark.svg
+  (36x36 ink, 6u inset = 12.5% padding), so the tab icon and the app icon
+  are the same drawing, not two lookalikes.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="G8Deck">
+  <rect width="48" height="48" rx="11" fill="#059669" />
+  <path
+    fill="#FFFFFF"
+    fill-rule="evenodd"
+    d="M14 6 h20 a8 8 0 0 1 8 8 v6 h-4 v6 h4 v8 a8 8 0 0 1 -8 8 h-20 a8 8 0 0 1 -8 -8 v-8 h4 v-6 h-4 v-6 a8 8 0 0 1 8 -8 z
+       M14 12 h20 a2 2 0 0 1 2 2 v4 a2 2 0 0 1 -2 2 h-20 a2 2 0 0 1 -2 -2 v-4 a2 2 0 0 1 2 -2 z
+       M14 26 h20 a2 2 0 0 1 2 2 v6 a2 2 0 0 1 -2 2 h-20 a2 2 0 0 1 -2 -2 v-6 a2 2 0 0 1 2 -2 z" />
+</svg>

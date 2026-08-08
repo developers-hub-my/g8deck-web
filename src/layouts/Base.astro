@@ -1,0 +1,106 @@
+---
+import '../styles/global.css';
+import { site } from '../data/site';
+
+interface Props {
+    title?: string;
+    description?: string;
+    /** Set on pages that should stay out of the index (404, etc). */
+    noindex?: boolean;
+}
+
+const {
+    title = `${site.name} — ${site.tagline}`,
+    description = site.description,
+    noindex = false,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
+const ogImage = new URL('/og.png', Astro.site ?? site.url).href;
+
+const organisationSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: site.company.name,
+    url: site.company.url,
+    logo: new URL('/favicon.svg', Astro.site ?? site.url).href,
+    address: { '@type': 'PostalAddress', addressCountry: 'MY' },
+};
+
+const productSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: site.name,
+    applicationCategory: 'DeveloperApplication',
+    operatingSystem: 'Linux',
+    url: site.url,
+    description: site.description,
+    publisher: { '@type': 'Organization', name: site.company.name, url: site.company.url },
+    offers: { '@type': 'Offer', category: 'SaaS, On-Premise, Air-Gapped', priceCurrency: 'MYR' },
+};
+---
+
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <link rel="canonical" href={canonical} />
+        {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="apple-touch-icon" href="/favicon.svg" />
+        <meta name="theme-color" content="#080c10" />
+        <meta name="color-scheme" content="dark" />
+
+        <link
+            rel="preload"
+            href="/fonts/archivo-latin-1.woff2"
+            as="font"
+            type="font/woff2"
+            crossorigin
+        />
+        <link
+            rel="preload"
+            href="/fonts/martian-mono-latin-1.woff2"
+            as="font"
+            type="font/woff2"
+            crossorigin
+        />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content={site.name} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={canonical} />
+        <meta property="og:image" content={ogImage} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:locale" content="en_MY" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={ogImage} />
+
+        <link rel="sitemap" href="/sitemap-index.xml" />
+
+        <script
+            type="application/ld+json"
+            set:html={JSON.stringify(organisationSchema)}
+            is:inline
+        />
+        <script type="application/ld+json" set:html={JSON.stringify(productSchema)} is:inline />
+    </head>
+    <body class="bg-ink text-fg antialiased">
+        <a
+            href="#main"
+            class="focus:bg-accent focus:text-ink sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-md focus:px-4 focus:py-2 focus:text-sm focus:font-medium"
+        >
+            Skip to content
+        </a>
+        <slot />
+    </body>
+</html>

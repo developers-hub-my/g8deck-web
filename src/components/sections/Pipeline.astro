@@ -1,0 +1,110 @@
+---
+import Section from '../Section.astro';
+import SectionHead from '../SectionHead.astro';
+import StatusPill from '../StatusPill.astro';
+import { pipeline } from '../../data/site';
+
+/** Flatten the phase groups into the numbered run the illustration shows. */
+const steps = pipeline.groups.flatMap((group, groupIndex) =>
+    group.steps.map((step) => ({ ...step, phase: group.phase, groupIndex }))
+);
+
+const running = pipeline.runningStep;
+
+type State = 'ok' | 'run' | 'idle';
+const stateOf = (n: number): State => (n < running ? 'ok' : n === running ? 'run' : 'idle');
+const labelOf: Record<State, string> = { ok: 'done', run: 'running', idle: 'pending' };
+const colorOf: Record<State, string> = {
+    ok: 'var(--color-ok)',
+    run: 'var(--color-run)',
+    idle: 'var(--color-idle)',
+};
+---
+
+<Section id="pipeline" index="03" label="PIPELINE">
+    <SectionHead eyebrow="Provisioning" title={pipeline.title} lede={pipeline.body} />
+
+    <!-- The ladder: the whole run in one glance. -->
+    <div
+        class="scroller border-line bg-surface/50 mt-14 border p-5 sm:p-7"
+        tabindex="0"
+        role="region"
+        aria-label="Provisioning pipeline, shown mid-run"
+    >
+        <div class="flex min-w-[46rem] gap-6">
+            {
+                pipeline.groups.map((group, gi) => {
+                    const offset = pipeline.groups
+                        .slice(0, gi)
+                        .reduce((n, g) => n + g.steps.length, 0);
+                    return (
+                        <div class="flex-1">
+                            <p class="mono-label text-muted">{group.phase}</p>
+                            <div class="mt-3 flex items-center gap-1.5">
+                                {group.steps.map((_, si) => {
+                                    const n = offset + si + 1;
+                                    const state = stateOf(n);
+                                    return (
+                                        <span class="relative flex h-8 flex-1 items-end">
+                                            {state === 'run' && (
+                                                <span
+                                                    class="animate-ping-ring absolute inset-x-0 bottom-0 h-8 rounded-[1px] border"
+                                                    style={`border-color: ${colorOf[state]}`}
+                                                    aria-hidden="true"
+                                                />
+                                            )}
+                                            <span
+                                                class="relative block w-full rounded-[1px]"
+                                                style={`height: ${state === 'idle' ? '12px' : state === 'run' ? '32px' : '22px'}; background: ${state === 'idle' ? 'var(--color-line-strong)' : colorOf[state]};`}
+                                            />
+                                        </span>
+                                    );
+                                })}
+                            </div>
+                            <div class="bg-line mt-3 h-px" />
+                        </div>
+                    );
+                })
+            }
+        </div>
+    </div>
+
+    <p class="text-muted mt-5 text-sm">
+        <span class="text-run">Interrupted at step {running}?</span> It resumes at step {running} — the
+        steps before it are idempotent, so re-running them changes nothing.
+    </p>
+
+    <!-- The run, step by step -->
+    <!-- minmax(0,1fr): an `auto` minimum would let a long step note size the
+         track and push the whole page sideways on a phone. -->
+    <div
+        class="mt-12 grid grid-cols-[minmax(0,1fr)] gap-x-12 gap-y-1 md:grid-cols-[repeat(2,minmax(0,1fr))]"
+    >
+        {
+            steps.map((step, i) => {
+                const n = i + 1;
+                const state = stateOf(n);
+                return (
+                    <div class="border-line/70 hover:bg-surface flex items-center gap-4 border-b py-3 transition-colors">
+                        <span
+                            class="mono-label tabular-nums"
+                            style={`color: ${state === 'idle' ? 'var(--color-idle)' : colorOf[state]}`}
+                        >
+                            {String(n).padStart(2, '0')}
+                        </span>
+                        <span
+                            class="h-px w-4 shrink-0"
+                            style={`background: ${state === 'idle' ? 'var(--color-line-strong)' : colorOf[state]}`}
+                            aria-hidden="true"
+                        />
+                        <span class="min-w-0 flex-1">
+                            <span class="block truncate font-medium">{step.name}</span>
+                            <span class="text-muted block truncate text-sm">{step.note}</span>
+                        </span>
+                        <StatusPill state={state} label={labelOf[state]} class="shrink-0" />
+                    </div>
+                );
+            })
+        }
+    </div>
+</Section>
