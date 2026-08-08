@@ -1,7 +1,8 @@
 ---
 /**
  * The differentiator, drawn: a dashed perimeter and the arrows that cross it.
- * Two for SaaS, one for on-premise, none — struck through — for air-gapped.
+ * Two for SaaS, one for on-premise. Zero — struck through — is kept for the
+ * air-gapped variant of on-premise, which crosses the perimeter not at all.
  */
 interface Props {
     egress: number;

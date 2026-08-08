@@ -8,11 +8,11 @@ import { modes } from '../../data/site';
 <Section id="deployment" index="06" label="DEPLOYMENT">
     <SectionHead
         eyebrow="Where it runs"
-        title="Three ways to run it. One control plane."
-        lede="The same platform, the same blueprints and the same pipeline in every mode. What changes is how much of it crosses your perimeter."
+        title="Two ways to run it. One control plane."
+        lede="The same platform, the same blueprints and the same pipeline in either mode. What changes is how much of it crosses your perimeter."
     />
 
-    <div class="mt-14 grid gap-px lg:grid-cols-3">
+    <div class="mt-14 grid max-w-4xl gap-px sm:grid-cols-2">
         {
             modes.map((mode) => (
                 <article

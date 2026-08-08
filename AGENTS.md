@@ -67,7 +67,7 @@ scripts/                  one-off generators; their output is committed
 > grid declares `minmax(0,1fr)` explicitly. After any layout change, verify
 > `document.documentElement.scrollWidth <= innerWidth` at 390px.
 
-> **Gotcha:** The rail's offset parent is `.page`, which sits *inside* the
+> **Gotcha:** The rail's offset parent is `.page`, which sits _inside_ the
 > section's 8rem vertical padding. Without `top: -8rem; bottom: -8rem` the line
 > breaks between every section.
 

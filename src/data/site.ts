@@ -326,29 +326,17 @@ export const modes: readonly Mode[] = [
     {
         name: 'On-Premise',
         summary:
-            'The whole control plane inside your perimeter, via Docker Compose or a Helm chart.',
+            'The whole control plane inside your perimeter, via Docker Compose or a Helm chart — air-gapped if your environment requires it.',
         commercial: 'Licence + support',
         featured: true,
         egress: 1,
-        egressLabel: 'egress: licence check only',
+        egressLabel: 'egress: licence check — none, air-gapped',
         points: [
             'Data residency enforced per deployment',
             'Your database of choice — MySQL, MariaDB, PostgreSQL, MSSQL or Oracle',
             'Integrates with existing LDAP / AD or Keycloak',
+            'Air-gapped: zero external egress, internal PKI, registry and DNS',
             'Compliance evidence never leaves your network',
-        ],
-    },
-    {
-        name: 'Air-Gapped',
-        summary: 'On-premise with zero outbound external calls, licensed offline.',
-        commercial: 'Licence + support (premium)',
-        egress: 0,
-        egressLabel: 'egress: none',
-        points: [
-            'No external egress by default — a hard platform rule',
-            'Offline licence activation',
-            'Internal PKI, internal registry, internal DNS',
-            'Built for classified and sovereign workloads',
         ],
     },
 ];
@@ -419,7 +407,7 @@ export const plans: {
 } = {
     title: 'Plans that scale with the estate, not the seat count',
     body: 'Every tier gets the full pipeline, every provider driver and the complete audit trail. What changes is quota, governance depth and the support you can call on.',
-    note: 'Pricing is being finalised and will be published in USD. On-premise and air-gapped deployments are licensed per installation — talk to us for a quote in the meantime.',
+    note: 'Pricing is being finalised and will be published in USD. On-premise deployments, air-gapped or not, are licensed per installation — talk to us for a quote in the meantime.',
     tiers: [
         {
             name: 'Starter',
@@ -456,7 +444,7 @@ export const plans: {
             name: 'Enterprise',
             for: 'Regulated, government and GLC estates',
             points: [
-                'On-premise or air-gapped licensing',
+                'On-premise licensing, air-gapped on request',
                 'SOC 2 evidence export and access reviews',
                 'HashiCorp Vault, LDAP / AD integration',
                 'Named support engineer',
@@ -507,7 +495,6 @@ export const footerLinks = [
         links: [
             { label: 'SaaS', href: '#deployment' },
             { label: 'On-premise', href: '#deployment' },
-            { label: 'Air-gapped', href: '#deployment' },
             { label: 'Plans', href: '#plans' },
         ],
     },
