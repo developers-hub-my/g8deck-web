@@ -1,62 +1,62 @@
 ---
 /**
- * The G8Deck lockup: mark + wordmark.
+ * The G8Deck lockup — "the deck seam".
  *
- * The mark is the product's own drawing language — three stacked layers (edge,
- * app, data) bound by the connector that runs through them. It is drawn on the
- * same 1px geometry as the blueprint canvas so the identity and the diagrams
- * read as one system, and it holds at 16px.
+ * Two deployment plates stacked and registered against each other, with the
+ * seam notched into both flanks. The notch pinches the waist, so the same
+ * silhouette also reads as the "8" of the G8 family. The wordmark is drawn as
+ * stroked geometry on a 4.5u monoline — no <text>, no font dependency, so it
+ * renders identically wherever it lands.
+ *
+ * Source of truth: src/assets/brand/. Keep the path data here in sync with
+ * those files; scripts/gen-assets.mjs carries the same geometry for the favicon
+ * and the Open Graph card.
  */
 interface Props {
-    /** Sizing is driven by height; the wordmark scales from the same em. */
+    /** Sizing is driven by height — the viewBox does the rest. */
     class?: string;
     markOnly?: boolean;
 }
 
 const { class: className = 'h-6 w-auto', markOnly = false } = Astro.props;
+
+/** 48x48 grid, 36x36 ink inset 6u, 6u bar weight throughout. */
+const MARK =
+    'M16 6 h16 a10 10 0 0 1 10 10 v4 h-4 v6 h4 v6 a10 10 0 0 1 -10 10 h-16 a10 10 0 0 1 -10 -10 v-6 h4 v-6 h-4 v-4 a10 10 0 0 1 10 -10 z ' +
+    'M16 12 H32 A4 4 0 0 1 36 16 V18 A2 2 0 0 1 34 20 H14 A2 2 0 0 1 12 18 V16 A4 4 0 0 1 16 12 Z ' +
+    'M14 26 H34 A2 2 0 0 1 36 28 V32 A4 4 0 0 1 32 36 H16 A4 4 0 0 1 12 32 V28 A2 2 0 0 1 14 26 Z';
 ---
 
-<span class:list={['inline-flex items-center gap-2.5', className]}>
-    <svg
-        viewBox="0 0 32 32"
-        class="h-full w-auto shrink-0"
-        fill="none"
-        aria-hidden="true"
-        focusable="false"
-    >
-        <!-- Deck layers -->
-        <rect x="4" y="5" width="24" height="6" rx="1.5" fill="var(--color-accent)"></rect>
-        <rect
-            x="4"
-            y="13"
-            width="24"
-            height="6"
-            rx="1.5"
-            stroke="var(--color-accent)"
-            stroke-width="1.5"></rect>
-        <rect
-            x="4"
-            y="21"
-            width="24"
-            height="6"
-            rx="1.5"
-            stroke="var(--color-accent)"
-            stroke-width="1.5"
-            opacity="0.55"></rect>
-        <!-- Connector running through the deck -->
-        <path d="M10 8 L10 24" stroke="var(--color-ink)" stroke-width="1.5"></path>
-        <path d="M10 11 L10 13 M10 19 L10 21" stroke="var(--color-accent)" stroke-width="1.5"
-        ></path>
-    </svg>
+<svg
+    viewBox={markOnly ? '0 0 48 48' : '0 0 213 48'}
+    class:list={[className]}
+    fill="none"
+    role="img"
+    aria-label="G8Deck"
+>
+    <path fill="var(--color-accent)" fill-rule="evenodd" d={MARK}></path>
 
     {
         !markOnly && (
-            <span
-                class="text-fg text-[1.0625em] leading-none font-semibold tracking-[-0.02em]"
-                style="font-variation-settings: 'wdth' 108"
+            <g
+                stroke="currentColor"
+                stroke-width="4.5"
+                stroke-linecap="butt"
+                stroke-linejoin="miter"
             >
-                G8Deck
-            </span>
+                {/* G */}
+                <path d="M70 25 H80 A10 10 0 0 1 70 35 A10 10 0 0 1 60 25 V23 A10 10 0 0 1 70 13 A10 10 0 0 1 78 17" />
+                {/* 8 — stacked bowls, narrower on top: the mark's logic at text scale */}
+                <path d="M95 13 h4 a5 5 0 0 1 5 5 v1 a5 5 0 0 1 -5 5 h-4 a5 5 0 0 1 -5 -5 v-1 a5 5 0 0 1 5 -5 z M93 24 h8 a5 5 0 0 1 5 5 v1 a5 5 0 0 1 -5 5 h-8 a5 5 0 0 1 -5 -5 v-1 a5 5 0 0 1 5 -5 z" />
+                {/* D */}
+                <path d="M115 35 V13 H124 A10 10 0 0 1 134 23 V25 A10 10 0 0 1 124 35 Z" />
+                {/* e */}
+                <path d="M142 27 H159 V26.5 A7.5 7.5 0 0 0 151.5 19 H149.5 A7.5 7.5 0 0 0 142 26.5 V27.5 A7.5 7.5 0 0 0 149.5 35 H151.5 A7.5 7.5 0 0 0 156 33.5" />
+                {/* c */}
+                <path d="M181.5 22 A7.5 7.5 0 0 0 175.5 19 H174.5 A7.5 7.5 0 0 0 167 26.5 V27.5 A7.5 7.5 0 0 0 174.5 35 H175.5 A7.5 7.5 0 0 0 181.5 32" />
+                {/* k */}
+                <path d="M191 13 V35 M191 28 L203 19 M195 25 L205 35" />
+            </g>
         )
     }
-</span>
+</svg>

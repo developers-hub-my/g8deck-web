@@ -1,7 +1,7 @@
 ---
 import Section from '../Section.astro';
 import SectionHead from '../SectionHead.astro';
-import { plans, site } from '../../data/site';
+import { mailto, plans } from '../../data/site';
 ---
 
 <Section id="plans" index="08" label="PLANS">
@@ -21,6 +21,13 @@ import { plans, site } from '../../data/site';
                         {tier.featured && <span class="mono-label text-accent">Popular</span>}
                     </div>
                     <p class="text-muted mt-2 text-sm">{tier.for}</p>
+
+                    {/* Stated rather than left blank: an empty price reads as hidden. */}
+                    <p class="mt-5 flex items-baseline gap-2">
+                        <span class="text-idle text-[1.75rem] leading-none font-semibold">TBC</span>
+                        <span class="mono-label text-idle">USD / month</span>
+                    </p>
+
                     <ul class="border-line/70 mt-6 mb-8 space-y-2.5 border-t pt-6 text-sm">
                         {tier.points.map((point) => (
                             <li class="flex gap-3">
@@ -33,7 +40,7 @@ import { plans, site } from '../../data/site';
                         ))}
                     </ul>
                     <a
-                        href={`mailto:${site.contact.sales}?subject=${encodeURIComponent(`G8Deck ${tier.name} — pricing`)}`}
+                        href={mailto(`Pricing enquiry — ${tier.name}`)}
                         class:list={[
                             'btn btn-sm mt-auto w-full',
                             tier.featured ? 'btn-primary' : 'btn-ghost',
@@ -47,5 +54,5 @@ import { plans, site } from '../../data/site';
     </div>
 
     <p class="text-muted mt-8 max-w-2xl text-sm text-pretty">{plans.note}</p>
-    <p class="mono-label text-idle mt-4">FPX · Touch ’n Go · Stripe · annual invoicing</p>
+    <p class="mono-label text-idle mt-4">USD · card · FPX · Touch ’n Go · annual invoicing</p>
 </Section>

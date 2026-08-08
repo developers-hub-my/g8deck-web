@@ -13,17 +13,25 @@ export const site = {
         'G8Deck turns an architecture blueprint into running infrastructure — provisioned, scaled, reconciled and audited on your own hardware, your cloud, or fully air-gapped.',
     company: {
         name: 'Developers Hub Sdn Bhd',
-        url: 'https://developershub.my',
+        url: 'https://devhub.my',
         country: 'Malaysia',
     },
     social: {
         github: 'https://github.com/developers-hub-my',
     },
     contact: {
-        sales: 'sales@g8deck.app',
-        support: 'support@g8deck.app',
+        /** One inbox for the whole product family. */
+        email: 'hello@devhub.my',
     },
 } as const;
+
+/**
+ * Build a mailto link with a subject that says which page and which intent it
+ * came from — one inbox serves every G8 product, so the subject is what routes
+ * it.
+ */
+export const mailto = (subject: string): string =>
+    `mailto:${site.contact.email}?subject=${encodeURIComponent(`[G8Deck] ${subject}`)}`;
 
 export const nav = [
     { label: 'Platform', href: '#platform' },
@@ -310,7 +318,7 @@ export const modes: readonly Mode[] = [
         egressLabel: 'egress: control plane + billing',
         points: [
             'Fastest path to a first deployment',
-            'MYR billing — FPX, Touch ’n Go and Stripe',
+            'USD billing — card, FPX and Touch ’n Go',
             'Usage and cost estimates per deployment',
             'Managed upgrades and patching',
         ],
@@ -411,7 +419,7 @@ export const plans: {
 } = {
     title: 'Plans that scale with the estate, not the seat count',
     body: 'Every tier gets the full pipeline, every provider driver and the complete audit trail. What changes is quota, governance depth and the support you can call on.',
-    note: 'Billing is in MYR. On-premise and air-gapped deployments are licensed per installation — talk to us for a quote.',
+    note: 'Pricing is being finalised and will be published in USD. On-premise and air-gapped deployments are licensed per installation — talk to us for a quote in the meantime.',
     tiers: [
         {
             name: 'Starter',
@@ -516,8 +524,8 @@ export const footerLinks = [
         links: [
             { label: 'Developers Hub', href: site.company.url },
             { label: 'GitHub', href: site.social.github },
-            { label: 'Sales', href: `mailto:${site.contact.sales}` },
-            { label: 'Support', href: `mailto:${site.contact.support}` },
+            { label: 'Sales enquiry', href: mailto('Sales enquiry') },
+            { label: 'Support', href: mailto('Support request') },
         ],
     },
 ] as const;

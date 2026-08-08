@@ -1,18 +1,20 @@
 <!--
   G8Deck — icon mark: "The Deck Seam".
-  Two stacked deployment plates, registered against each other at a deck line.
-  The seam notched into both flanks pinches the waist, so the silhouette
-  simultaneously reads as the G8 family "8".
 
-  Grid 48x48. Ink 36x36 at (6,6). Bar weight 6u everywhere. Outer radius 8u,
-  counter radius 2u, seam 4u deep x 6u tall.
+  Two deployment plates stacked and registered against each other. The seam is
+  notched into both flanks, which pinches the waist so the same silhouette also
+  reads as the "8" of the G8 product family.
+
+  Construction, 48x48 grid: ink 36x36 inset 6u. Bar weight 6u everywhere —
+  counter corners are drawn concentric to the shell (r4 against the r10 shell,
+  r2 elsewhere) so the wall never thins at a corner. Seam 4u deep x 6u tall.
   Colour inherits from surrounding text via `currentColor`.
 -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" role="img" aria-label="G8Deck">
   <path
     fill="currentColor"
     fill-rule="evenodd"
-    d="M14 6 h20 a8 8 0 0 1 8 8 v6 h-4 v6 h4 v8 a8 8 0 0 1 -8 8 h-20 a8 8 0 0 1 -8 -8 v-8 h4 v-6 h-4 v-6 a8 8 0 0 1 8 -8 z
-       M14 12 h20 a2 2 0 0 1 2 2 v4 a2 2 0 0 1 -2 2 h-20 a2 2 0 0 1 -2 -2 v-4 a2 2 0 0 1 2 -2 z
-       M14 26 h20 a2 2 0 0 1 2 2 v6 a2 2 0 0 1 -2 2 h-20 a2 2 0 0 1 -2 -2 v-6 a2 2 0 0 1 2 -2 z" />
+    d="M16 6 h16 a10 10 0 0 1 10 10 v4 h-4 v6 h4 v6 a10 10 0 0 1 -10 10 h-16 a10 10 0 0 1 -10 -10 v-6 h4 v-6 h-4 v-4 a10 10 0 0 1 10 -10 z
+       M16 12 H32 A4 4 0 0 1 36 16 V18 A2 2 0 0 1 34 20 H14 A2 2 0 0 1 12 18 V16 A4 4 0 0 1 16 12 Z
+       M14 26 H34 A2 2 0 0 1 36 28 V32 A4 4 0 0 1 32 36 H16 A4 4 0 0 1 12 32 V28 A2 2 0 0 1 14 26 Z" />
 </svg>

@@ -1,21 +1,29 @@
 <!--
   G8Deck — favicon.
-  Browser tabs sit on unpredictable chrome (light, dark, high-contrast), so the
-  outline mark alone cannot be trusted to hold contrast. This version ships the
-  brand colour as a solid emerald tile with the mark reversed out in white,
-  which guarantees a fixed contrast ratio on any tab background and puts the
-  emerald itself on screen at 16px, where the silhouette alone is hard to read.
 
-  Grid 48x48, full bleed. Tile radius 11u. Mark geometry identical to mark.svg
-  (36x36 ink, 6u inset = 12.5% padding), so the tab icon and the app icon
-  are the same drawing, not two lookalikes.
+  Two decisions worth recording:
+
+  1. Solid tile, not the bare outline mark. Browser tabs sit on unpredictable
+     chrome (light, dark, high-contrast, pinned-tab strips), so a currentColor
+     outline cannot be trusted to hold contrast. The tile fixes the contrast
+     ratio on any tab background and puts the brand emerald itself on screen at
+     16px, which is the only thing anyone recognises at that size.
+
+  2. The mark is knocked out in the page ink (#080C10), not white. Against
+     emerald-500 the ink knockout runs ~6.5:1 where white runs ~2.4:1, so the
+     counters and the seam survive at 16px. It also matches the tile/ink
+     favicon convention already used by scripts/gen-assets.mjs.
+
+  Grid 48x48, full bleed, tile radius 11u. Mark geometry identical to mark.svg
+  (36x36 ink, 6u inset = 12.5% padding), so the tab icon and the app icon are
+  the same drawing rather than two lookalikes.
 -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="G8Deck">
-  <rect width="48" height="48" rx="11" fill="#059669" />
+  <rect width="48" height="48" rx="11" fill="#10B981" />
   <path
-    fill="#FFFFFF"
+    fill="#080C10"
     fill-rule="evenodd"
-    d="M14 6 h20 a8 8 0 0 1 8 8 v6 h-4 v6 h4 v8 a8 8 0 0 1 -8 8 h-20 a8 8 0 0 1 -8 -8 v-8 h4 v-6 h-4 v-6 a8 8 0 0 1 8 -8 z
-       M14 12 h20 a2 2 0 0 1 2 2 v4 a2 2 0 0 1 -2 2 h-20 a2 2 0 0 1 -2 -2 v-4 a2 2 0 0 1 2 -2 z
-       M14 26 h20 a2 2 0 0 1 2 2 v6 a2 2 0 0 1 -2 2 h-20 a2 2 0 0 1 -2 -2 v-6 a2 2 0 0 1 2 -2 z" />
+    d="M16 6 h16 a10 10 0 0 1 10 10 v4 h-4 v6 h4 v6 a10 10 0 0 1 -10 10 h-16 a10 10 0 0 1 -10 -10 v-6 h4 v-6 h-4 v-4 a10 10 0 0 1 10 -10 z
+       M16 12 H32 A4 4 0 0 1 36 16 V18 A2 2 0 0 1 34 20 H14 A2 2 0 0 1 12 18 V16 A4 4 0 0 1 16 12 Z
+       M14 26 H34 A2 2 0 0 1 36 28 V32 A4 4 0 0 1 32 36 H16 A4 4 0 0 1 12 32 V28 A2 2 0 0 1 14 26 Z" />
 </svg>

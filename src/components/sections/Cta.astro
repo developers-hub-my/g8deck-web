@@ -1,6 +1,6 @@
 ---
 import Section from '../Section.astro';
-import { site } from '../../data/site';
+import { mailto, site } from '../../data/site';
 ---
 
 <Section id="start" index="10" label="END" terminal>
@@ -14,16 +14,11 @@ import { site } from '../../data/site';
 
         <div class="mt-10 flex flex-wrap gap-3">
             <a href={site.consoleUrl} class="btn btn-primary">Open the console</a>
-            <a
-                href={`mailto:${site.contact.sales}?subject=G8Deck%20—%20talk%20to%20engineering`}
-                class="btn btn-ghost"
-            >
-                Talk to engineering
-            </a>
+            <a href={mailto('Talk to engineering')} class="btn btn-ghost"> Talk to engineering </a>
         </div>
 
         <p class="mono-label text-idle mt-8">
-            console.g8deck.app · sales@g8deck.app · Kuala Lumpur, Malaysia
+            console.g8deck.app · {site.contact.email} · Kuala Lumpur, Malaysia
         </p>
     </div>
 </Section>

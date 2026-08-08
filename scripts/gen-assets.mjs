@@ -27,22 +27,28 @@ const FG = '#E6EDF3';
 const MUTED = '#8FA3B0';
 const ACCENT = '#10B981';
 
-/** The deck mark, drawn once and reused at both sizes. */
-const mark = (x, y, scale, stroke, fill, cut) => `
-  <g transform="translate(${x} ${y}) scale(${scale})">
-    <rect x="4" y="5" width="24" height="6" rx="1.5" fill="${fill}"/>
-    <rect x="4" y="13" width="24" height="6" rx="1.5" fill="none" stroke="${stroke}" stroke-width="1.5"/>
-    <rect x="4" y="21" width="24" height="6" rx="1.5" fill="none" stroke="${stroke}" stroke-width="1.5" opacity="0.55"/>
-    <path d="M10 8 L10 24" stroke="${cut}" stroke-width="1.5"/>
-    <path d="M10 11 L10 13 M10 19 L10 21" stroke="${stroke}" stroke-width="1.5"/>
+/**
+ * The deck-seam mark — see src/assets/brand/. Drawn on a 48x48 grid with 36x36
+ * of ink, a constant 6u bar weight, and counter corners concentric to the shell
+ * so no wall thins at a corner. Keep in sync with src/components/Logo.astro.
+ */
+const MARK_PATH =
+    'M16 6 h16 a10 10 0 0 1 10 10 v4 h-4 v6 h4 v6 a10 10 0 0 1 -10 10 h-16 a10 10 0 0 1 -10 -10 v-6 h4 v-6 h-4 v-4 a10 10 0 0 1 10 -10 z ' +
+    'M16 12 H32 A4 4 0 0 1 36 16 V18 A2 2 0 0 1 34 20 H14 A2 2 0 0 1 12 18 V16 A4 4 0 0 1 16 12 Z ' +
+    'M14 26 H34 A2 2 0 0 1 36 28 V32 A4 4 0 0 1 32 36 H16 A4 4 0 0 1 12 32 V28 A2 2 0 0 1 14 26 Z';
+
+const mark = (x, y, size, fill) => `
+  <g transform="translate(${x} ${y}) scale(${size / 48})">
+    <path d="${MARK_PATH}" fill="${fill}" fill-rule="evenodd"/>
   </g>`;
 
 // ---- favicon --------------------------------------------------------------
-// Emerald tile with the mark knocked out in the page ink: at 16px the tile is
-// what makes it findable in a row of tabs, and the three bands still read.
-const favicon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-  <rect width="32" height="32" rx="7" fill="${ACCENT}"/>
-  ${mark(0, 0, 1, INK, INK, ACCENT)}
+// Emerald tile with the mark knocked out in the page ink. The tile is what
+// makes it findable in a row of tabs, and ink-on-emerald runs ~6.5:1 where
+// white would run ~2.4:1 — the counters and the seam survive at 16px.
+const favicon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <rect width="48" height="48" rx="11" fill="${ACCENT}"/>
+  <path d="${MARK_PATH}" fill="${INK}" fill-rule="evenodd"/>
 </svg>
 `;
 
@@ -93,8 +99,8 @@ const og = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" vi
   <circle cx="40" cy="96" r="4.5" fill="${ACCENT}"/>
 
   <!-- Lockup -->
-  ${mark(72, 78, 1.1, ACCENT, ACCENT, INK)}
-  <text x="116" y="103" font-family="${SANS}" font-size="27" font-weight="700" fill="${FG}" letter-spacing="-0.5">G8Deck</text>
+  ${mark(72, 74, 40, ACCENT)}
+  <text x="126" y="104" font-family="${SANS}" font-size="29" font-weight="700" fill="${FG}" letter-spacing="-0.6">G8Deck</text>
 
   <!-- Headline -->
   <text x="72" y="228" font-family="${SANS}" font-size="66" font-weight="700" fill="${FG}" letter-spacing="-2.4">Describe the architecture.</text>
