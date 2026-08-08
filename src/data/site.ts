@@ -55,12 +55,12 @@ export const hero = {
     primaryCta: { label: 'Open the console', href: site.consoleUrl },
     secondaryCta: { label: 'See how it works', href: '#platform' },
     /* Every figure here is counted from platform/g8deck-app, not estimated:
-       DeploymentPipeline::defaultSteps(), Services/Infra/Drivers (excluding the
-       Fake test double), ComponentTypeSeeder, DatabaseComplianceReporter. */
+       DeploymentPipeline::defaultSteps(), DriverResolver::driverClass(),
+       ComponentTypeSeeder, DatabaseComplianceReporter. */
     stats: [
         { value: '20', label: 'pipeline steps, each idempotent' },
         { value: '63', label: 'provisionable component types' },
-        { value: '4', label: 'provider drivers implemented' },
+        { value: '4', label: 'providers with a working driver' },
         { value: '11', label: 'SOC 2 controls mapped to evidence' },
     ],
 } as const;
@@ -300,18 +300,23 @@ export const componentMatrix = [
 ] as const;
 
 /**
- * Only drivers that exist in app/Services/Infra/Drivers belong in `shipped` —
- * the Fake driver is a test double and is not one of them. `modelled` are the
- * remaining InfraProviderType cases: the registry accepts them, the driver is
- * not written yet. Never move a name up a list before the driver lands.
+ * `shipped` is exactly what DriverResolver::driverClass() maps to a real
+ * driver — Docker, Docker Swarm, and K8s/K3s, which share one driver. A
+ * directory under Services/Infra/Drivers is not the test: Proxmox has a full
+ * driver there, but driverClass() still resolves it to the Fake, so its
+ * workload runtime is FakeWorkloadRuntime and nothing actually deploys onto it.
+ *
+ * `modelled` is every other InfraProviderType case: the registry accepts them,
+ * the pipeline stays executable through the Fake pair, and nothing runs. Never
+ * move a name up before driverClass() names its driver.
  */
 export const providers = {
-    shipped: ['Docker', 'Docker Swarm', 'Kubernetes', 'Proxmox'],
+    shipped: ['Docker', 'Docker Swarm', 'Kubernetes', 'k3s'],
     modelled: [
         'Bare metal',
+        'Proxmox',
         'VMware',
         'KVM',
-        'k3s',
         'Nomad',
         'AWS',
         'GCP',
@@ -492,11 +497,11 @@ export const faqs = [
     },
     {
         q: 'Which providers can it actually provision today?',
-        a: 'Four drivers are implemented: Docker, Docker Swarm, Kubernetes and Proxmox. The other provider types are modelled in the registry — bare metal, VMware, KVM, k3s, Nomad, AWS, GCP, Azure, Hetzner and DigitalOcean — but their drivers are still being written, and we would rather say so than let you find out during an evaluation.',
+        a: 'Docker, Docker Swarm, Kubernetes and k3s — Kubernetes and k3s share one driver. The other provider types are modelled in the registry — bare metal, Proxmox, VMware, KVM, Nomad, AWS, GCP, Azure, Hetzner and DigitalOcean — and their drivers are still being written. We would rather say so than let you find out during an evaluation.',
     },
     {
         q: 'Can I keep my existing Kubernetes cluster?',
-        a: 'Yes. Kubernetes is a provider driver like any other, so an existing cluster becomes a target for deployments rather than something G8Deck replaces.',
+        a: 'Yes. Kubernetes and k3s are provider drivers like any other, so an existing cluster becomes a target for deployments rather than something G8Deck replaces.',
     },
 ] as const;
 

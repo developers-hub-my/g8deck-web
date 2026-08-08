@@ -52,11 +52,17 @@ scripts/                  one-off generators; their output is committed
   `platform/g8deck-app` before it is written. Verify against code, not against
   the app's own `CLAUDE.md`: that file describes the intended product and runs
   ahead of it (it lists Oracle and 14 provider types; the code has neither).
-  Count the enum cases, the driver directories, the seeder rows. An
-  implementation named `Fake*` is a test double and does not count as shipped.
+  Count the enum cases, the resolver arms, the seeder rows. An implementation
+  named `Fake*` is a test double and does not count as shipped.
+- **A driver directory is not proof a provider works.** `DriverResolver::driverClass()`
+  is the only authority: it maps Docker, Docker Swarm and K8s/K3s to real
+  drivers and everything else to `FakeProviderDriver`, which also decides the
+  node agent, the workload runtime and the provisioner registry. Proxmox has a
+  356-line driver on disk and still resolves to the Fake pair, so nothing
+  deploys onto it — it belongs under "modelled", not "shipped".
 - **Numbers must be true.** The pipeline is 20 steps (`DeploymentPipeline::defaultSteps()`),
-  63 component types (`ComponentTypeSeeder`), 4 provider drivers
-  (`app/Services/Infra/Drivers`, less `Fake`), 11 SOC 2 controls
+  63 component types (`ComponentTypeSeeder`), 4 working providers across 3
+  drivers (`DriverResolver::driverClass()`), 11 SOC 2 controls
   (`DatabaseComplianceReporter`). If the product changes, change `site.ts` — do
   not round for effect.
 - **Roadmap is labelled as roadmap.** Where the site names something unbuilt —

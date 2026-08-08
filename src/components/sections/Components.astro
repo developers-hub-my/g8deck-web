@@ -10,7 +10,7 @@ const total = componentMatrix.reduce((n, group) => n + group.items.length, 0);
     <SectionHead
         eyebrow="Breadth"
         title="Everything below your container, accounted for."
-        lede={`${total} component types provision through one contract, and ${providers.shipped.length} provider drivers place them today. Adding a component or a provider is a new driver, not a change to the core.`}
+        lede={`${total} component types provision through one contract, and ${providers.shipped.length} providers can place them today. Adding a component or a provider is a new driver, not a change to the core.`}
     />
 
     <div class="mt-14 space-y-px">
@@ -36,7 +36,7 @@ const total = componentMatrix.reduce((n, group) => n + group.items.length, 0);
     </div>
 
     <div class="border-line mt-14 border-t pt-10">
-        <p class="mono-label text-accent">Provider drivers</p>
+        <p class="mono-label text-accent">Provisions today</p>
         <p class="text-muted mt-4 max-w-2xl text-pretty">
             Drivers talk over SSH and REST — the two things that work identically on a rack in a
             data centre and on a public cloud API. The blueprint never names any of them.
