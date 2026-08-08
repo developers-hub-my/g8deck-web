@@ -297,49 +297,61 @@ export const providers = [
     'DigitalOcean',
 ] as const;
 
-interface Mode {
-    name: string;
-    summary: string;
-    commercial: string;
-    /** How many connections cross the customer's perimeter — drives the diagram. */
-    egress: number;
-    egressLabel: string;
-    points: readonly string[];
-    featured?: boolean;
-}
-
-export const modes: readonly Mode[] = [
-    {
-        name: 'SaaS',
-        summary:
-            'Hosted by Developers Hub. Multi-tenant control plane, your infrastructure providers.',
-        commercial: 'Subscription + usage',
-        egress: 2,
-        egressLabel: 'egress: control plane + billing',
-        points: [
-            'Fastest path to a first deployment',
-            'USD billing — card, FPX and Touch ’n Go',
-            'Usage and cost estimates per deployment',
-            'Managed upgrades and patching',
-        ],
+/**
+ * The two deployment modes, compared property by property. Rows read across:
+ * `values` is index-aligned with `columns`. Several rows are deliberately
+ * identical in both columns — what does *not* change is the point.
+ */
+export const deployment: {
+    columns: readonly { name: string; featured?: boolean }[];
+    rows: readonly { label: string; values: readonly string[] }[];
+    commercial: { label: string; values: readonly string[] };
+    note: string;
+} = {
+    columns: [{ name: 'SaaS' }, { name: 'On-Premise', featured: true }],
+    rows: [
+        {
+            label: 'Control plane',
+            values: ['Hosted by Developers Hub', 'Yours — Docker Compose or Helm'],
+        },
+        {
+            label: 'Workloads and data',
+            values: ['Yours', 'Yours'],
+        },
+        {
+            label: 'Providers',
+            values: ['Your providers, your accounts', 'Your providers, your accounts'],
+        },
+        {
+            label: 'Database',
+            values: ['Managed for you', 'MySQL, MariaDB, PostgreSQL, MSSQL or Oracle'],
+        },
+        {
+            label: 'Identity',
+            values: ['G8ID or your own IdP', 'LDAP / AD, Keycloak or G8ID'],
+        },
+        {
+            label: 'Upgrades',
+            values: ['Managed, on our schedule', 'Yours, on your schedule'],
+        },
+        {
+            label: 'Network posture',
+            values: [
+                'Control plane reached over the internet',
+                'Control plane never leaves your network',
+            ],
+        },
+        {
+            label: 'Air-gapped',
+            values: ['—', 'Supported'],
+        },
+    ],
+    commercial: {
+        label: 'Commercial',
+        values: ['Subscription + usage', 'Licence + support, per installation'],
     },
-    {
-        name: 'On-Premise',
-        summary:
-            'The whole control plane inside your perimeter, via Docker Compose or a Helm chart — air-gapped if your environment requires it.',
-        commercial: 'Licence + support',
-        featured: true,
-        egress: 1,
-        egressLabel: 'egress: licence check — none, air-gapped',
-        points: [
-            'Data residency enforced per deployment',
-            'Your database of choice — MySQL, MariaDB, PostgreSQL, MSSQL or Oracle',
-            'Integrates with existing LDAP / AD or Keycloak',
-            'Air-gapped: zero external egress, internal PKI, registry and DNS',
-            'Compliance evidence never leaves your network',
-        ],
-    },
-];
+    note: 'Air-gapped is not a third product — it is on-premise with the perimeter closed: internal registry, internal PKI, internal DNS, and no external egress. Whether you need it is a property of your environment, not of the platform.',
+};
 
 export const compliance = {
     title: 'Compliance is a schema, not a slide',

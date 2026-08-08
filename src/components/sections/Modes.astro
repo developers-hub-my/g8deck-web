@@ -1,53 +1,114 @@
 ---
 import Section from '../Section.astro';
 import SectionHead from '../SectionHead.astro';
-import EgressDiagram from '../EgressDiagram.astro';
-import { modes } from '../../data/site';
+import { deployment } from '../../data/site';
+
+const { columns, rows, commercial, note } = deployment;
+
+/* The featured column is tinted top to bottom, so every cell needs to know. */
+const columnClass = (index: number) => (columns[index].featured ? 'bg-surface/40' : '');
+
+/* mono-label's 0.14em tracking overruns the row-label column on a phone, so the
+   label is set tighter until there is room for the full drafting-label look. */
+const rowLabel =
+    'text-muted mono-label py-4 pr-3 align-top text-[0.5625rem] font-semibold tracking-[0.09em] sm:pr-6 sm:text-[0.6875rem] sm:tracking-[0.14em]';
 ---
 
 <Section id="deployment" index="06" label="DEPLOYMENT">
     <SectionHead
         eyebrow="Where it runs"
         title="Two ways to run it. One control plane."
-        lede="The same platform, the same blueprints and the same pipeline in either mode. What changes is how much of it crosses your perimeter."
+        lede="The same platform, the same blueprints and the same 20-step pipeline either way. What changes is who holds the control plane — everything below it stays yours in both."
     />
 
-    <div class="mt-14 grid max-w-4xl gap-px sm:grid-cols-2">
-        {
-            modes.map((mode) => (
-                <article
-                    class:list={[
-                        'border-line bg-surface/40 flex flex-col border border-t-2 p-6',
-                        mode.featured ? 'border-t-accent' : 'border-t-transparent',
-                    ]}
-                >
-                    <div class="flex items-baseline justify-between gap-3">
-                        <h3 class="h3">{mode.name}</h3>
-                        {mode.featured && <span class="mono-label text-accent">Most deployed</span>}
-                    </div>
-                    <p class="text-muted mt-3 text-sm text-pretty">{mode.summary}</p>
+    <div class="mt-14">
+        <table class="w-full table-fixed border-collapse text-left">
+            <caption class="sr-only">
+                SaaS and on-premise deployment compared, property by property
+            </caption>
+            <colgroup>
+                <col class="w-[30%] sm:w-[26%]" />
+                <col class="w-[35%] sm:w-[37%]" />
+                <col class="w-[35%] sm:w-[37%]" />
+            </colgroup>
 
-                    <div class="mt-6">
-                        <EgressDiagram egress={mode.egress} label={mode.egressLabel} />
-                    </div>
-
-                    <ul class="mt-6 mb-8 space-y-2.5 text-sm">
-                        {mode.points.map((point) => (
-                            <li class="flex gap-3">
+            <thead>
+                <tr>
+                    <td></td>
+                    {
+                        columns.map((column, i) => (
+                            <th
+                                scope="col"
+                                class:list={[
+                                    'border-t-2 px-3 pt-4 pb-4 align-bottom sm:px-5',
+                                    columnClass(i),
+                                    column.featured ? 'border-t-accent' : 'border-t-line',
+                                ]}
+                            >
+                                {/* The badge sits above the name, and its slot is
+                                    reserved in both columns, so the two mode names
+                                    share one baseline. */}
                                 <span
-                                    class="bg-accent mt-[0.55rem] size-1 shrink-0 rounded-full"
-                                    aria-hidden="true"
-                                />
-                                <span class="text-pretty">{point}</span>
-                            </li>
-                        ))}
-                    </ul>
+                                    class="mono-label text-accent mb-3 block text-[0.5625rem] whitespace-nowrap sm:text-[0.6875rem]"
+                                    aria-hidden={!column.featured}
+                                >
+                                    {column.featured ? 'Most deployed' : ' '}
+                                </span>
+                                {/* nowrap: "On-Premise" otherwise breaks at its
+                                    hyphen in a narrow column. */}
+                                <span class="h3 block text-[1.0625rem] whitespace-nowrap sm:text-[1.375rem]">
+                                    {column.name}
+                                </span>
+                            </th>
+                        ))
+                    }
+                </tr>
+            </thead>
 
-                    <p class="border-line/70 mono-label text-idle mt-auto border-t pt-4">
-                        {mode.commercial}
-                    </p>
-                </article>
-            ))
-        }
+            <tbody>
+                {
+                    rows.map((row) => (
+                        <tr>
+                            <th scope="row" class:list={['border-line border-t', rowLabel]}>
+                                {row.label}
+                            </th>
+                            {row.values.map((value, i) => (
+                                <td
+                                    class:list={[
+                                        'border-line border-t px-3 py-4 align-top text-sm text-pretty sm:px-5',
+                                        columnClass(i),
+                                        value === '—' ? 'text-idle' : '',
+                                    ]}
+                                >
+                                    {value}
+                                </td>
+                            ))}
+                        </tr>
+                    ))
+                }
+            </tbody>
+
+            <tfoot>
+                <tr>
+                    <th scope="row" class:list={['border-line-strong border-t-2', rowLabel]}>
+                        {commercial.label}
+                    </th>
+                    {
+                        commercial.values.map((value, i) => (
+                            <td
+                                class:list={[
+                                    'border-line-strong border-t-2 px-3 py-4 align-top text-sm text-pretty sm:px-5',
+                                    columnClass(i),
+                                ]}
+                            >
+                                {value}
+                            </td>
+                        ))
+                    }
+                </tr>
+            </tfoot>
+        </table>
+
+        <p class="text-muted mt-8 max-w-2xl text-sm text-pretty">{note}</p>
     </div>
 </Section>
