@@ -7,7 +7,9 @@ export const site = {
     name: 'G8Deck',
     domain: 'g8deck.app',
     url: 'https://g8deck.app',
-    consoleUrl: 'https://console.g8deck.app',
+    // The console is the deployed Laravel app itself, which now serves
+    // g8deck.app directly -- not a subdomain in front of it.
+    consoleUrl: 'https://g8deck.app',
     tagline: 'Architecture-first infrastructure deployment',
     description:
         'G8Deck turns an architecture blueprint into running infrastructure — provisioned, scaled, reconciled and audited on your own hardware or your own cloud.',
