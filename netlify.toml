@@ -24,21 +24,22 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-# Convenience shortcuts to the product console.
+# Convenience shortcuts to the product console, which is the deployed Laravel
+# application at g8deck.app -- not a console.* subdomain, which never existed.
 [[redirects]]
   from = "/console"
-  to = "https://console.g8deck.app"
+  to = "https://g8deck.app"
   status = 302
   force = true
 
 [[redirects]]
   from = "/login"
-  to = "https://console.g8deck.app/login"
+  to = "https://g8deck.app/login"
   status = 302
   force = true
 
 [[redirects]]
   from = "/register"
-  to = "https://console.g8deck.app/register"
+  to = "https://g8deck.app/register"
   status = 302
   force = true
