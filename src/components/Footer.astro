@@ -5,8 +5,9 @@ import { footerLinks, site } from '../data/site';
 
 const year = new Date().getFullYear();
 
-/* Anything that leaves g8deck.app opens in its own tab — the in-page links are
-   all fragments, so a new tab would be wrong for them. */
+/* Anything that leaves this site opens in its own tab — including the console
+   on g8deck.app, which is a separate property. The in-page links are all
+   fragments, so a new tab would be wrong for them. */
 const isExternal = (href: string) => href.startsWith('http') || href.startsWith('mailto:');
 ---
 
