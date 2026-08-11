@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://g8deck.app/sitemap-index.xml
+Sitemap: https://g8deck.com/sitemap-index.xml

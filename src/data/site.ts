@@ -1,14 +1,17 @@
 /**
  * Single source of truth for every piece of copy and structured content on
- * g8deck.app. Sections import from here so the page stays layout-only.
+ * g8deck.com. Sections import from here so the page stays layout-only.
  */
 
 export const site = {
     name: 'G8Deck',
-    domain: 'g8deck.app',
-    url: 'https://g8deck.app',
-    // The console is the deployed Laravel app itself, which now serves
-    // g8deck.app directly -- not a subdomain in front of it.
+    // Two domains, deliberately: this marketing site is g8deck.com, and
+    // g8deck.app is the product itself — the deployed Laravel console, not a
+    // page of this site. Keep `url` and `consoleUrl` apart; canonical tags,
+    // the sitemap and the Open Graph card all derive from `url`, so pointing
+    // it at the console would have this site claim the console's pages.
+    domain: 'g8deck.com',
+    url: 'https://g8deck.com',
     consoleUrl: 'https://g8deck.app',
     tagline: 'Architecture-first infrastructure deployment',
     description:

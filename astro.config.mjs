@@ -5,7 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-    site: 'https://g8deck.app',
+    site: 'https://g8deck.com',
     integrations: [sitemap()],
     vite: {
         plugins: [tailwindcss()],
