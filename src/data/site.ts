@@ -63,7 +63,7 @@ export const hero = {
        DeploymentPipeline::defaultSteps(), DriverResolver::driverClass(),
        ComponentTypeSeeder, DatabaseComplianceReporter. */
     stats: [
-        { value: '20', label: 'pipeline steps, each idempotent' },
+        { value: '24', label: 'pipeline steps, each idempotent' },
         { value: '63', label: 'component types in the catalogue' },
         { value: '8', label: 'server platforms you can adopt today' },
         { value: '11', label: 'SOC 2 controls mapped to evidence' },
@@ -116,7 +116,7 @@ export const problems = [
 ] as const;
 
 export const pipeline = {
-    title: 'Twenty steps. Resumable. Idempotent.',
+    title: 'Twenty-four steps. Resumable. Idempotent.',
     body: 'Provisioning runs as one ordered pipeline. Every step is idempotent, every step has a rollback, and pipeline state is persisted per step — so a failure at step 13 resumes at step 13 instead of starting over or leaving orphaned resources behind.',
     /** The illustration ships mid-run: everything before this is done, this one is in flight. */
     runningStep: 13,
@@ -127,6 +127,14 @@ export const pipeline = {
                 {
                     name: 'Validate blueprint',
                     note: 'Resolve components, reject impossible topologies',
+                },
+                {
+                    name: 'Assign preview domains',
+                    note: 'A platform hostname, before anything checks for one',
+                },
+                {
+                    name: 'Preflight workloads',
+                    note: 'Warn on what cannot be reached or built, before it is',
                 },
                 { name: 'Check quota', note: 'Fail fast before anything is created' },
                 {
@@ -163,6 +171,10 @@ export const pipeline = {
                     name: 'Issue internal certificates',
                     note: 'Internal CA, mTLS everywhere — enforced',
                 },
+                {
+                    name: 'Provision mail sandbox',
+                    note: 'Captured mailbox, so a first boot cannot email real people',
+                },
                 { name: 'Inject secrets', note: 'Vault-backed, resolved at provision time' },
             ],
         },
@@ -171,6 +183,10 @@ export const pipeline = {
             steps: [
                 { name: 'Deploy workloads', note: 'Git repo, registry image or compose' },
                 { name: 'Run health checks', note: 'Gate the release on real liveness' },
+                {
+                    name: 'Install applications',
+                    note: 'Ready-made app installers run against the live instance',
+                },
                 { name: 'Configure observability', note: 'Metrics, logs, traces, alert rules' },
             ],
         },
