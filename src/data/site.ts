@@ -451,7 +451,7 @@ export const plans: {
 } = {
     title: 'Plans that scale with the estate, not the seat count',
     body: 'Every tier gets the full pipeline, every provider driver and the complete audit trail. What changes is capacity — servers, seats and deployments — never whether the platform will let you prove a control.',
-    note: 'A server is a billable node, counted by what runs an operating system: fifty containers on one Docker host are one server, not fifty. The three priced tiers run on our hosted control plane, billed monthly in USD and metered live. Running the control plane inside your own perimeter is an Enterprise licence — annual, per installation, quoted against the estate.',
+    note: 'A server is one machine, not one container — fifty containers on one Docker host count as one. Priced tiers are hosted and billed monthly; running the control plane on your own network is Enterprise.',
     tiers: [
         {
             name: 'Starter',
