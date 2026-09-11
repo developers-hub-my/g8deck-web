@@ -56,7 +56,7 @@ export const hero = {
     eyebrow: 'Architecture-first infrastructure platform',
     title: 'Describe the architecture.',
     titleAccent: 'Ship the infrastructure.',
-    body: 'G8Deck takes an architecture blueprint — three-tier, HA cluster, microservices — and provisions, operates, scales and reconciles the whole system on infrastructure you control. On-premise or in your own cloud. Any containerised workload, in any language.',
+    body: 'G8Deck takes an architecture blueprint — three-tier, HA cluster, microservices — and provisions, operates, scales and reconciles the whole system on infrastructure you control. On-premise or in your own cloud. Point it at a server you already have and your application runs there natively — nothing to containerise.',
     primaryCta: { label: 'Open the console', href: site.consoleUrl },
     secondaryCta: { label: 'See how it works', href: '#platform' },
     /* Every figure here is counted from platform/g8deck-app, not estimated:
@@ -64,8 +64,8 @@ export const hero = {
        ComponentTypeSeeder, DatabaseComplianceReporter. */
     stats: [
         { value: '20', label: 'pipeline steps, each idempotent' },
-        { value: '63', label: 'provisionable component types' },
-        { value: '4', label: 'providers with a working driver' },
+        { value: '63', label: 'component types in the catalogue' },
+        { value: '8', label: 'server platforms you can adopt today' },
         { value: '11', label: 'SOC 2 controls mapped to evidence' },
     ],
 } as const;
@@ -99,7 +99,7 @@ export const model = [
 export const problems = [
     {
         title: 'PaaS that only speaks one language',
-        body: 'Single-stack platforms cover the web tier and abandon everything else. G8Deck deploys any container — PHP, Python, Node, Go, Java, Ruby, Rust, .NET.',
+        body: 'Single-stack platforms cover the web tier and abandon everything else. G8Deck installs the toolchain on your own server and runs the application as an ordinary service — PHP and Node today, on any machine you can reach over SSH.',
     },
     {
         title: 'Server setup mistaken for lifecycle',
@@ -305,30 +305,27 @@ export const componentMatrix = [
 ] as const;
 
 /**
- * `shipped` is exactly what DriverResolver::driverClass() maps to a real
- * driver — Docker, Docker Swarm, and K8s/K3s, which share one driver. A
- * directory under Services/Infra/Drivers is not the test: Proxmox has a full
- * driver there, but driverClass() still resolves it to the Fake, so its
- * workload runtime is FakeWorkloadRuntime and nothing actually deploys onto it.
+ * Three states, because two could not tell the truth any more.
  *
- * `modelled` is every other InfraProviderType case: the registry accepts them,
- * the pipeline stays executable through the Fake pair, and nothing runs. Never
- * move a name up before driverClass() names its driver.
+ * `shipped` is what a customer can deploy onto today: a machine somebody
+ * already created, reached over SSH. `SimulatedCapabilities::isAdoptedVm()`
+ * is the list, and `DriverResolver` hands every one of them the real
+ * SshProviderDriver once it has credentials.
+ *
+ * `unreleased` is the container side — Docker, Docker Swarm and K8s/K3s,
+ * which share drivers that work. They are finished code held behind a
+ * release decision, which is a different thing from unfinished code and is
+ * labelled differently.
+ *
+ * `modelled` is what is genuinely not there. Proxmox has a 356-line driver
+ * on disk and `driverClass()` still resolves it to the Fake pair, so nothing
+ * deploys onto it; Nomad has no driver at all. Never move a name up before
+ * `driverClass()` names its driver AND the release ships.
  */
 export const providers = {
-    shipped: ['Docker', 'Docker Swarm', 'Kubernetes', 'k3s'],
-    modelled: [
-        'Bare metal',
-        'Proxmox',
-        'VMware',
-        'KVM',
-        'Nomad',
-        'AWS',
-        'GCP',
-        'Azure',
-        'Hetzner',
-        'DigitalOcean',
-    ],
+    shipped: ['Bare metal', 'VMware', 'KVM', 'AWS', 'GCP', 'Azure', 'Hetzner', 'DigitalOcean'],
+    unreleased: ['Docker', 'Docker Swarm', 'Kubernetes', 'k3s'],
+    modelled: ['Proxmox', 'Nomad'],
 } as const;
 
 /**
@@ -503,36 +500,38 @@ export const plans: {
  * invites the conclusion that the platform is opinionated about a framework
  * it is not opinionated about.
  *
- * And "shipped" means proven on a live deployment, not present in the code.
- * PHP and Node are proven; Python, Go and static builds have recipes,
- * presets and install commands and have not been run end to end on a real
- * one. Naming that gap here is cheaper than having it found during an
- * evaluation.
+ * And "shipped" means released and proven on a live deployment, not present
+ * in the code. Today that is one path: a machine somebody already created,
+ * adopted over SSH, running the application natively. PHP and Node are proven
+ * on it; Python, Go and static builds have recipes and presets and have not
+ * completed a live deployment. Container delivery has working drivers and is
+ * held for beta. Naming each gap here is cheaper than having it found during
+ * an evaluation.
  */
 export const faqs = [
     {
         q: 'Which languages and frameworks can I deploy?',
-        a: 'Two paths, and the answer differs. As a container, anything that produces an image — the runtime does not inspect what is inside it. Natively on a VM, G8Deck installs the toolchain itself: PHP and Node.js are proven end to end today, with presets for Laravel, Symfony, Next.js, Astro and plain Node. Python, Go and static sites are built and not yet proven on a live deployment; we will keep saying so until they are.',
+        a: 'G8Deck installs the toolchain on the server itself and runs your application as an ordinary service. PHP and Node.js are proven end to end today, with presets for Laravel, Symfony, Next.js, Astro and plain Node. Python, Go and static sites are built and have not yet completed a live deployment; we will keep saying so until they have. Container delivery, where the image is the only contract and the language stops mattering, has working drivers and is held for beta.',
     },
     {
         q: 'Do I have to containerise anything?',
-        a: 'No. A VM runs your application as an ordinary systemd service behind nginx — a git push, a build on the node, a release directory and an atomic switch. Containers are one delivery mode, not the price of entry.',
+        a: 'No — and today there is nothing to opt into. Your application runs as a systemd service behind nginx: a git push, a build on the node, a release directory and an atomic switch into it. Container delivery will be an option when it is released, never a requirement.',
     },
     {
         q: 'Does the same blueprint really run on different infrastructure?',
-        a: 'Yes, by construction. Blueprints carry no provider-specific fields, and every provider sits behind one driver contract. Moving a deployment from your own servers to a Kubernetes cluster is a change of provider, not a change of blueprint.',
+        a: 'Yes, by construction. Blueprints carry no provider-specific fields, and every provider sits behind one driver contract. Moving a deployment from a machine in your rack to one at a cloud host is a change of provider, not a change of blueprint.',
     },
     {
         q: 'What happens when provisioning fails halfway?',
         a: 'Pipeline state is persisted per step. Every step is idempotent and has a rollback, so you resume from the failed step rather than restarting — and a partial failure does not leave orphaned resources behind.',
     },
     {
-        q: 'Which providers can it actually provision today?',
-        a: 'Docker, Docker Swarm, Kubernetes and k3s each have their own driver and deploy into a host or cluster you already run. Machines are adopted rather than created: point G8Deck at a server you already have — bare metal, VMware, KVM, AWS, GCP, Azure, Hetzner or DigitalOcean — and it bootstraps and drives it over SSH. Proxmox and Nomad are modelled in the registry and their drivers are unfinished. We would rather say so than let you find out during an evaluation.',
+        q: 'Which infrastructure can it actually run on today?',
+        a: 'Any machine you can reach over SSH. Machines are adopted, not created — you bring the server and G8Deck bootstraps and drives it, whether it sits on bare metal, VMware, KVM, AWS, GCP, Azure, Hetzner or DigitalOcean. The container backends — Docker, Docker Swarm, Kubernetes and k3s — have working drivers and are held for beta. Proxmox and Nomad are modelled in the registry and their drivers are unfinished. We would rather say so than let you find out during an evaluation.',
     },
     {
-        q: 'Can I keep my existing Kubernetes cluster?',
-        a: 'Yes. Kubernetes and k3s are provider drivers like any other, so an existing cluster becomes a target for deployments rather than something G8Deck replaces.',
+        q: 'Can I bring a server that already exists?',
+        a: 'That is the only way in today. G8Deck does not create machines — you point it at one you already run, it bootstraps the stack over SSH and takes over the lifecycle from there. Your existing Kubernetes cluster becomes a target the same way once container delivery is released.',
     },
     {
         q: 'Which database does the platform itself need?',

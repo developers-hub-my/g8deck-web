@@ -9,8 +9,8 @@ const total = componentMatrix.reduce((n, group) => n + group.items.length, 0);
 <Section id="components" index="05" label="COMPONENTS">
     <SectionHead
         eyebrow="Breadth"
-        title="Everything below your container, accounted for."
-        lede={`${total} component types provision through one contract, and ${providers.shipped.length} providers can place them today. Adding a component or a provider is a new driver, not a change to the core.`}
+        title="Everything below your application, accounted for."
+        lede={`${total} component types are modelled in one catalogue, placed through one contract. ${providers.shipped.length} server platforms can be adopted today, and MySQL, MariaDB, PostgreSQL and Redis install natively on them — the rest of the catalogue arrives with the container backends.`}
     />
 
     <div class="mt-14 space-y-px">
@@ -36,15 +36,32 @@ const total = componentMatrix.reduce((n, group) => n + group.items.length, 0);
     </div>
 
     <div class="border-line mt-14 border-t pt-10">
-        <p class="mono-label text-accent">Provisions today</p>
+        <p class="mono-label text-accent">Adopted today</p>
         <p class="text-muted mt-4 max-w-2xl text-pretty">
-            Drivers talk over SSH and REST — the two things that work identically on a rack in a
-            data centre and on a public cloud API. The blueprint never names any of them.
+            You bring the machine; G8Deck bootstraps it over SSH and owns the lifecycle from there.
+            SSH is the one thing that works identically on a rack in a data centre and on a cloud
+            host, and the blueprint never names either.
         </p>
         <ul class="mt-6 flex flex-wrap gap-1.5">
             {
                 providers.shipped.map((provider) => (
                     <li class="border-accent/40 text-fg rounded-[2px] border px-2.5 py-1.5 font-mono text-xs">
+                        {provider}
+                    </li>
+                ))
+            }
+        </ul>
+
+        {
+            /* Two different absences, and collapsing them would misreport both:
+            these drivers work and are held for beta, the ones below do not
+            exist yet. */
+        }
+        <p class="mono-label text-idle mt-8">Built, held for beta</p>
+        <ul class="mt-4 flex flex-wrap gap-1.5">
+            {
+                providers.unreleased.map((provider) => (
+                    <li class="border-line/80 text-idle rounded-[2px] border border-dashed px-2.5 py-1.5 font-mono text-xs">
                         {provider}
                     </li>
                 ))
