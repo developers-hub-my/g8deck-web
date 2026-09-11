@@ -495,30 +495,48 @@ export const plans: {
     ],
 };
 
+/**
+ * Two rules this list is written under.
+ *
+ * It never names the stack G8Deck itself is built in. A prospect asking what
+ * they may deploy is asking about their code, and answering with ours only
+ * invites the conclusion that the platform is opinionated about a framework
+ * it is not opinionated about.
+ *
+ * And "shipped" means proven on a live deployment, not present in the code.
+ * PHP and Node are proven; Python, Go and static builds have recipes,
+ * presets and install commands and have not been run end to end on a real
+ * one. Naming that gap here is cheaper than having it found during an
+ * evaluation.
+ */
 export const faqs = [
     {
-        q: 'Do I have to write my applications in a particular language?',
-        a: 'No. G8Deck deploys any containerised workload — PHP, Python, Node, Go, Java, Ruby, Rust, .NET or anything else that produces an image. Laravel is what G8Deck itself is built in; it is not a constraint on what you deploy.',
+        q: 'Which languages and frameworks can I deploy?',
+        a: 'Two paths, and the answer differs. As a container, anything that produces an image — the runtime does not inspect what is inside it. Natively on a VM, G8Deck installs the toolchain itself: PHP and Node.js are proven end to end today, with presets for Laravel, Symfony, Next.js, Astro and plain Node. Python, Go and static sites are built and not yet proven on a live deployment; we will keep saying so until they are.',
+    },
+    {
+        q: 'Do I have to containerise anything?',
+        a: 'No. A VM runs your application as an ordinary systemd service behind nginx — a git push, a build on the node, a release directory and an atomic switch. Containers are one delivery mode, not the price of entry.',
     },
     {
         q: 'Does the same blueprint really run on different infrastructure?',
-        a: 'Yes, by construction. Blueprints carry no provider-specific fields, and every provider sits behind a single driver contract. Moving from Proxmox to a public cloud is a change of provider, not a change of blueprint.',
+        a: 'Yes, by construction. Blueprints carry no provider-specific fields, and every provider sits behind one driver contract. Moving a deployment from your own servers to a Kubernetes cluster is a change of provider, not a change of blueprint.',
     },
     {
         q: 'What happens when provisioning fails halfway?',
         a: 'Pipeline state is persisted per step. Every step is idempotent and has a rollback, so you resume from the failed step rather than restarting — and a partial failure does not leave orphaned resources behind.',
     },
     {
-        q: 'Which database does the platform itself need?',
-        a: 'Whichever you already run. G8Deck supports MySQL, MariaDB, PostgreSQL and MSSQL, and behaves identically on all four. It also needs queue workers and a scheduler; the secret vault is built in.',
-    },
-    {
         q: 'Which providers can it actually provision today?',
-        a: 'Docker, Docker Swarm, Kubernetes and k3s — Kubernetes and k3s share one driver. The other provider types are modelled in the registry — bare metal, Proxmox, VMware, KVM, Nomad, AWS, GCP, Azure, Hetzner and DigitalOcean — and their drivers are still being written. We would rather say so than let you find out during an evaluation.',
+        a: 'Docker, Docker Swarm, Kubernetes and k3s each have their own driver and deploy into a host or cluster you already run. Machines are adopted rather than created: point G8Deck at a server you already have — bare metal, VMware, KVM, AWS, GCP, Azure, Hetzner or DigitalOcean — and it bootstraps and drives it over SSH. Proxmox and Nomad are modelled in the registry and their drivers are unfinished. We would rather say so than let you find out during an evaluation.',
     },
     {
         q: 'Can I keep my existing Kubernetes cluster?',
         a: 'Yes. Kubernetes and k3s are provider drivers like any other, so an existing cluster becomes a target for deployments rather than something G8Deck replaces.',
+    },
+    {
+        q: 'Which database does the platform itself need?',
+        a: 'Whichever you already run. G8Deck supports MySQL, MariaDB, PostgreSQL and MSSQL, and behaves identically on all four. The secret vault is part of the platform, so there is no external secret service to stand up alongside it.',
     },
 ] as const;
 
