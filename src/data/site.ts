@@ -425,62 +425,124 @@ interface PlanTier {
     name: string;
     /** Who the tier is for — shown under the name. */
     for: string;
+    /** List price exactly as it renders; `period` carries the unit. */
+    price: string;
+    period: string;
     points: readonly string[];
     featured?: boolean;
 }
 
+interface OnPremTier {
+    name: string;
+    for: string;
+    price: string;
+    servers: string;
+    seats: string;
+    cores: string;
+}
+
+/**
+ * Prices and capacity are the live figures from the console's own plan
+ * settings (Admin > Settings > Plans), which overlay `config/plans.php` — the
+ * settings row is the authority, not the file. Change one and change the
+ * other, or the site quotes a number no customer is ever charged.
+ *
+ * Tiers differ by capacity alone: the entitlement schema holds servers, seats,
+ * deployments, cores-per-server and organisations, and no feature flag. MFA,
+ * the audit trail, mTLS and encryption at rest are never tier-gated — selling
+ * compliance as an upsell is what disqualifies a tender.
+ */
 export const plans: {
     title: string;
     body: string;
     note: string;
     tiers: readonly PlanTier[];
+    onPremise: {
+        heading: string;
+        caption: string;
+        columns: readonly string[];
+        tiers: readonly OnPremTier[];
+    };
 } = {
     title: 'Plans that scale with the estate, not the seat count',
-    body: 'Every tier gets the full pipeline, every provider driver and the complete audit trail. What changes is quota, governance depth and the support you can call on.',
-    note: 'Pricing is being finalised and will be published in USD. On-premise deployments are licensed per installation — talk to us for a quote in the meantime.',
+    body: 'Every tier gets the full pipeline, every provider driver and the complete audit trail. What changes is capacity — servers, seats and deployments — never whether the platform will let you prove a control.',
+    note: 'A server is a billable node, counted by what runs an operating system: fifty containers on one Docker host are one server, not fifty. SaaS is billed monthly in USD and metered live. On-premise is licensed annually per installation in MYR, with unlimited users and every feature in every tier — the licence ceiling is the only enforcement.',
     tiers: [
         {
             name: 'Starter',
             for: 'A first production deployment',
-            points: [
-                'Single organisation, single team',
-                'Core provider drivers',
-                'Full 20-step provisioning pipeline',
-                'Community support',
-            ],
+            price: '$5',
+            period: 'USD / month',
+            points: ['2 servers', '1 seat', '10 deployments', '2 organisations'],
         },
         {
             name: 'Growth',
             for: 'Teams running several environments',
-            points: [
-                'Multiple teams and projects',
-                'Environment promotion and rollback',
-                'Autoscaling and drift reconciliation',
-                'Business-hours support',
-            ],
+            price: '$15',
+            period: 'USD / month',
+            points: ['50 servers', '10 seats', 'Unlimited deployments', 'Unlimited organisations'],
         },
         {
             name: 'Business',
             featured: true,
             for: 'Multi-project engineering organisations',
-            points: [
-                'Per-team and per-user resource quotas',
-                'Observability components provisioned with the deployment',
-                'SSO integration',
-                'Priority support with an SLA',
-            ],
+            price: '$49',
+            period: 'USD / month',
+            points: ['100 servers', '30 seats', 'Unlimited deployments', 'Unlimited organisations'],
         },
         {
             name: 'Enterprise',
             for: 'Regulated, government and GLC estates',
+            price: 'Negotiated',
+            period: 'USD / month',
             points: [
+                'Unlimited servers, seats and deployments',
+                'No cap on cores per server',
                 'On-premise licensing, per installation',
-                'SOC 2 evidence export and access reviews',
-                'Compliance evidence for ISO 27001, PDPA and GDPR',
-                'Named support engineer',
+                'SOC 2, ISO 27001, PDPA and GDPR evidence export',
             ],
         },
     ],
+    onPremise: {
+        heading: 'On-premise licences',
+        caption:
+            'Customer installation, licensed annually, enforced by the licence ceiling. Deployments and organisations are unlimited on every licence.',
+        columns: ['Licence', 'MYR / year', 'Servers', 'Seats', 'Max cores / server'],
+        tiers: [
+            {
+                name: 'Team',
+                for: 'Self-hosted licence for a single site',
+                price: 'RM 16,800',
+                servers: '15',
+                seats: 'Unlimited',
+                cores: '16',
+            },
+            {
+                name: 'Business',
+                for: 'Self-hosted licence for a growing estate',
+                price: 'RM 50,400',
+                servers: '50',
+                seats: 'Unlimited',
+                cores: '32',
+            },
+            {
+                name: 'Enterprise',
+                for: 'Air-gapped and regulated estates',
+                price: 'RM 132,000',
+                servers: '150',
+                seats: 'Unlimited',
+                cores: '64',
+            },
+            {
+                name: 'Academic',
+                for: 'Universities and student cohorts',
+                price: 'RM 16,200',
+                servers: '30',
+                seats: '60',
+                cores: '8',
+            },
+        ],
+    },
 };
 
 export const faqs = [
