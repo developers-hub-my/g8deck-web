@@ -1,0 +1,483 @@
+---
+/**
+ * "How it works" — three drafting-sheet panels read as one sequence.
+ *
+ *   01  a machine you already own, adopted over SSH (nothing bought, nothing moved)
+ *   02  the same machine described as a blueprint — still a drawing, nothing running
+ *   03  the drawing live and supervised, with a reconciliation loop that never ends
+ *
+ * Colour is state, as everywhere else: slate = pending, cyan = in flight,
+ * emerald = healthy. The drawings are informative, not decorative, so each
+ * carries its own `role="img"` label rather than leaning on the copy beside it.
+ *
+ * Copy lives in `src/data/site.ts`; `steps` takes the three labels from there.
+ */
+interface Props {
+    class?: string;
+    steps?: string[];
+}
+
+const { class: className = '', steps = ['Connect', 'Describe', 'Operate'] } = Astro.props;
+
+/* Marker ids are document-global; keep them unique per render. */
+const uid = Math.random().toString(36).slice(2, 8);
+const arrow = (n: number) => `ts-${uid}-arrow-${n}`;
+
+const [s1, s2, s3] = steps;
+---
+
+<ol class:list={['grid gap-4 sm:grid-cols-3 sm:gap-5', className]}>
+    <!-- ── 01 · adopt an existing machine ───────────────────────────────── -->
+    <li class="card drafting-grid min-w-0 p-4">
+        <p class="flex items-center gap-2.5">
+            <span
+                class="mono-label grid size-6 shrink-0 place-items-center border"
+                style="border-color: var(--color-line-strong); border-radius: var(--radius-chip); color: var(--color-fg); text-indent: 0.14em;"
+                aria-hidden="true">01</span
+            >
+            <span class="mono-label leading-[1.6]" style="color: var(--color-muted);">{s1}</span>
+        </p>
+
+        <svg
+            viewBox="0 0 240 150"
+            class="mt-4 h-auto w-full"
+            fill="none"
+            role="img"
+            aria-label="Step one: the G8Deck control plane reaches a rack of servers you already own over SSH on port 22. The hardware stays where it is."
+        >
+            <defs>
+                <marker
+                    id={arrow(1)}
+                    viewBox="0 0 8 8"
+                    refX="7"
+                    refY="4"
+                    markerWidth="6"
+                    markerHeight="6"
+                    orient="auto-start-reverse"
+                >
+                    <path d="M0 1 L7 4 L0 7 z" fill="var(--color-run)" stroke="none"></path>
+                </marker>
+            </defs>
+
+            <g
+                stroke="var(--color-line-strong)"
+                stroke-width="1"
+                vector-effect="non-scaling-stroke"
+            >
+                <!-- The boundary of what is already yours -->
+                <rect
+                    x="136"
+                    y="28"
+                    width="90"
+                    height="98"
+                    rx="3"
+                    stroke-dasharray="3 3"
+                    opacity="0.65"></rect>
+                <!-- Control plane -->
+                <rect x="14" y="62" width="60" height="34" rx="3" fill="var(--color-raised)"></rect>
+                <!-- Rack units -->
+                <rect x="146" y="40" width="70" height="22" rx="2" fill="var(--color-raised)"
+                ></rect>
+                <rect x="146" y="68" width="70" height="22" rx="2" fill="var(--color-raised)"
+                ></rect>
+                <rect x="146" y="96" width="70" height="22" rx="2" fill="var(--color-raised)"
+                ></rect>
+            </g>
+
+            <!-- Vents -->
+            <g
+                stroke="var(--color-line)"
+                stroke-width="1"
+                vector-effect="non-scaling-stroke"
+                opacity="0.9"
+            >
+                <line x1="200" y1="47" x2="200" y2="55"></line>
+                <line x1="205" y1="47" x2="205" y2="55"></line>
+                <line x1="210" y1="47" x2="210" y2="55"></line>
+                <line x1="200" y1="75" x2="200" y2="83"></line>
+                <line x1="205" y1="75" x2="205" y2="83"></line>
+                <line x1="210" y1="75" x2="210" y2="83"></line>
+                <line x1="200" y1="103" x2="200" y2="111"></line>
+                <line x1="205" y1="103" x2="205" y2="111"></line>
+                <line x1="210" y1="103" x2="210" y2="111"></line>
+            </g>
+
+            <!-- SSH link, in flight -->
+            <line
+                class="march"
+                x1="74"
+                y1="79"
+                x2="142"
+                y2="79"
+                stroke="var(--color-run)"
+                stroke-width="1"
+                stroke-dasharray="4 4"
+                vector-effect="non-scaling-stroke"
+                marker-end={`url(#${arrow(1)})`}></line>
+
+            <!-- State: the middle unit is being connected; the others wait. -->
+            <circle cx="155" cy="51" r="3" fill="none" stroke="var(--color-idle)" stroke-width="1"
+            ></circle>
+            <circle cx="155" cy="79" r="3" fill="none" stroke="var(--color-run)" stroke-width="1"
+            ></circle>
+            <circle cx="155" cy="107" r="3" fill="none" stroke="var(--color-idle)" stroke-width="1"
+            ></circle>
+
+            <g font-family="var(--font-mono)" font-size="8" fill="var(--color-fg)">
+                <text x="164" y="54">node-01</text>
+                <text x="164" y="82">node-02</text>
+                <text x="164" y="110">node-03</text>
+            </g>
+
+            <g
+                font-family="var(--font-label)"
+                font-size="8"
+                letter-spacing="1"
+                fill="var(--color-muted)"
+            >
+                <text x="14" y="56">CONTROL PLANE</text>
+                <text x="44" y="83" text-anchor="middle" fill="var(--color-fg)">G8DECK</text>
+                <text x="136" y="22">YOUR HARDWARE</text>
+                <text x="108" y="72" text-anchor="middle" fill="var(--color-run)">SSH :22</text>
+            </g>
+
+            <g font-family="var(--font-label)" font-size="8" letter-spacing="1">
+                <line
+                    x1="14"
+                    y1="136"
+                    x2="226"
+                    y2="136"
+                    stroke="var(--color-line)"
+                    stroke-width="1"
+                    vector-effect="non-scaling-stroke"></line>
+                <text x="14" y="148" fill="var(--color-muted)">ADOPT OVER SSH</text>
+                <text x="226" y="148" text-anchor="end" fill="var(--color-muted)">NOT MOVED</text>
+            </g>
+        </svg>
+    </li>
+
+    <!-- ── 02 · describe the architecture ───────────────────────────────── -->
+    <li class="card drafting-grid min-w-0 p-4">
+        <p class="flex items-center gap-2.5">
+            <span
+                class="mono-label grid size-6 shrink-0 place-items-center border"
+                style="border-color: var(--color-line-strong); border-radius: var(--radius-chip); color: var(--color-fg); text-indent: 0.14em;"
+                aria-hidden="true">02</span
+            >
+            <span class="mono-label leading-[1.6]" style="color: var(--color-muted);">{s2}</span>
+        </p>
+
+        <svg
+            viewBox="0 0 240 150"
+            class="mt-4 h-auto w-full"
+            fill="none"
+            role="img"
+            aria-label="Step two: a blueprint drawing of three layers — two load balancers, three application components, a database and a cache — with one component still being placed. Nothing is running yet."
+        >
+            <defs>
+                <marker
+                    id={arrow(2)}
+                    viewBox="0 0 8 8"
+                    refX="7"
+                    refY="4"
+                    markerWidth="6"
+                    markerHeight="6"
+                    orient="auto-start-reverse"
+                >
+                    <path d="M0 1 L7 4 L0 7 z" fill="var(--color-line-strong)" stroke="none"></path>
+                </marker>
+            </defs>
+
+            <g
+                stroke="var(--color-line-strong)"
+                stroke-width="1"
+                vector-effect="non-scaling-stroke"
+            >
+                <!-- Layer bands -->
+                <rect
+                    x="38"
+                    y="28"
+                    width="188"
+                    height="26"
+                    rx="3"
+                    stroke-dasharray="3 3"
+                    opacity="0.65"></rect>
+                <rect
+                    x="38"
+                    y="64"
+                    width="188"
+                    height="26"
+                    rx="3"
+                    stroke-dasharray="3 3"
+                    opacity="0.65"></rect>
+                <rect
+                    x="38"
+                    y="100"
+                    width="188"
+                    height="26"
+                    rx="3"
+                    stroke-dasharray="3 3"
+                    opacity="0.65"></rect>
+
+                <!-- Dimension line: three layers -->
+                <line x1="24" y1="28" x2="32" y2="28"></line>
+                <line x1="24" y1="126" x2="32" y2="126"></line>
+                <line x1="28" y1="28" x2="28" y2="126"></line>
+
+                <!-- Components -->
+                <rect x="46" y="34" width="52" height="14" rx="2" fill="var(--color-raised)"></rect>
+                <rect x="106" y="34" width="52" height="14" rx="2" fill="var(--color-raised)"
+                ></rect>
+                <rect x="46" y="70" width="52" height="14" rx="2" fill="var(--color-raised)"></rect>
+                <rect x="106" y="70" width="52" height="14" rx="2" fill="var(--color-raised)"
+                ></rect>
+                <rect x="166" y="70" width="52" height="14" rx="2" fill="var(--color-raised)"
+                ></rect>
+                <rect x="46" y="106" width="52" height="14" rx="2" fill="var(--color-raised)"
+                ></rect>
+                <rect x="106" y="106" width="52" height="14" rx="2" fill="var(--color-raised)"
+                ></rect>
+            </g>
+
+            <!-- Still being placed: outline only, no fill, no state yet -->
+            <rect
+                x="166"
+                y="106"
+                width="52"
+                height="14"
+                rx="2"
+                fill="none"
+                stroke="var(--color-idle)"
+                stroke-width="1"
+                stroke-dasharray="3 3"
+                vector-effect="non-scaling-stroke"></rect>
+
+            <!-- Layer joins -->
+            <g
+                stroke="var(--color-line-strong)"
+                stroke-width="1"
+                vector-effect="non-scaling-stroke"
+            >
+                <line x1="132" y1="54" x2="132" y2="64" marker-end={`url(#${arrow(2)})`}></line>
+                <line x1="132" y1="90" x2="132" y2="100" marker-end={`url(#${arrow(2)})`}></line>
+            </g>
+
+            <!-- Pending, every one of them -->
+            <g fill="none" stroke="var(--color-idle)" stroke-width="1">
+                <circle cx="55" cy="41" r="2.5"></circle>
+                <circle cx="115" cy="41" r="2.5"></circle>
+                <circle cx="55" cy="77" r="2.5"></circle>
+                <circle cx="115" cy="77" r="2.5"></circle>
+                <circle cx="175" cy="77" r="2.5"></circle>
+                <circle cx="55" cy="113" r="2.5"></circle>
+                <circle cx="115" cy="113" r="2.5"></circle>
+            </g>
+
+            <g font-family="var(--font-mono)" font-size="7" fill="var(--color-fg)">
+                <text x="63" y="44">lb</text>
+                <text x="123" y="44">lb</text>
+                <text x="63" y="80">app</text>
+                <text x="123" y="80">app</text>
+                <text x="183" y="80">app</text>
+                <text x="63" y="116">db</text>
+                <text x="123" y="116">cache</text>
+            </g>
+
+            <g
+                font-family="var(--font-label)"
+                font-size="8"
+                letter-spacing="1"
+                fill="var(--color-muted)"
+            >
+                <text x="18" y="80" text-anchor="middle" transform="rotate(-90 18 80)">×3</text>
+            </g>
+
+            <g font-family="var(--font-label)" font-size="8" letter-spacing="1">
+                <line
+                    x1="14"
+                    y1="136"
+                    x2="226"
+                    y2="136"
+                    stroke="var(--color-line)"
+                    stroke-width="1"
+                    vector-effect="non-scaling-stroke"></line>
+                <text x="14" y="148" fill="var(--color-muted)">BLUEPRINT</text>
+                <text x="226" y="148" text-anchor="end" fill="var(--color-idle)"
+                    >NOT PROVISIONED</text
+                >
+            </g>
+        </svg>
+    </li>
+
+    <!-- ── 03 · it runs, and keeps running ──────────────────────────────── -->
+    <li class="card drafting-grid min-w-0 p-4">
+        <p class="flex items-center gap-2.5">
+            <span
+                class="mono-label grid size-6 shrink-0 place-items-center border"
+                style="border-color: var(--color-line-strong); border-radius: var(--radius-chip); color: var(--color-fg); text-indent: 0.14em;"
+                aria-hidden="true">03</span
+            >
+            <span class="mono-label leading-[1.6]" style="color: var(--color-muted);">{s3}</span>
+        </p>
+
+        <svg
+            viewBox="0 0 240 150"
+            class="mt-4 h-auto w-full"
+            fill="none"
+            role="img"
+            aria-label="Step three: three healthy nodes feed a reconciliation loop that runs continuously, detecting drift and correcting it."
+        >
+            <defs>
+                <marker
+                    id={arrow(3)}
+                    viewBox="0 0 8 8"
+                    refX="7"
+                    refY="4"
+                    markerWidth="6"
+                    markerHeight="6"
+                    orient="auto-start-reverse"
+                >
+                    <path d="M0 1 L7 4 L0 7 z" fill="var(--color-line-strong)" stroke="none"></path>
+                </marker>
+                <marker
+                    id={arrow(4)}
+                    viewBox="0 0 8 8"
+                    refX="7"
+                    refY="4"
+                    markerWidth="6"
+                    markerHeight="6"
+                    orient="auto-start-reverse"
+                >
+                    <path d="M0 1 L7 4 L0 7 z" fill="var(--color-run)" stroke="none"></path>
+                </marker>
+            </defs>
+
+            <g
+                stroke="var(--color-line-strong)"
+                stroke-width="1"
+                vector-effect="non-scaling-stroke"
+            >
+                <rect x="22" y="26" width="60" height="26" rx="3" fill="var(--color-raised)"></rect>
+                <rect x="90" y="26" width="60" height="26" rx="3" fill="var(--color-raised)"></rect>
+                <rect x="158" y="26" width="60" height="26" rx="3" fill="var(--color-raised)"
+                ></rect>
+            </g>
+
+            <!-- Healthy, and saying so -->
+            <circle class="ping" cx="33" cy="39" r="3" fill="var(--color-ok)"></circle>
+            <circle cx="33" cy="39" r="3" fill="var(--color-ok)"></circle>
+            <circle cx="101" cy="39" r="3" fill="var(--color-ok)"></circle>
+            <circle cx="169" cy="39" r="3" fill="var(--color-ok)"></circle>
+
+            <g font-family="var(--font-mono)" font-size="8" fill="var(--color-fg)">
+                <text x="42" y="42">app-01</text>
+                <text x="110" y="42">app-02</text>
+                <text x="178" y="42">db-01</text>
+            </g>
+
+            <!-- Reported state falls into the loop -->
+            <g
+                stroke="var(--color-line-strong)"
+                stroke-width="1"
+                vector-effect="non-scaling-stroke"
+            >
+                <line x1="52" y1="52" x2="52" y2="68" marker-end={`url(#${arrow(3)})`}></line>
+                <line x1="120" y1="52" x2="120" y2="68" marker-end={`url(#${arrow(3)})`}></line>
+                <line x1="188" y1="52" x2="188" y2="68" marker-end={`url(#${arrow(3)})`}></line>
+            </g>
+
+            <!-- The loop that never closes out -->
+            <rect
+                x="28"
+                y="68"
+                width="184"
+                height="46"
+                rx="12"
+                stroke="var(--color-line-strong)"
+                stroke-width="1"
+                vector-effect="non-scaling-stroke"></rect>
+            <rect
+                class="flow"
+                x="28"
+                y="68"
+                width="184"
+                height="46"
+                rx="12"
+                stroke="var(--color-run)"
+                stroke-width="1"
+                stroke-dasharray="6 14"
+                vector-effect="non-scaling-stroke"></rect>
+            <g stroke="var(--color-run)" stroke-width="1" vector-effect="non-scaling-stroke">
+                <line x1="112" y1="68" x2="128" y2="68" marker-end={`url(#${arrow(4)})`}></line>
+                <line x1="128" y1="114" x2="112" y2="114" marker-end={`url(#${arrow(4)})`}></line>
+            </g>
+
+            <g font-family="var(--font-label)" letter-spacing="1" text-anchor="middle">
+                <text x="120" y="88" font-size="8" fill="var(--color-fg)">RECONCILE LOOP</text>
+                <text x="120" y="102" font-size="7" fill="var(--color-muted)"
+                    >DRIFT DETECTED · CORRECTED</text
+                >
+            </g>
+
+            <g font-family="var(--font-label)" font-size="8" letter-spacing="1">
+                <line
+                    x1="14"
+                    y1="136"
+                    x2="226"
+                    y2="136"
+                    stroke="var(--color-line)"
+                    stroke-width="1"
+                    vector-effect="non-scaling-stroke"></line>
+                <text x="14" y="148" fill="var(--color-muted)">SUPERVISED · LIVE</text>
+                <text x="226" y="148" text-anchor="end" fill="var(--color-ok)">HEALTHY</text>
+            </g>
+        </svg>
+    </li>
+</ol>
+
+<style>
+    /* Text is never stroked — only the drawn geometry. */
+    text {
+        stroke: none;
+    }
+
+    /* SVG transforms need a box to be relative to before `center` means centre. */
+    .ping {
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: ping-ring 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+
+    /* Dashes travel; the still frame is the same drawing with the dashes parked. */
+    .march {
+        animation: march-ssh 1.4s linear infinite;
+    }
+
+    .flow {
+        animation: march-loop 3.2s linear infinite;
+    }
+
+    @keyframes march-ssh {
+        to {
+            stroke-dashoffset: -8;
+        }
+    }
+
+    @keyframes march-loop {
+        to {
+            stroke-dashoffset: -40;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .ping,
+        .march,
+        .flow {
+            animation: none;
+        }
+
+        .ping {
+            opacity: 0.4;
+        }
+    }
+</style>

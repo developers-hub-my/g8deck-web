@@ -3,18 +3,30 @@ import Section from '../Section.astro';
 import { mailto, site } from '../../data/site';
 ---
 
-<Section id="start" index="10" label="END" terminal>
+<Section id="start" index="11" label="END" terminal>
     <div class="max-w-3xl">
         <p class="mono-label text-accent">Get started</p>
-        <h2 class="h2 mt-5">Bring the architecture. We’ll provision it.</h2>
+        <h2 class="h2 mt-5">See it provision a real machine.</h2>
         <p class="body-lg text-muted mt-6 text-pretty">
-            Sign in to the console to author your first blueprint, or talk to the engineers who
-            built the pipeline about an on-premise installation.
+            Twenty minutes, on one of your servers or one of ours. You leave with a working
+            deployment and a straight answer on whether this fits.
         </p>
 
         <div class="mt-10 flex flex-wrap gap-3">
-            <a href={site.consoleUrl} class="btn btn-primary">Open the console</a>
-            <a href={mailto('Talk to engineering')} class="btn btn-ghost"> Talk to engineering </a>
+            <a href={mailto('Book a 20-minute demo')} class="btn btn-primary">
+                Book a 20-minute demo
+            </a>
+            <a href="/docs/first-deployment" class="btn btn-ghost">Read the walkthrough</a>
         </div>
+
+        <p class="text-muted mt-8 text-sm text-pretty">
+            Already have an account? <a
+                href={site.consoleUrl}
+                class="text-accent hover:text-fg transition-colors">Sign in to the console</a
+            >. Or write to <a
+                href={mailto('Question about G8Deck')}
+                class="text-accent hover:text-fg transition-colors">{site.contact.email}</a
+            > — it reaches the engineers, not a queue.
+        </p>
     </div>
 </Section>

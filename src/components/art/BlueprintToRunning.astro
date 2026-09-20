@@ -1,0 +1,428 @@
+---
+/**
+ * Hero drawing: a blueprint on the left becomes running infrastructure on the
+ * right, read across one provisioning seam.
+ *
+ * Drawn at roughly 1:1 for the ~530px column it sits in — the viewBox is 560
+ * wide so a 13px label is a 13px label and a 1.5px stroke stays a stroke. Do
+ * not widen the viewBox to "fit more in": every extra unit shrinks everything
+ * already here.
+ *
+ * The device that joins the two halves is the layer band: each band runs the
+ * full width, so the sheet and the runtime occupy literally the same three
+ * rows. A transformation line crosses every band — dashed while it is still
+ * only specified, solid once it is provisioned — and changes at the seam.
+ *
+ * Colour is state, never decoration: the left half is line-only because a
+ * drawing has no health; emerald dots on the right mean healthy; the cyan
+ * seam and the marching dashes mean in flight.
+ *
+ * Not decorative — this image carries the product's promise, so it is
+ * announced with role="img" and a <title>.
+ */
+interface Props {
+    class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+
+const BAND_H = 76;
+
+/** y is the band's top edge; everything else is derived from it. */
+const layers = [
+    { key: 'edge', label: 'EDGE', name: 'edge', y: 70 },
+    { key: 'app', label: 'APP', name: 'app', y: 172 },
+    { key: 'data', label: 'DATA', name: 'db', y: 274 },
+];
+
+const SEAM = 210;
+
+/** Left sheet: one specified box per layer, annotated with its replica count. */
+const SPEC_X = 52;
+const SPEC_W = 100;
+const SPEC_H = 40;
+const SPINE = SPEC_X + SPEC_W / 2;
+
+/** Right runtime: two live nodes per layer. */
+const NODE_W = 130;
+const NODE_H = 48;
+const NODE_X = [254, 400];
+const NODE_CX = [NODE_X[0] + NODE_W / 2, NODE_X[1] + NODE_W / 2];
+
+/** Buses between adjacent runtime layers: from-bottom, mid, to-top. */
+const buses = layers.slice(0, -1).map((layer, i) => {
+    const a = layer.y + 14 + NODE_H;
+    const b = layers[i + 1].y + 14;
+    return { a, b, m: (a + b) / 2 };
+});
+---
+
+<div
+    class:list={['drafting-grid card relative overflow-hidden p-3', className]}
+    style="--draw-len: 420"
+>
+    <svg
+        viewBox="0 0 560 400"
+        class="block h-auto w-full"
+        fill="none"
+        role="img"
+        aria-labelledby="btr-title"
+    >
+        <title id="btr-title">
+            A three-layer architecture drawn twice. On the left it is a blueprint on a drafting
+            sheet: outlined boxes for the edge, application and database layers, joined by a
+            construction line and each marked "times two". A cyan provisioning seam runs down the
+            middle. On the right the same three layers are running infrastructure — two live nodes
+            per layer, each with a green health dot, wired together by buses carrying traffic.
+        </title>
+
+        <defs>
+            <marker
+                id="btr-arrow"
+                viewBox="0 0 8 8"
+                refX="7"
+                refY="4"
+                markerWidth="8"
+                markerHeight="8"
+                orient="auto"
+            >
+                <path d="M0 1 L7 4 L0 7 z" fill="var(--color-muted)" stroke="none"></path>
+            </marker>
+
+            <linearGradient id="btr-sweep" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="var(--color-run)" stop-opacity="0"></stop>
+                <stop offset="1" stop-color="var(--color-run)" stop-opacity="0.28"></stop>
+            </linearGradient>
+        </defs>
+
+        <!-- The drafting sheet the left half is drawn on. -->
+        <rect
+            x="8"
+            y="44"
+            width="194"
+            height="326"
+            fill="var(--color-surface)"
+            stroke="var(--color-line-strong)"
+            stroke-width="1"
+            vector-effect="non-scaling-stroke"></rect>
+
+        <!-- Layer bands span both halves: the same three rows, before and after.
+             Background construction, so this is the one place --color-line is right. -->
+        <g stroke="var(--color-line)" stroke-width="1" vector-effect="non-scaling-stroke">
+            {
+                layers.map((layer) => (
+                    <rect
+                        x="14"
+                        y={layer.y}
+                        width="532"
+                        height={BAND_H}
+                        rx="3"
+                        stroke-dasharray="5 5"
+                    />
+                ))
+            }
+        </g>
+
+        <!-- LEFT: specified, line-only, no state colour. -->
+        <g class="animate-draw">
+            <g
+                stroke="var(--color-line-strong)"
+                stroke-width="1.5"
+                stroke-dasharray="5 5"
+                vector-effect="non-scaling-stroke"
+            >
+                {
+                    layers
+                        .slice(0, -1)
+                        .map((layer, i) => (
+                            <line
+                                x1={SPINE}
+                                y1={layer.y + 18 + SPEC_H}
+                                x2={SPINE}
+                                y2={layers[i + 1].y + 18}
+                            />
+                        ))
+                }
+            </g>
+            <g stroke="var(--color-muted)" stroke-width="1.5" vector-effect="non-scaling-stroke">
+                {
+                    layers.map((layer) => (
+                        <rect
+                            x={SPEC_X}
+                            y={layer.y + 18}
+                            width={SPEC_W}
+                            height={SPEC_H}
+                            rx="3"
+                            fill="var(--color-ink)"
+                            fill-opacity="0.6"
+                        />
+                    ))
+                }
+            </g>
+        </g>
+
+        <!-- The transformation: one line per layer, dashed until the seam, solid after. -->
+        <g stroke="var(--color-muted)" stroke-width="1.5" vector-effect="non-scaling-stroke">
+            {
+                layers.map((layer) => (
+                    <>
+                        <line
+                            x1={SPEC_X + SPEC_W}
+                            y1={layer.y + BAND_H / 2}
+                            x2={SEAM}
+                            y2={layer.y + BAND_H / 2}
+                            stroke-dasharray="5 5"
+                        />
+                        <line
+                            x1={SEAM}
+                            y1={layer.y + BAND_H / 2}
+                            x2={NODE_X[0] - 12}
+                            y2={layer.y + BAND_H / 2}
+                            marker-end="url(#btr-arrow)"
+                        />
+                    </>
+                ))
+            }
+        </g>
+
+        <!-- The seam: the provisioning edge the drawing crosses to become real. -->
+        <rect class="sweep" x="0" y="44" width="110" height="314" fill="url(#btr-sweep)"></rect>
+        <g stroke="var(--color-run)" stroke-width="2" vector-effect="non-scaling-stroke">
+            <line x1={SEAM} y1="44" x2={SEAM} y2="358"></line>
+            <line x1={SEAM - 7} y1="44" x2={SEAM + 7} y2="44"></line>
+            <line x1={SEAM - 7} y1="358" x2={SEAM + 7} y2="358"></line>
+        </g>
+
+        <!-- RIGHT: the same shape, alive. -->
+        <g class="runtime">
+            <!-- Buses, then the same geometry again as travelling traffic. -->
+            <g
+                stroke="var(--color-line-strong)"
+                stroke-width="1.5"
+                vector-effect="non-scaling-stroke"
+            >
+                {
+                    buses.map((bus) => (
+                        <>
+                            <path
+                                d={`M${NODE_CX[0]} ${bus.a} V${bus.m} H${NODE_CX[1]} V${bus.a}`}
+                            />
+                            <path
+                                d={`M${NODE_CX[0]} ${bus.b} V${bus.m} H${NODE_CX[1]} V${bus.b}`}
+                            />
+                        </>
+                    ))
+                }
+            </g>
+            <g
+                class="flow"
+                stroke="var(--color-run)"
+                stroke-width="2"
+                vector-effect="non-scaling-stroke"
+            >
+                {
+                    buses.map((bus) => (
+                        <>
+                            <path
+                                d={`M${NODE_CX[0]} ${bus.a} V${bus.m} H${NODE_CX[1]} V${bus.a}`}
+                            />
+                            <path
+                                d={`M${NODE_CX[1]} ${bus.b} V${bus.m} H${NODE_CX[0]} V${bus.b}`}
+                            />
+                        </>
+                    ))
+                }
+            </g>
+
+            {
+                layers.map((layer) =>
+                    NODE_X.map((x, i) => (
+                        <g>
+                            <rect
+                                x={x}
+                                y={layer.y + 14}
+                                width={NODE_W}
+                                height={NODE_H}
+                                rx="3"
+                                fill="var(--color-raised)"
+                                stroke="var(--color-line-strong)"
+                                stroke-width="1.5"
+                                vector-effect="non-scaling-stroke"
+                            />
+                            {layer.key === 'edge' && i === 0 && (
+                                <circle
+                                    class="ping animate-ping-ring"
+                                    cx={x + 20}
+                                    cy={layer.y + BAND_H / 2}
+                                    r="5"
+                                    fill="var(--color-ok)"
+                                />
+                            )}
+                            <circle
+                                cx={x + 20}
+                                cy={layer.y + BAND_H / 2}
+                                r="5"
+                                fill="var(--color-ok)"
+                            />
+                        </g>
+                    ))
+                )
+            }
+        </g>
+
+        <!-- Everything that only survives at reading size. -->
+        <g class="fine">
+            <g
+                font-family="var(--font-label)"
+                font-size="13"
+                letter-spacing="1.4"
+                fill="var(--color-muted)"
+            >
+                {
+                    layers.map((layer) => (
+                        <text x="14" y={layer.y - 10}>
+                            {layer.label}
+                        </text>
+                    ))
+                }
+                <text x={SEAM} y="30" fill="var(--color-run)" text-anchor="middle">PROVISION</text>
+            </g>
+
+            <g font-family="var(--font-mono)" font-size="13">
+                {
+                    layers.map((layer) => (
+                        <>
+                            <text
+                                x={SPEC_X + SPEC_W / 2}
+                                y={layer.y + BAND_H / 2 + 5}
+                                fill="var(--color-muted)"
+                                text-anchor="middle"
+                            >
+                                {layer.name}
+                            </text>
+                            <text
+                                x={SPEC_X - 10}
+                                y={layer.y + BAND_H / 2 + 5}
+                                fill="var(--color-line-strong)"
+                                text-anchor="end"
+                            >
+                                ×2
+                            </text>
+                            {NODE_X.map((x) => (
+                                <text
+                                    x={x + 36}
+                                    y={layer.y + BAND_H / 2 + 5}
+                                    fill="var(--color-fg)"
+                                >
+                                    {layer.name}
+                                </text>
+                            ))}
+                        </>
+                    ))
+                }
+            </g>
+
+            <!-- Title block. -->
+            <g font-family="var(--font-label)" font-size="13" letter-spacing="1.4">
+                <line
+                    x1="14"
+                    y1="372"
+                    x2="546"
+                    y2="372"
+                    stroke="var(--color-line-strong)"
+                    stroke-width="1"
+                    vector-effect="non-scaling-stroke"></line>
+                <text x="14" y="392" fill="var(--color-muted)">SPECIFIED</text>
+                <text x="546" y="392" fill="var(--color-ok)" text-anchor="end">RUNNING</text>
+            </g>
+        </g>
+    </svg>
+</div>
+
+<style>
+    /* Only geometry is ever dash-drawn. */
+    text {
+        stroke: none;
+    }
+
+    /* Without fill-box, transform-origin resolves against the viewBox, not the
+       dot, and the ring pulses from the middle of the drawing. */
+    .ping {
+        transform-box: fill-box;
+        transform-origin: center;
+    }
+
+    /* The provisioning pass that hands the drawing over to the runtime: it
+       travels the sheet once and stops at the seam. */
+    .sweep {
+        transform: translateX(-110px);
+        animation: btr-sweep 1100ms cubic-bezier(0.4, 0, 0.2, 1) 150ms both;
+    }
+
+    @keyframes btr-sweep {
+        from {
+            transform: translateX(-110px);
+            opacity: 0;
+        }
+        25% {
+            opacity: 1;
+        }
+        to {
+            transform: translateX(100px);
+            opacity: 0;
+        }
+    }
+
+    /* The runtime resolves behind the sweep. Base state is opaque, so the
+       still image is complete whether or not the animation ever runs. */
+    .runtime {
+        opacity: 1;
+        animation: btr-resolve 700ms ease-out 900ms both;
+    }
+
+    @keyframes btr-resolve {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    /* Traffic. Static dashes already read as a live connection. */
+    .flow {
+        stroke-dasharray: 6 12;
+        animation: btr-flow 1.6s linear 1.4s infinite;
+    }
+
+    @keyframes btr-flow {
+        to {
+            stroke-dashoffset: -36;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .sweep {
+            animation: none;
+            transform: translateX(100px);
+            opacity: 0;
+        }
+
+        .runtime {
+            animation: none;
+            opacity: 1;
+        }
+
+        .flow {
+            animation: none;
+        }
+    }
+
+    /* A phone renders this ~350px wide, so 13px type lands near 8px. The
+       geometry carries the idea; the labels are dropped rather than smudged. */
+    @media (max-width: 40rem) {
+        .fine {
+            display: none;
+        }
+    }
+</style>
