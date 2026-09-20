@@ -1,0 +1,23 @@
+---
+/**
+ * One route for every Markdown file in `src/docs`. The layout and the
+ * sidebar are settled in Docs.astro; this file only pairs a slug with its
+ * rendered content.
+ */
+import Docs from '../../layouts/Docs.astro';
+import { docs } from '../../data/docs';
+
+export function getStaticPaths() {
+    return docs.map((doc) => ({
+        params: { slug: doc.slug },
+        props: { doc },
+    }));
+}
+
+const { doc } = Astro.props;
+const { Content, getHeadings } = doc.module;
+---
+
+<Docs frontmatter={doc} headings={getHeadings()}>
+    <Content />
+</Docs>

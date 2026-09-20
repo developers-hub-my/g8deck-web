@@ -13,9 +13,11 @@ export const site = {
     domain: 'g8deck.com',
     url: 'https://g8deck.com',
     consoleUrl: 'https://g8deck.app',
-    tagline: 'Architecture-first infrastructure deployment',
+    // The tagline is the <title> suffix on every page, so it is written for
+    // someone reading a search result, not for someone already sold.
+    tagline: 'Deploy on infrastructure you own',
     description:
-        'G8Deck turns an architecture blueprint into running infrastructure — provisioned, scaled, reconciled and audited on your own hardware or your own cloud.',
+        'G8Deck deploys and runs your applications on servers you already own — on-premise or in your own cloud. Provisioned, scaled, reconciled and audited, with nothing to rewrite and no data leaving the building.',
     company: {
         name: 'Developers Hub Sdn Bhd',
         url: 'https://devhub.my',
@@ -43,30 +45,63 @@ export const site = {
 export const mailto = (subject: string): string =>
     `mailto:${site.contact.email}?subject=${encodeURIComponent(`[G8Deck] ${subject}`)}`;
 
+/**
+ * Fragments are written root-relative (`/#platform`, not `#platform`) because
+ * this nav also renders on /docs pages, where a bare fragment would point at
+ * an anchor the docs page does not have.
+ */
 export const nav = [
-    { label: 'Platform', href: '#platform' },
-    { label: 'Pipeline', href: '#pipeline' },
-    { label: 'Components', href: '#components' },
-    { label: 'Deployment', href: '#deployment' },
-    { label: 'Compliance', href: '#compliance' },
-    { label: 'Plans', href: '#plans' },
+    { label: 'How it works', href: '/#how' },
+    { label: 'Platform', href: '/#platform' },
+    { label: 'Compliance', href: '/#compliance' },
+    { label: 'Pricing', href: '/#plans' },
+    { label: 'Docs', href: '/docs' },
 ] as const;
 
 export const hero = {
-    eyebrow: 'Architecture-first infrastructure platform',
-    title: 'Describe the architecture.',
-    titleAccent: 'Ship the infrastructure.',
-    body: 'G8Deck takes an architecture blueprint — three-tier, HA cluster, microservices — and provisions, operates, scales and reconciles the whole system on infrastructure you control. On-premise or in your own cloud. Point it at a server you already have and your application runs there natively — nothing to containerise.',
-    primaryCta: { label: 'Open the console', href: site.consoleUrl },
-    secondaryCta: { label: 'See how it works', href: '#platform' },
+    eyebrow: 'Deploy on servers you already own',
+    title: 'Your architecture,',
+    titleAccent: 'running on your own servers.',
+    body: 'Point G8Deck at a machine you already have. It sets the whole system up, keeps it running, and nothing ever leaves your building.',
+    primaryCta: { label: 'Book a 20-minute demo', href: mailto('Book a 20-minute demo') },
+    secondaryCta: { label: 'See how it works', href: '/#how' },
     /* Every figure here is counted from platform/g8deck-app, not estimated:
-       DeploymentPipeline::defaultSteps(), DriverResolver::driverClass(),
-       ComponentTypeSeeder, DatabaseComplianceReporter. */
+       DeploymentPipeline::defaultSteps(), SimulatedCapabilities::isAdoptedVm(),
+       ComponentTypeSeeder, DatabaseComplianceReporter. The labels are written
+       for someone who has not read the docs; the numbers are not rounded. */
     stats: [
-        { value: '24', label: 'pipeline steps, each idempotent' },
-        { value: '63', label: 'component types in the catalogue' },
-        { value: '8', label: 'server platforms you can adopt today' },
-        { value: '11', label: 'SOC 2 controls mapped to evidence' },
+        { value: '24', label: 'setup steps, done for you every time' },
+        { value: '63', label: 'databases, caches and queues ready to add' },
+        { value: '8', label: 'kinds of machine you can use today' },
+        { value: '11', label: 'SOC 2 controls, evidence included' },
+    ],
+} as const;
+
+/**
+ * The plain-language answer to "what do I actually do?", placed before the
+ * four-noun model so a reader meets the outcome before the vocabulary.
+ * `ThreeSteps.astro` draws these; the copy stays here.
+ */
+export const howItWorks = {
+    eyebrow: 'How it works',
+    title: 'Three steps, then it looks after itself.',
+    lede: 'No migration project. No rewrite. The machine you already run is the machine it deploys to.',
+    steps: [
+        {
+            number: '01',
+            title: 'Point it at your machine',
+            body: 'A server in your building, or a VM in your own cloud account. G8Deck takes it as it is — nothing is wiped and nothing is moved.',
+        },
+        {
+            number: '02',
+            title: 'Describe the architecture',
+            body: 'Start from a ready-made setup or draw your own. You describe the shape of the system; you do not write deployment scripts.',
+        },
+        {
+            number: '03',
+            title: 'It runs, and keeps running',
+            body: 'G8Deck builds it, then stays on it — watching, scaling, fixing what slips, and keeping a record your auditor can read.',
+        },
     ],
 } as const;
 
@@ -75,7 +110,7 @@ export const model = [
     {
         term: 'Blueprint',
         summary: 'The desired architecture — layers, components, connections and scaling rules.',
-        detail: 'Blueprints hold no provider-specific fields, which is what makes the same blueprint deploy to Proxmox, VMware, bare metal or a public cloud without edits.',
+        detail: 'Blueprints hold no provider-specific fields, which is what makes the same blueprint deploy to bare metal, VMware, a Kubernetes cluster or your own cloud account without edits.',
     },
     {
         term: 'Deployment',
@@ -559,26 +594,27 @@ export const footerLinks = [
     {
         heading: 'Platform',
         links: [
-            { label: 'How it works', href: '#platform' },
-            { label: 'Provisioning pipeline', href: '#pipeline' },
-            { label: 'Components', href: '#components' },
-            { label: 'Providers', href: '#components' },
+            { label: 'How it works', href: '/#platform' },
+            { label: 'Provisioning pipeline', href: '/#pipeline' },
+            { label: 'Components', href: '/#components' },
+            { label: 'Providers', href: '/#components' },
+            { label: 'Documentation', href: '/docs' },
         ],
     },
     {
         heading: 'Deployment',
         links: [
-            { label: 'SaaS', href: '#deployment' },
-            { label: 'On-premise', href: '#deployment' },
-            { label: 'Plans', href: '#plans' },
+            { label: 'SaaS', href: '/#deployment' },
+            { label: 'On-premise', href: '/#deployment' },
+            { label: 'Plans', href: '/#plans' },
         ],
     },
     {
         heading: 'Trust',
         links: [
-            { label: 'Compliance', href: '#compliance' },
-            { label: 'Security model', href: '#compliance' },
-            { label: 'FAQ', href: '#faq' },
+            { label: 'Compliance', href: '/#compliance' },
+            { label: 'Security model', href: '/#compliance' },
+            { label: 'FAQ', href: '/#faq' },
         ],
     },
     {

@@ -1,10 +1,10 @@
 # AGENTS.md — g8deck-web
 
-Marketing site for **G8Deck** (https://g8deck.app). Static Astro. It is **not**
-the product: the console is a separate Laravel application at
-**console.g8deck.app**, in the `developers-hub-my/g8deck-app` repository. This
-repo never talks to it — every product link is an absolute URL to
-`site.consoleUrl`.
+Marketing site for **G8Deck**, served at **g8deck.com**. Static Astro. It is
+**not** the product: the console is a separate Laravel application at
+**g8deck.app** (there is no `console.` subdomain and there never was), in the
+`developers-hub-my/g8deck-app` repository. This repo never talks to it — every
+product link is an absolute URL to `site.consoleUrl`.
 
 ## Stack
 
@@ -39,7 +39,15 @@ scripts/                  one-off generators; their output is committed
 ## Conventions
 
 - **Copy lives in `src/data/site.ts`**, never inline in markup. Adding a section
-  means adding its data there first, then a component that renders it.
+  means adding its data there first, then a component that renders it. The one
+  exception is `src/docs/*.md`: a documentation page _is_ its content file, and
+  its frontmatter is the only place its title, order and date are written.
+- **Docs pages live in `src/docs`, not `src/pages/docs`.** `[...slug].astro`
+  routes them and `src/data/docs.ts` globs them for the sidebar and the index —
+  adding a `.md` file is the whole step. Screenshots go in
+  `public/docs/<slug>/`, and `public/docs/_pending.svg` is the placeholder plate
+  to point at until a real capture exists, so a page is never shipped with a
+  broken image.
 - **Static by default.** No client framework, no runtime JS. The mobile menu and
   the FAQ are native `<details>`; the rail is CSS `animation-timeline`.
 - **Dark only, deliberately.** The design is a dark drafting sheet; there is no
@@ -55,12 +63,17 @@ scripts/                  one-off generators; their output is committed
   Count the enum cases, the resolver arms, the seeder rows. An implementation
   named `Fake*` is a test double and does not count as shipped.
 - **A driver directory is not proof a provider works.** `DriverResolver::driverClass()`
-  is the only authority: it maps Docker, Docker Swarm and K8s/K3s to real
-  drivers and everything else to `FakeProviderDriver`, which also decides the
-  node agent, the workload runtime and the provisioner registry. Proxmox has a
-  356-line driver on disk and still resolves to the Fake pair, so nothing
-  deploys onto it — it belongs under "modelled", not "shipped".
-- **Numbers must be true.** The pipeline is 20 steps (`DeploymentPipeline::defaultSteps()`),
+  is the only authority, and it also decides the node agent, the workload
+  runtime and the provisioner registry. Today it maps Docker, Docker Swarm and
+  K8s/K3s to real drivers; the eight adopted-VM types in
+  `SimulatedCapabilities::isAdoptedVm()` to `SshProviderDriver`, **but only once
+  SSH credentials are saved**; a credentialed Proxmox row to
+  `ProxmoxProviderDriver`; and everything else to `FakeProviderDriver`. The
+  credential gate is the part that bites: an unconfigured row of a supported
+  type still resolves to the Fake. On a native/systemd provider only four
+  provisioners are real (Redis, PostgreSQL, MySQL, MariaDB), so a component
+  outside that set is simulated even on a provider that works.
+- **Numbers must be true.** The pipeline is 24 steps (`DeploymentPipeline::defaultSteps()`),
   63 component types (`ComponentTypeSeeder`), 4 working providers across 3
   drivers (`DriverResolver::driverClass()`), 11 SOC 2 controls
   (`DatabaseComplianceReporter`). If the product changes, change `site.ts` — do

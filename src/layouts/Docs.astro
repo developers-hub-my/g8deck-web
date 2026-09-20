@@ -1,0 +1,152 @@
+---
+/**
+ * Layout for every Markdown page under `src/pages/docs`, applied through the
+ * file's own `layout:` frontmatter. Pages carry prose and screenshots only —
+ * the chrome, the sidebar and the metadata are settled here once.
+ */
+import Base from './Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { docs, isCurrent, type DocFrontmatter } from '../data/docs';
+import { site } from '../data/site';
+
+interface Props {
+    frontmatter: DocFrontmatter;
+    /** From the page's own Markdown, so it cannot drift from the headings. */
+    headings?: MarkdownHeading[];
+}
+
+const { frontmatter, headings = [] } = Astro.props;
+
+/* h1 is the page title, already on screen; anything below h3 is detail a
+   reader scans for rather than navigates to. */
+const contents = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+const pathname = Astro.url.pathname;
+
+const updated = new Date(frontmatter.updated).toLocaleDateString('en-MY', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+});
+
+const position = docs.findIndex((doc) => isCurrent(doc.href, pathname));
+const previous = position > 0 ? docs[position - 1] : undefined;
+const next = position >= 0 && position < docs.length - 1 ? docs[position + 1] : undefined;
+---
+
+<Base
+    title={`${frontmatter.title} — ${site.name} documentation`}
+    description={frontmatter.description}
+>
+    <Nav />
+
+    <main id="main" class="page max-w-[100rem] py-12 lg:py-16">
+        <div
+            class="grid gap-12 lg:grid-cols-[14rem_minmax(0,1fr)] lg:gap-16 xl:grid-cols-[14rem_minmax(0,1fr)_13rem]"
+        >
+            <aside class="lg:sticky lg:top-20 lg:self-start">
+                <p class="mono-label text-muted">Documentation</p>
+                <nav class="border-line mt-4 border-t pt-4" aria-label="Documentation">
+                    <ul class="space-y-1">
+                        {
+                            docs.map((doc) => {
+                                const current = isCurrent(doc.href, pathname);
+                                return (
+                                    <li>
+                                        <a
+                                            href={doc.href}
+                                            aria-current={current ? 'page' : undefined}
+                                            class:list={[
+                                                'hover:bg-raised block rounded-[2px] px-3 py-2 text-sm transition-colors',
+                                                current
+                                                    ? 'bg-raised text-fg font-medium'
+                                                    : 'text-muted hover:text-fg',
+                                            ]}
+                                        >
+                                            {doc.title}
+                                        </a>
+                                    </li>
+                                );
+                            })
+                        }
+                    </ul>
+                </nav>
+            </aside>
+
+            <article>
+                <h1 class="h2">{frontmatter.title}</h1>
+                <p class="body-lg text-muted mt-5 max-w-2xl text-pretty">
+                    {frontmatter.description}
+                </p>
+                <p class="mono-label text-idle border-line mt-6 border-t pt-6">
+                    Updated {updated}
+                </p>
+
+                <div class="prose mt-10">
+                    <slot />
+                </div>
+
+                {
+                    (previous || next) && (
+                        <nav
+                            class="border-line mt-16 grid gap-3 border-t pt-8 sm:grid-cols-2"
+                            aria-label="Pagination"
+                        >
+                            {previous ? (
+                                <a
+                                    href={previous.href}
+                                    class="card group hover:border-line-strong px-5 py-4"
+                                >
+                                    <span class="mono-label text-idle">Previous</span>
+                                    <span class="text-fg mt-2 block text-sm font-medium">
+                                        {previous.title}
+                                    </span>
+                                </a>
+                            ) : (
+                                <span />
+                            )}
+                            {next && (
+                                <a
+                                    href={next.href}
+                                    class="card group hover:border-line-strong px-5 py-4 text-right"
+                                >
+                                    <span class="mono-label text-idle">Next</span>
+                                    <span class="text-fg mt-2 block text-sm font-medium">
+                                        {next.title}
+                                    </span>
+                                </a>
+                            )}
+                        </nav>
+                    )
+                }
+            </article>
+
+            {
+                contents.length > 1 && (
+                    <aside class="hidden xl:sticky xl:top-20 xl:block xl:self-start">
+                        <p class="mono-label text-muted">On this page</p>
+                        <nav class="border-line mt-4 border-t pt-4" aria-label="On this page">
+                            <ul class="space-y-2">
+                                {contents.map((heading) => (
+                                    <li class:list={[heading.depth === 3 && 'ps-3']}>
+                                        <a
+                                            href={`#${heading.slug}`}
+                                            class:list={[
+                                                'hover:text-fg block text-sm leading-snug transition-colors',
+                                                heading.depth === 3 ? 'text-idle' : 'text-muted',
+                                            ]}
+                                        >
+                                            {heading.text}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </nav>
+                    </aside>
+                )
+            }
+        </div>
+    </main>
+
+    <Footer />
+</Base>

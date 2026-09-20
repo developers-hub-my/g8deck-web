@@ -1,0 +1,34 @@
+---
+import Section from '../Section.astro';
+import SectionHead from '../SectionHead.astro';
+import ThreeSteps from '../art/ThreeSteps.astro';
+import { howItWorks, mailto } from '../../data/site';
+---
+
+<Section id="how" index="02" label="HOW">
+    <SectionHead eyebrow={howItWorks.eyebrow} title={howItWorks.title} lede={howItWorks.lede} />
+
+    <ThreeSteps class="mt-14" steps={howItWorks.steps.map((step) => step.title)} />
+
+    <div class="mt-10 grid gap-px sm:grid-cols-3">
+        {
+            howItWorks.steps.map((step) => (
+                <div class="border-line bg-surface/40 border p-6">
+                    <h3 class="h3">{step.title}</h3>
+                    <p class="text-muted mt-3 text-pretty">{step.body}</p>
+                </div>
+            ))
+        }
+    </div>
+
+    <p class="text-muted mt-10 text-sm text-pretty">
+        Want to watch it happen on one of your own machines?{' '}
+        <a
+            href={mailto('Book a 20-minute demo')}
+            class="text-accent hover:text-fg transition-colors">Book a 20-minute demo</a
+        > — or read <a
+            href="/docs/first-deployment"
+            class="text-accent hover:text-fg transition-colors">the first-deployment walkthrough</a
+        > and do it yourself.
+    </p>
+</Section>

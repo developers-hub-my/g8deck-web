@@ -1,0 +1,63 @@
+---
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { docs } from '../../data/docs';
+import { site } from '../../data/site';
+---
+
+<Base
+    title={`Documentation — ${site.name}`}
+    description={`Step-by-step guides for ${site.name}: connect infrastructure, deploy a blueprint, and operate what is running.`}
+>
+    <Nav />
+
+    <main id="main" class="relative">
+        <div
+            class="drafting-grid pointer-events-none absolute inset-x-0 top-0 h-64 opacity-30"
+            aria-hidden="true"
+        >
+        </div>
+
+        <div class="page relative py-16 lg:py-24">
+            <div class="content">
+                <p class="mono-label text-accent">Documentation</p>
+                <h1 class="h1 mt-6 max-w-3xl">Blueprint to running system.</h1>
+                <p class="body-lg text-muted mt-6 max-w-2xl text-pretty">
+                    Every guide walks the console screen by screen, in the order you would actually
+                    do the work. Start at the top if this is your first deployment.
+                </p>
+
+                <ul class="mt-14 grid gap-4 sm:grid-cols-2">
+                    {
+                        docs.map((doc, index) => (
+                            <li>
+                                <a href={doc.href} class="card block h-full p-6">
+                                    <span class="mono-label text-idle">
+                                        {String(index + 1).padStart(2, '0')}
+                                    </span>
+                                    <h2 class="h3 text-fg mt-3">{doc.title}</h2>
+                                    <p class="text-muted mt-3 text-sm text-pretty">
+                                        {doc.description}
+                                    </p>
+                                </a>
+                            </li>
+                        ))
+                    }
+                </ul>
+
+                <div class="border-line mt-16 border-t pt-8">
+                    <p class="text-muted text-sm text-pretty">
+                        Looking for the console itself? It lives at <a
+                            href={site.consoleUrl}
+                            class="text-accent hover:text-fg transition-colors"
+                            >{new URL(site.consoleUrl).host}</a
+                        >.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <Footer />
+</Base>
