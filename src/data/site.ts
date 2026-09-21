@@ -487,7 +487,9 @@ interface PlanTier {
  * other, or the site quotes a number no customer is ever charged.
  *
  * Tiers differ by capacity alone: the entitlement schema holds servers, seats,
- * deployments, cores-per-server and organisations, and no feature flag. MFA,
+ * deployments (labelled "app environments": one application in one
+ * environment — deploys and releases never count), cores-per-server and
+ * organisations, and no feature flag. MFA,
  * the audit trail, mTLS and encryption at rest are never tier-gated — selling
  * compliance as an upsell is what disqualifies a tender.
  */
@@ -498,22 +500,34 @@ export const plans: {
     tiers: readonly PlanTier[];
 } = {
     title: 'Plans that scale with the estate, not the seat count',
-    body: 'Every tier gets the full pipeline, every provider driver and the complete audit trail. What changes is capacity — servers, seats and deployments — never whether the platform will let you prove a control.',
-    note: 'A server is one machine, not one container — fifty containers on one Docker host count as one. Priced tiers are hosted and billed monthly; running the control plane on your own network is Enterprise.',
+    body: 'Every tier gets the full pipeline, every provider driver and the complete audit trail. What changes is capacity — servers, seats and app environments — never whether the platform will let you prove a control.',
+    note: 'A server is one machine, not one container — fifty containers on one Docker host count as one. An app environment is one application in one environment (e.g. production); deploys and releases are unlimited on every tier. Priced tiers are hosted and billed monthly; running the control plane on your own network is Enterprise.',
     tiers: [
         {
             name: 'Starter',
             for: 'A first production deployment',
             price: '$5',
             period: 'USD / month',
-            points: ['2 servers', '1 seat', '10 deployments', '2 organisations'],
+            points: [
+                '2 servers',
+                '1 seat',
+                '10 app environments (≈ 5 apps with dev + production)',
+                'Unlimited deploys and releases',
+                '2 organisations',
+            ],
         },
         {
             name: 'Growth',
             for: 'Teams running several environments',
             price: '$15',
             period: 'USD / month',
-            points: ['50 servers', '10 seats', 'Unlimited deployments', 'Unlimited organisations'],
+            points: [
+                '50 servers',
+                '10 seats',
+                'Unlimited app environments',
+                'Unlimited deploys and releases',
+                'Unlimited organisations',
+            ],
         },
         {
             name: 'Business',
@@ -521,7 +535,13 @@ export const plans: {
             for: 'Multi-project engineering organisations',
             price: '$49',
             period: 'USD / month',
-            points: ['100 servers', '30 seats', 'Unlimited deployments', 'Unlimited organisations'],
+            points: [
+                '100 servers',
+                '30 seats',
+                'Unlimited app environments',
+                'Unlimited deploys and releases',
+                'Unlimited organisations',
+            ],
         },
         {
             // The only tier that can be bought two ways, which is why the
@@ -534,7 +554,8 @@ export const plans: {
             price: 'Negotiated',
             period: 'Hosted or on-premise',
             points: [
-                'Unlimited servers, seats and deployments',
+                'Unlimited servers, seats and app environments',
+                'Unlimited deploys and releases',
                 'No cap on cores per server',
                 'On-premise licence — the control plane runs on your own network, air-gapped if it has to',
                 'SOC 2, ISO 27001, PDPA and GDPR evidence export',
