@@ -22,6 +22,9 @@ export const site = {
         name: 'Developers Hub Sdn Bhd',
         url: 'https://devhub.my',
         country: 'Malaysia',
+        /** Printed on the legal pages; the SSM number, old and new format. */
+        registration: '202001019928 (1376248-V)',
+        city: 'Johor Bahru',
     },
     /** G8Deck is one product in the G8Suite family. */
     suite: {
@@ -629,6 +632,11 @@ export const faqs = [
         q: 'Do pushes count against my plan?',
         a: 'No. A plan counts app environments — one application in one environment, such as production — and deploys and releases are unlimited on every tier. A launch that failed without ever holding a server does not count either.',
     },
+    {
+        q: 'How does billing work, and can I cancel?',
+        a: 'Self-serve plans are billed monthly in USD, paid by card through Stripe, and start with a free trial that needs no card. Cancel whenever you like: you keep access to the end of the period you have paid for, and there is no refund for the unused part of a month. A charge made in error is refunded in full.',
+        more: { label: 'Refund and cancellation policy', href: '/legal/refund-policy' },
+    },
 ] as const;
 
 export const footerLinks = [
@@ -656,6 +664,9 @@ export const footerLinks = [
             { label: 'Compliance', href: '/#compliance' },
             { label: 'Security model', href: '/#compliance' },
             { label: 'FAQ', href: '/#faq' },
+            { label: 'Terms of Service', href: '/legal/terms' },
+            { label: 'Privacy Notice', href: '/legal/privacy' },
+            { label: 'Refund policy', href: '/legal/refund-policy' },
         ],
     },
     {
