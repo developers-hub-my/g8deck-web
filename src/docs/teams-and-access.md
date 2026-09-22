@@ -109,9 +109,11 @@ picks lead, member or viewer.
 These are two different things.
 
 - **Quotas** are yours to set. CPU, memory, storage, deployment and node counts
-  can be limited per organisation, per team or per user, and the tightest scope
-  that declares a limit wins. A deployment over quota is refused before
-  provisioning starts, not halfway through.
+  can be limited per organisation, per team or per user. For each limit, the
+  most specific level that sets one applies — the user's own, then their
+  team's, then the organisation's — so a user limit replaces the team and
+  organisation limits rather than adding to them. A deployment over quota is
+  refused before provisioning starts, not halfway through.
 - **Plan limits** are what the subscription includes. The one that counts
   applications is **app environments**: one application in one environment,
   such as production. Deploys and releases are unlimited on every plan, and a
