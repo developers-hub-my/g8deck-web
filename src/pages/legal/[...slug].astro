@@ -1,0 +1,102 @@
+---
+/**
+ * One route for every Markdown file in `src/legal`, the same shape as
+ * `/docs` but with its own chrome: a legal page has no reading order, no
+ * screenshots and no "next" — only the documents, each dated and versioned
+ * in its own frontmatter, which `src/data/legal.ts` globs.
+ */
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { isCurrent } from '../../data/docs';
+import { legal } from '../../data/legal';
+import { site } from '../../data/site';
+
+export function getStaticPaths() {
+    return legal.map((page) => ({ params: { slug: page.slug }, props: { page } }));
+}
+
+const { page } = Astro.props;
+const { Content } = page.module;
+const pathname = Astro.url.pathname;
+
+const date = (iso: string) =>
+    new Date(iso).toLocaleDateString('en-MY', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+
+<Base title={`${page.title} — ${site.name}`} description={page.description}>
+    <Nav />
+
+    <main id="main" class="page max-w-[100rem] py-12 lg:py-16">
+        <div class="grid gap-12 lg:grid-cols-[14rem_minmax(0,1fr)] lg:gap-16">
+            <aside class="lg:sticky lg:top-20 lg:self-start">
+                <p class="mono-label text-muted">Legal</p>
+                <nav class="border-line mt-4 border-t pt-4" aria-label="Legal">
+                    <ul class="space-y-1">
+                        {
+                            legal.map((item) => {
+                                const current = isCurrent(item.href, pathname);
+                                return (
+                                    <li>
+                                        <a
+                                            href={item.href}
+                                            aria-current={current ? 'page' : undefined}
+                                            class:list={[
+                                                'hover:bg-raised block rounded-[2px] px-3 py-2 text-sm transition-colors',
+                                                current
+                                                    ? 'bg-raised text-fg font-medium'
+                                                    : 'text-muted hover:text-fg',
+                                            ]}
+                                        >
+                                            {item.title}
+                                        </a>
+                                    </li>
+                                );
+                            })
+                        }
+                    </ul>
+                </nav>
+            </aside>
+
+            <article>
+                <h1 class="h2">{page.title}</h1>
+                <p class="body-lg text-muted mt-5 max-w-2xl text-pretty">{page.description}</p>
+                <dl
+                    class="mono-label text-idle border-line mt-6 flex flex-wrap gap-x-8 gap-y-2 border-t pt-6"
+                >
+                    <div>
+                        <dt class="inline">Effective date:</dt>
+                        <dd class="text-muted inline">{date(page.effective)}</dd>
+                    </div>
+                    <div>
+                        <dt class="inline">Last updated:</dt>
+                        <dd class="text-muted inline">{date(page.updated)}</dd>
+                    </div>
+                    <div>
+                        <dt class="inline">Version:</dt>
+                        <dd class="text-muted inline">{page.version}</dd>
+                    </div>
+                </dl>
+
+                <div class="prose mt-10">
+                    <Content />
+                </div>
+
+                <footer class="border-line mt-16 border-t pt-8">
+                    <p class="text-muted text-sm text-pretty">
+                        <strong class="text-fg">{site.company.name}</strong> (Registration No. {
+                            site.company.registration
+                        }), {site.company.city}, {site.company.country}. Questions about this
+                        document: <a
+                            href={`mailto:${site.contact.email}`}
+                            class="text-accent hover:text-fg transition-colors"
+                            >{site.contact.email}</a
+                        >.
+                    </p>
+                </footer>
+            </article>
+        </div>
+    </main>
+
+    <Footer />
+</Base>

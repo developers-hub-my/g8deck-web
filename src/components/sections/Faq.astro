@@ -24,7 +24,17 @@ import { faqs } from '../../data/site';
                         </span>
                         <span class="text-pretty">{faq.q}</span>
                     </summary>
-                    <p class="text-muted pb-5 pl-8 text-pretty">{faq.a}</p>
+                    <p class="text-muted pb-5 pl-8 text-pretty">
+                        {faq.a}
+                        {'more' in faq && (
+                            <a
+                                href={faq.more.href}
+                                class="text-accent hover:text-fg transition-colors"
+                            >
+                                {faq.more.label} →
+                            </a>
+                        )}
+                    </p>
                 </details>
             ))
         }
