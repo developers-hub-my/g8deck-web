@@ -489,12 +489,15 @@ interface PlanTier {
  * settings row is the authority, not the file. Change one and change the
  * other, or the site quotes a number no customer is ever charged.
  *
- * Tiers differ by capacity alone: the entitlement schema holds servers, seats,
+ * Tiers differ by capacity alone: the entitlement schema holds servers,
+ * members (stored as `seats`: every active person in the organisation),
  * deployments (labelled "app environments": one application in one
- * environment — deploys and releases never count), cores-per-server and
- * organisations, and no feature flag. MFA,
- * the audit trail, mTLS and encryption at rest are never tier-gated — selling
- * compliance as an upsell is what disqualifies a tender.
+ * environment — deploys and releases never count) and cores-per-server, and
+ * no feature flag. How many organisations one person may own is a platform
+ * setting (3) that a plan may raise; no plan does today, so the Starter card
+ * states the default and the others say nothing. MFA, the audit trail, mTLS
+ * and encryption at rest are never tier-gated — selling compliance as an
+ * upsell is what disqualifies a tender.
  */
 export const plans: {
     title: string;
@@ -502,8 +505,8 @@ export const plans: {
     note: string;
     tiers: readonly PlanTier[];
 } = {
-    title: 'Plans that scale with the estate, not the seat count',
-    body: 'Every tier gets the full pipeline, every provider driver and the complete audit trail. What changes is capacity — servers, seats and app environments — never whether the platform will let you prove a control.',
+    title: 'Plans that scale with the estate, not the head count',
+    body: 'Every tier gets the full pipeline, every provider driver and the complete audit trail. What changes is capacity — servers, members and app environments — never whether the platform will let you prove a control.',
     note: 'A server is one machine, not one container — fifty containers on one Docker host count as one. An app environment is one application in one environment (e.g. production); deploys and releases are unlimited on every tier. Priced tiers are hosted and billed monthly; running the control plane on your own network is Enterprise.',
     tiers: [
         {
@@ -513,10 +516,10 @@ export const plans: {
             period: 'USD / month',
             points: [
                 '2 servers',
-                '1 seat',
+                '1 member — the owner; invite people on Growth',
                 '10 app environments (≈ 5 apps with dev + production)',
                 'Unlimited deploys and releases',
-                '2 organisations',
+                'Up to 3 organisations per account',
             ],
         },
         {
@@ -526,10 +529,9 @@ export const plans: {
             period: 'USD / month',
             points: [
                 '50 servers',
-                '10 seats',
+                '10 members',
                 'Unlimited app environments',
                 'Unlimited deploys and releases',
-                'Unlimited organisations',
             ],
         },
         {
@@ -540,10 +542,9 @@ export const plans: {
             period: 'USD / month',
             points: [
                 '100 servers',
-                '30 seats',
+                '30 members',
                 'Unlimited app environments',
                 'Unlimited deploys and releases',
-                'Unlimited organisations',
             ],
         },
         {
@@ -557,7 +558,7 @@ export const plans: {
             price: 'Negotiated',
             period: 'Hosted or on-premise',
             points: [
-                'Unlimited servers, seats and app environments',
+                'Unlimited servers, members and app environments',
                 'Unlimited deploys and releases',
                 'No cap on cores per server',
                 'On-premise licence — the control plane runs on your own network, air-gapped if it has to',
