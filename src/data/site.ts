@@ -280,8 +280,11 @@ export const capabilities = [
         tag: 'Operations',
     },
     {
-        title: 'Quotas across organisation, team and user',
-        body: 'CPU, memory, storage, deployment and node counts resolve from the tightest scope that declares them. Provisioning fails before it starts, not halfway through.',
+        // Organization::isAdministeredBy() gates every org-infrastructure
+        // policy (InfraProvider, DatabaseServer, StorageServer, ManagedCache,
+        // Backup*, ResourceQuota); TeamRole is lead / member / viewer.
+        title: 'Your organisation decides; teams run the applications',
+        body: 'Connecting servers, creating database, storage and cache servers, restoring backups and setting quotas belong to the organisation’s owner and administrators. Inside it, team leads, members and viewers decide who may change which application. Quotas resolve from the tightest of organisation, team and user, so provisioning fails before it starts.',
         tag: 'Governance',
     },
     {
@@ -438,7 +441,7 @@ export const compliance = {
         {
             code: 'CC6',
             name: 'Logical access',
-            detail: 'Role-based access across organisation, team and user scopes, two-factor authentication, scheduled access reviews',
+            detail: 'Organisation owners and administrators hold the infrastructure; team leads, members and viewers hold the applications. Two-factor authentication, scheduled access reviews',
         },
         {
             code: 'CC7',
@@ -608,6 +611,22 @@ export const faqs = [
     {
         q: 'Which database does the platform itself need?',
         a: 'Whichever you already run. G8Deck supports MySQL, MariaDB, PostgreSQL and MSSQL, and behaves identically on all four. The secret vault is part of the platform, so there is no external secret service to stand up alongside it.',
+    },
+    {
+        q: 'Can a team deploy onto our servers without being handed the servers?',
+        a: 'Yes. Servers, database, storage and cache servers, backups and the credentials behind them belong to the organisation, and only its owner and administrators can connect, change or reveal them. A team member deploys onto those servers and manages the applications they created; a team lead manages every application in the team and approves promotions — never their own request. The console and the MCP servers enforce the same rules.',
+    },
+    {
+        q: 'Is there a read-only role for auditors or examiners?',
+        a: 'Yes — viewer. A viewer on a team sees its projects, applications and deployments and can change none of them: no deploy, no restart, no revealed credential, whether they try from the console or through the API. People only see the teams they belong to; organisation owners and administrators see all of them.',
+    },
+    {
+        q: 'Can people still use their own servers?',
+        a: 'Yes. Every account gets a personal organisation at sign-up, which they own and can connect their own servers to. Being invited into yours adds to that rather than replacing it. An invitation is sent to an email address, carries the role it grants and expires after seven days; the person accepts it signed in with that address.',
+    },
+    {
+        q: 'Do pushes count against my plan?',
+        a: 'No. A plan counts app environments — one application in one environment, such as production — and deploys and releases are unlimited on every tier. A launch that failed without ever holding a server does not count either.',
     },
 ] as const;
 
