@@ -140,22 +140,52 @@ export const model = [
     },
 ] as const;
 
+/** Problem section: the heading, the comparison table and the four cards. */
+export const problem = {
+    eyebrow: 'Why this exists',
+    title: 'Your systems. Your servers. Your data.',
+    lede: 'Banks, ministries, GLCs and universities cannot put sensitive systems and data on someone else’s cloud. Most PaaS platforms ask you to. G8Deck runs on your own infrastructure — on-premise or private cloud — so your IT team can deploy, manage and monitor applications without giving up control.',
+    columns: { theirs: 'Most PaaS platforms', ours: 'G8Deck' },
+    assumptions: [
+        {
+            theirs: 'Your data goes to their cloud, in their region',
+            ours: 'Your data stays on your servers, in the country you choose',
+        },
+        {
+            theirs: 'One language and one way of running it',
+            ours: 'Your runtime, on your own server, in the layout you already use',
+        },
+        {
+            theirs: 'Setting up the server is the whole job',
+            ours: 'Scaling, drift checks, promotion, rollback and audit evidence keep running after setup',
+        },
+        {
+            theirs: 'Compliance is your problem',
+            ours: 'The platform enforces the controls and exports the evidence when you need it',
+        },
+        {
+            theirs: 'The internet is always available',
+            ours: 'It runs on your own network, even with no internet access',
+        },
+    ],
+} as const;
+
 export const problems = [
     {
-        title: 'PaaS that only speaks one language',
-        body: 'Single-stack platforms cover the web tier and abandon everything else. G8Deck installs the toolchain on your own server and runs the application as an ordinary service — PHP and Node today, on any machine you can reach over SSH.',
+        title: 'Platforms that support one language',
+        body: 'Many platforms only run one kind of web app. G8Deck installs what your application needs on your own server and runs it as a normal service — PHP and Node today, on any machine you can reach over SSH.',
     },
     {
-        title: 'Server setup mistaken for lifecycle',
-        body: 'Provisioning a box is the easy part. Scaling, drift reconciliation, promotion, rollback and evidence are the part that keeps you up at night.',
+        title: 'Setting up a server is only the start',
+        body: 'Installing a server is the easy part. Scaling, drift checks, promotion, rollback and audit evidence are the hard part, and they never stop.',
     },
     {
-        title: 'Kubernetes as the only serious option',
-        body: 'Topology should be a first-class object, not a thousand lines of YAML. Blueprints give you the abstraction without handing you a cluster to babysit.',
+        title: 'Kubernetes should not be the only option',
+        body: 'You should not need a thousand lines of YAML to describe your servers. A blueprint describes the layout in one place, and you do not have to run a cluster to use it.',
     },
     {
         title: 'Data that cannot leave the country',
-        body: 'Regulated industry, government and GLC workloads cannot sit on foreign hosted control planes. G8Deck runs inside your perimeter, on infrastructure you already own.',
+        body: 'Regulated industries, government agencies and GLCs cannot run on a control plane hosted abroad. G8Deck runs inside your network, on servers you already own.',
     },
 ] as const;
 
@@ -854,9 +884,9 @@ export const ai = {
 
 /** Photography — every credit and licence is in src/assets/photos/CREDITS.md. */
 export const photos = {
-    kualaLumpur: {
-        alt: 'Kuala Lumpur skyline at night, the Petronas Towers lit on the left.',
-        credit: 'Photo · Catalin Pop / Unsplash',
+    serverBays: {
+        alt: 'Close-up of a rack server’s front panel: a row of hot-swap drive bays, each with a lit status light.',
+        credit: 'Photo · Domaintechnik / Unsplash',
     },
     dataCentre: {
         alt: 'A data centre floor with rows of server cabinets under blue cable trays.',
