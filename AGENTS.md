@@ -34,9 +34,28 @@ src/components/           primitives (Rail, StatusPill, Logo, diagrams)
 src/components/sections/  one file per landing-page section
 src/layouts/Base.astro    SEO head, JSON-LD, skip link
 scripts/                  one-off generators; their output is committed
+src/assets/photos/        licensed photography + CREDITS.md (the licence record)
+src/assets/screens/       console captures used on the landing page
+docs/landing-brief.md     the landing page's narrative and the source of every claim
 ```
 
 ## Conventions
+
+- **Any UI/UX work invokes the `ui-ux-pro-max` skill first** — a new section, a
+  layout change, a colour, type or motion decision, an accessibility pass. Work
+  delegated to another agent must name the skill in its brief, or the agent
+  will not load it. The brand rules below still win where the skill's generic
+  advice disagrees with them (it will suggest a light theme; there is none).
+- **Photos come from Unsplash (free licence, never Unsplash+) or Pexels only**,
+  and every one has a row in `src/assets/photos/CREDITS.md` — photographer,
+  source URL, licence, where it is used — in the same commit that adds it. No
+  identifiable face, no customer logo, nothing that reads as someone endorsing
+  G8Deck. Render through `art/Photo.astro` (`astro:assets`, responsive WebP,
+  lazy, toned toward the ink), never a raw `<img>` to a JPEG, and print the
+  credit in the caption.
+- **Console captures on the landing page are copies** of the docs captures in
+  `public/docs/console/`, kept in `src/assets/screens/` so they are optimised.
+  They show a sample organisation, and every caption says so.
 
 - **Copy lives in `src/data/site.ts`**, never inline in markup. Adding a section
   means adding its data there first, then a component that renders it. The one
@@ -76,7 +95,9 @@ scripts/                  one-off generators; their output is committed
 - **Numbers must be true.** The pipeline is 24 steps (`DeploymentPipeline::defaultSteps()`),
   63 component types (`ComponentTypeSeeder`), 4 working providers across 3
   drivers (`DriverResolver::driverClass()`), 11 SOC 2 controls
-  (`DatabaseComplianceReporter`). If the product changes, change `site.ts` — do
+  (`DatabaseComplianceReporter`), 5 MCP servers with 21 / 21 / 78 / 62 / 12
+  tools (the `$tools` arrays in `app/Mcp/Servers/*`; platform and compliance are
+  operator-only). If the product changes, change `site.ts` — do
   not round for effect.
 - **Roadmap is labelled as roadmap.** Where the site names something unbuilt —
   the ten provider types with no driver — it sits under its own heading, in

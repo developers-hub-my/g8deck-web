@@ -1,22 +1,21 @@
 ---
-import BlueprintToRunning from '../art/BlueprintToRunning.astro';
+import ConsoleShot from '../art/ConsoleShot.astro';
 import StatusPill from '../StatusPill.astro';
+import heroShot from '../../assets/screens/application-overview.jpg';
 import { hero, site } from '../../data/site';
 ---
 
-<section class="relative overflow-hidden pt-16 pb-20 lg:pt-24 lg:pb-28">
+<section class="relative overflow-hidden pt-16 pb-20 lg:pt-24 lg:pb-24">
     <!-- A faint drafting sheet behind the hero only, fading into the page. -->
     <div
-        class="drafting-grid pointer-events-none absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent_88%)] opacity-40"
+        class="drafting-grid pointer-events-none absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent_70%)] opacity-40"
         aria-hidden="true"
     >
     </div>
 
     <div class="page relative">
-        <div
-            class="content grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-16"
-        >
-            <div>
+        <div class="content">
+            <div class="max-w-5xl">
                 <p class="mono-label text-accent animate-rise">{hero.eyebrow}</p>
 
                 <h1 class="h1 animate-rise mt-6" style="animation-delay: 60ms">
@@ -24,59 +23,62 @@ import { hero, site } from '../../data/site';
                 </h1>
 
                 <p
-                    class="body-lg text-muted animate-rise mt-7 max-w-xl text-pretty"
+                    class="body-lg text-muted animate-rise mt-7 max-w-2xl text-pretty"
                     style="animation-delay: 120ms"
                 >
                     {hero.body}
                 </p>
 
-                <div class="animate-rise mt-9 flex flex-wrap gap-3" style="animation-delay: 180ms">
+                <div
+                    class="animate-rise mt-9 flex flex-wrap items-center gap-3"
+                    style="animation-delay: 180ms"
+                >
                     <a href={hero.primaryCta.href} class="btn btn-primary"
                         >{hero.primaryCta.label}</a
                     >
                     <a href={hero.secondaryCta.href} class="btn btn-ghost"
                         >{hero.secondaryCta.label}</a
                     >
-                </div>
-
-                <div
-                    class="animate-rise mt-8 flex flex-wrap items-center gap-2"
-                    style="animation-delay: 220ms"
-                >
-                    <StatusPill state="ok" label="saas" />
-                    <StatusPill state="ok" label="on-prem" />
+                    <span class="ml-1 flex flex-wrap items-center gap-2">
+                        <StatusPill state="ok" label="saas" />
+                        <StatusPill state="ok" label="on-prem" />
+                    </span>
                 </div>
             </div>
 
-            <div class="animate-rise" style="animation-delay: 240ms">
-                <BlueprintToRunning />
-            </div>
+            <ConsoleShot
+                src={heroShot}
+                alt={hero.shot.alt}
+                caption={hero.shot.caption}
+                priority
+                class="animate-rise mt-14 lg:mt-16"
+            />
+
+            <!-- Stat strip -->
+            <dl class="border-line mt-16 grid grid-cols-2 gap-px border-t pt-10 lg:grid-cols-4">
+                {
+                    hero.stats.map((stat) => (
+                        <div class="pr-6">
+                            <dt class="sr-only">{stat.label}</dt>
+                            <dd>
+                                <span
+                                    class="block text-[2.25rem] leading-none font-semibold tabular-nums"
+                                    style="font-variation-settings: 'wdth' 110"
+                                >
+                                    {stat.value}
+                                </span>
+                                <span class="text-muted mt-2.5 block text-sm text-pretty">
+                                    {stat.label}
+                                </span>
+                            </dd>
+                        </div>
+                    ))
+                }
+            </dl>
+
+            <p class="text-muted mono-label mt-10">
+                Product console → {site.consoleUrl.replace('https://', '')}
+            </p>
         </div>
-
-        <!-- Stat strip -->
-        <dl class="content border-line mt-16 grid grid-cols-2 gap-px border-t pt-10 lg:grid-cols-4">
-            {
-                hero.stats.map((stat) => (
-                    <div class="pr-6">
-                        <dt class="sr-only">{stat.label}</dt>
-                        <dd>
-                            <span
-                                class="block text-[2.25rem] leading-none font-semibold tabular-nums"
-                                style="font-variation-settings: 'wdth' 110"
-                            >
-                                {stat.value}
-                            </span>
-                            <span class="text-muted mt-2.5 block text-sm text-pretty">
-                                {stat.label}
-                            </span>
-                        </dd>
-                    </div>
-                ))
-            }
-        </dl>
-
-        <p class="content text-idle mono-label mt-10">
-            Product console → {site.consoleUrl.replace('https://', '')}
-        </p>
     </div>
 </section>

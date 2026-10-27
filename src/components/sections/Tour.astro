@@ -1,0 +1,45 @@
+---
+import type { ImageMetadata } from 'astro';
+import ConsoleShot from '../art/ConsoleShot.astro';
+import Section from '../Section.astro';
+import SectionHead from '../SectionHead.astro';
+import { tour } from '../../data/site';
+
+/* Captures are named in site.ts by file; resolve them here so a typo fails
+   the build rather than shipping a broken image. */
+const screens = import.meta.glob<{ default: ImageMetadata }>('../../assets/screens/*.jpg', {
+    eager: true,
+});
+const screen = (file: string) => {
+    const found = screens[`../../assets/screens/${file}.jpg`];
+    if (!found) throw new Error(`Missing console capture: ${file}.jpg`);
+    return found.default;
+};
+const [lead, ...rest] = tour.shots;
+---
+
+<Section id="console" index="04" label="CONSOLE">
+    <SectionHead eyebrow={tour.eyebrow} title={tour.title} lede={tour.lede} />
+
+    <div class="mt-14">
+        <h3 class="h3">{lead.title}</h3>
+        <ConsoleShot src={screen(lead.file)} alt={lead.alt} caption={lead.caption} class="mt-6" />
+    </div>
+
+    <div class="mt-16 grid gap-12 lg:grid-cols-2 lg:gap-10">
+        {
+            rest.map((shot) => (
+                <div class="min-w-0">
+                    <h3 class="h3">{shot.title}</h3>
+                    <ConsoleShot
+                        src={screen(shot.file)}
+                        alt={shot.alt}
+                        caption={shot.caption}
+                        sizes="(min-width: 1024px) 560px, 100vw"
+                        class="mt-6"
+                    />
+                </div>
+            ))
+        }
+    </div>
+</Section>
