@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-label="Screenshot pending">
+  <defs>
+    <pattern id="minor" width="16" height="16" patternUnits="userSpaceOnUse">
+      <path d="M16 0H0V16" fill="none" stroke="#111a21" stroke-width="1"/>
+    </pattern>
+    <pattern id="major" width="80" height="80" patternUnits="userSpaceOnUse">
+      <rect width="80" height="80" fill="url(#minor)"/>
+      <path d="M80 0H0V80" fill="none" stroke="#18242e" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1280" height="720" fill="#0e141a"/>
+  <rect width="1280" height="720" fill="url(#major)"/>
+  <rect x="440" y="300" width="400" height="120" rx="4" fill="#0e141a" stroke="#2e3d49" stroke-dasharray="6 6"/>
+  <text x="640" y="352" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="15" letter-spacing="2" fill="#64748b">SCREENSHOT PENDING</text>
+  <text x="640" y="382" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="14" fill="#8fa3b0">The text on this page describes the screen.</text>
+</svg>

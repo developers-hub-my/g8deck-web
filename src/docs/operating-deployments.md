@@ -1,166 +1,134 @@
 ---
 title: Operating what is running
-description: Day two in the console — lifecycle actions, environment variables, logs, health, endpoints, drift, promotion and rollback, and what each one really tells you.
-order: 30
-updated: 2026-09-20
+nav: Operating deployments
+description: Day two on a deployment — start, stop, restart and delete, logs, health, scaling, drift, promotion and rollback, and what each one really tells you.
+section: apps
+order: 50
+updated: 2026-10-27
 ---
 
-Your deployment reports **active**. Everything from here is day two: changing
-what runs, reading what it is doing, moving it forward, and putting it back.
-All of it lives on the deployment's own pages in the console at
-[g8deck.app](https://g8deck.app).
+Your deployment reports **active**. Everything from here is day two: reading
+what it is doing, changing what runs, moving it forward and putting it back.
+Open **Advanced → Build → Deployments**, or follow **Open** from an
+application's **Runs in** list.
+
+![The Deployments list: each deployment with its environment, blueprint and status, with search and filters above](/docs/operating-deployments/deployments.webp)
+
+A deployment page has its own sub-navigation — **Overview**, **Metrics**,
+**Resources**, **Logs**, **Services**, **Secrets** and **Certificates** — and
+the lifecycle actions in its header.
 
 ## Lifecycle actions
 
-The deployment overview carries four actions. Each is refused from a state it
-cannot apply to, rather than run and left half-done.
+Each action is refused from a state it cannot apply to, and the refusal says
+why, rather than running and being left half-done.
 
-| Action      | Allowed from              | What it does                       |
-| ----------- | ------------------------- | ---------------------------------- |
-| **Start**   | Stopped                   | Brings the existing resources back |
-| **Stop**    | Active, Degraded          | Halts them; the resources stay     |
-| **Restart** | Active, Degraded          | Stop and start in one step         |
-| **Destroy** | Anything but already gone | Releases the resources, confirmed  |
+| Action      | Allowed from                 | What it does                                                                                      |
+| ----------- | ---------------------------- | ------------------------------------------------------------------------------------------------- |
+| **Start**   | Stopped                      | Brings a stopped deployment back up on its existing resources                                     |
+| **Stop**    | Active, Degraded             | Stops everything but keeps the resources for a later start                                        |
+| **Restart** | Active, Degraded             | Stops and starts in place                                                                         |
+| **Delete**  | Anything not already deleted | Releases every resource. It cannot be undone, and it is the only one of these that stops the bill |
 
-<a class="shot" id="shot-1-thumb" href="#shot-1" aria-label="Enlarge: A deployment: its status and lifecycle actions, the node, managed-service and pipeline tiles, and the settled run reporting how many steps did no work"><img src="/docs/console/deployment-overview.jpg" alt="A deployment: its status and lifecycle actions, the node, managed-service and pipeline tiles, and the settled run reporting how many steps did no work" /></a>
+![A deployment's overview: Promote, Stop, Restart and Re-run Pipeline in the header, and the node, service, application and pipeline tiles](/docs/operating-deployments/deployment.webp)
 
-<div id="shot-1" class="lightbox">
-  <a class="lightbox-backdrop" href="#shot-1-thumb" aria-label="Close"></a>
-  <figure class="lightbox-figure">
-    <img src="/docs/console/deployment-overview.jpg" alt="A deployment: its status and lifecycle actions, the node, managed-service and pipeline tiles, and the settled run reporting how many steps did no work" loading="lazy" />
-    <figcaption>A deployment: its status and lifecycle actions, the node, managed-service and pipeline tiles, and the settled run reporting how many steps did no work</figcaption>
-  </figure>
-  <a class="lightbox-close" href="#shot-1-thumb">Close</a>
-</div>
+**Delete** sits behind a confirmation and its own permission, so someone who
+may restart a deployment is not thereby allowed to delete one. The deployment
+list offers two more acts, and the words after Delete say which:
 
-Destroy sits behind a confirmation **and** a separate permission from the other
-three, so an operator who may restart a deployment is not thereby entitled to
-delete one.
+| Control                 | What happens                                                                                                                                                                      |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Delete**              | Containers, nodes and networks are released and billing stops; blueprints and applications stay                                                                                   |
+| **Force delete record** | Failed deployments only. Nothing is contacted — you are stating the infrastructure is already gone, and you are asked why. Anything still running keeps running and keeps billing |
 
 > Re-running the pipeline is not a substitute for **Start**. On a stopped
 > deployment every step would find its work already done, skip, and flip the
-> deployment to active without starting anything. The console refuses it.
+> deployment to active without starting anything. The console refuses it and
+> points you at Start.
 
-Individual machines have their own controls — start, stop, reboot, and a
-refresh that only re-reads status. All of them, and the four above, are refused
-on the provider that hosts G8Deck's own control plane. Workloads are redeployed
-one at a time from the workloads list, without disturbing the rest of the
-deployment.
+All lifecycle actions are refused on the server that hosts G8Deck's own
+control plane.
 
-## Environment variables
+## Re-run Pipeline
 
-A workload's variables are edited in place as rows, or as a pasted dotenv
-block, and written in **one batch save** — no per-row writes, so a refused
-entry leaves nothing partially applied. Two rules are enforced on the way in,
-because the runtime fails silently on both:
+**Re-run Pipeline** is how you redeploy. It picks up where the last run
+stopped: a step already marked success is not repeated, so a fixed cause plus a
+re-run is cheaper than starting over. Only one run per deployment can be in
+flight at a time. Saving domains also re-queues the DNS and certificate steps,
+which is why the console asks you to re-run after adding one.
 
-- A key must be letters, digits and underscores, and must not start with a
-  digit. A key systemd cannot parse is dropped outright — absent at runtime,
-  with nothing in the journal to say so.
-- A value cannot contain a newline. An environment file cannot represent one;
-  systemd reads the remainder as further variables, so one pasted multi-line
-  secret silently becomes several variables named from the middle of it.
+## Environment variables and secrets
 
-Saved variables **apply on the next deploy**; nothing restarts when you press
-save. Variables found in the workload's own `.env.example` appear as a seed you
-can promote into the draft — importing them changes only what you are editing,
-because the seed keeps applying underneath either way.
-
-> On G8Deck's agent-facing MCP surface the same column is written by
-> `set-workload-env`, and there the rules are stricter: it **merges** into what
-> is stored rather than replacing it, values travel inbound only, and the
-> response names each key and whether it was added, changed, unchanged, removed
-> or generated — never the value. A value nobody needs to read, `APP_KEY` above
-> all, is generated where it is stored, so it never enters a transcript at all.
+Variables are edited per environment on the application's **Environment** tab
+and apply on the next deploy; secrets declared for token references live on
+the deployment's **Secrets** page. Both are covered in [Environment variables
+and secrets](/docs/environment-variables).
 
 ## Logs
 
-The log viewer tails one target at a time — a workload, its application log
-file, a managed service, or a node — in 100, 500 or 1000 lines. Nothing is
-stored: every refresh is a fresh tail from the provider.
+The log viewer tails one target at a time — an application, its log file, a
+managed service, or a server — in 100, 500 or 1000 lines. Nothing is stored:
+every refresh is a fresh tail, and **Download** saves what you see.
 
 **Output is redacted unless you hold `deployments.view.logs-raw`.** The viewer
 states which of the two you got, so a masked value is never mistaken for a real
-one.
+one, and downloads follow the same rule.
 
-![The log viewer tailing a workload: the target and tail-size selects, and the notice stating that known credentials are masked as [redacted] on screen and in downloads](/docs/console/deployment-logs.jpg)
+![The log viewer: the target and tail selects, Refresh and Download, the notice saying whether output is redacted, and the latest lines](/docs/operating-deployments/logs.webp)
 
 ## Health readings
 
-Health is sampled per provisioned node, including adopted machines that G8Deck
-did not create. What is recorded is only what something actually reports:
+Health is sampled per server, including adopted machines G8Deck did not create.
+What is recorded is only what something actually reports:
 
 - CPU and memory come from the node agent.
-- The error rate is a **liveness probe**, not an HTTP error rate: full marks
-  against a node the provider will not report as running, zero otherwise.
+- The error rate is a **liveness probe**, not an HTTP error rate.
 - Requests per second and latency stay at zero. Nothing measures them yet, and
   a plausible guess in a column alert rules threshold on is worse than a zero.
 
-The reading to be careful with is degradation over a window. **A null figure
-means insufficient evidence, never a clean bill of health.** Two conditions
-have to hold before any number is returned: at least two distinct readings, and
-an oldest reading covering at least half the window. A monitor that started
-twenty seconds ago has not observed five minutes of anything.
-
-## Endpoints
-
-A workload's ports and domains are edited together, and the distinction is what
-catches people out. A **published port binds loopback** unless the workload
-declares public exposure — siblings still reach it by network alias, the
-outside world does not, and published is not the same as reachable. A
-**domain** routes through the reverse proxy, which is what makes a workload
-answerable from outside the host. Both apply on the next deploy.
+**A missing degradation figure means insufficient evidence, never a clean bill
+of health.** A figure is returned only once there are at least two distinct
+readings and the oldest covers at least half the window.
 
 ## Scaling
 
-Scaling policies are attached to a blueprint layer: a metric, a scale-up and a
-scale-down threshold between 0 and 100, and minimum and maximum replica counts.
-The scale-down threshold must be lower than the scale-up one, and the minimum
-is at least one replica.
+The **Operations** page holds scaling policies, drift detection, rollback and
+a cost estimate. A scaling policy is attached to a blueprint layer: a metric,
+a scale-up and a scale-down threshold between 0 and 100, and minimum and
+maximum replica counts. The scale-down threshold must be lower than the
+scale-up one.
 
-An evaluation cycle can be run now rather than waiting for the scheduler, and
-**it is a dry run by default** — pressing evaluate reports what the policies
-make of the current load without resizing anything. Applying is a deliberate
-second action.
+Evaluating the policies now **is a dry run by default** — it reports what the
+policies make of the current load without resizing anything. Applying is a
+second, deliberate action.
+
+![The Operations page: estimated monthly cost, scaling policies and recent scaling events, drift detection and rollback](/docs/operating-deployments/operations.webp)
 
 ## Drift
 
-Drift is the difference between the blueprint G8Deck holds and what the
+Drift is the difference between the desired state G8Deck recorded and what the
 provider actually reports. Replica counts are read by asking the provider about
-each machine, never by counting rows: a row saying "running" beside a VM that
-no longer exists is exactly the drift being looked for.
+each machine, never by counting rows.
 
 Recording the baseline and detecting against it are **two separate actions, on
 purpose** — recording immediately before detecting makes the desired state
-equal to the current state by construction, so nothing can ever be found to
-have drifted.
+equal to the current state, so nothing could ever be found to have drifted.
 
 > An empty drift list over a deployment with no baseline certifies nothing.
-> The console says whether a baseline exists rather than letting the empty list
-> read as "no drift".
+> The drift page says so in amber rather than letting the empty list read as
+> "no drift".
+
+![The drift history page with no baseline recorded: the warning that nothing can be found to have drifted until one is](/docs/operating-deployments/drift.webp)
 
 Two kinds of drift reconcile themselves — a replica mismatch and a missing
 component, both corrected by scaling the layer back to its desired count.
-Everything else is reported and waits for you to resolve it.
-
-<a class="shot" id="shot-2-thumb" href="#shot-2" aria-label="Enlarge: The operations page: scaling policies with Evaluate and Apply as separate actions, recent scaling events, drift findings, and auto-rollback armed with its threshold, window and scope"><img src="/docs/console/deployment-operations.jpg" alt="The operations page: scaling policies with Evaluate and Apply as separate actions, recent scaling events, drift findings, and auto-rollback armed with its threshold, window and scope" /></a>
-
-<div id="shot-2" class="lightbox">
-  <a class="lightbox-backdrop" href="#shot-2-thumb" aria-label="Close"></a>
-  <figure class="lightbox-figure">
-    <img src="/docs/console/deployment-operations.jpg" alt="The operations page: scaling policies with Evaluate and Apply as separate actions, recent scaling events, drift findings, and auto-rollback armed with its threshold, window and scope" loading="lazy" />
-    <figcaption>The operations page: scaling policies with Evaluate and Apply as separate actions, recent scaling events, drift findings, and auto-rollback armed with its threshold, window and scope</figcaption>
-  </figure>
-  <a class="lightbox-close" href="#shot-2-thumb">Close</a>
-</div>
+Everything else is reported and waits for you.
 
 ## Promotion between environments
 
-A promotion moves a deployment to another environment **of the same project**.
-The source must be healthy, and the target must not be the environment it is
-already in.
-
-Raising the request runs the gates that the platform can actually answer:
+**Promote** moves a deployment to another environment **of the same project**.
+The source must be healthy, and the target must differ from where it is.
+Raising the request runs only the gates the platform can actually answer:
 
 | Check         | Passes when                                                           |
 | ------------- | --------------------------------------------------------------------- |
@@ -169,36 +137,21 @@ Raising the request runs the gates that the platform can actually answer:
 | `test`        | Only created when the pipeline requires one                           |
 | `manual`      | The approver signs off; never passed by the engine itself             |
 
-A check is only created when it can genuinely fail, which is why a pipeline
-that asks for no test gets no test row: a permanently green gate is worse than
-an absent one. G8Deck runs no test suite of its own, so a pipeline that _does_
-require one fails with that as the reason.
-
 Approval creates the target deployment pinned to the exact image tags the
-source is running, with the target environment's overrides applied — and leaves
-it **pending**. It is not provisioned for you, for the same reason a new
-deployment is not: standing up infrastructure is an explicit act. The one
-exception is an auto-promote pipeline, where "automatic" is precisely the
-promise that no human touches it.
+source is running and leaves it **pending** — standing up infrastructure is an
+explicit act. The person who asked cannot approve their own request.
 
 ## Rollback
 
-Rollback is planned first and executed second, never in one click. Every plan
-has a scope:
+Two kinds, for two questions:
 
-| Scope                   | Reverts                                        |
-| ----------------------- | ---------------------------------------------- |
-| **Full**                | Infrastructure and workloads together          |
-| **Workload only**       | The previous workload release; infra untouched |
-| **Infrastructure only** | Infra configuration; the workload untouched    |
+- **Roll back to this**, on an application's **Releases** tab, reruns one
+  earlier release's exact image without rebuilding.
+- A **rollback plan**, on the Operations page, is planned first and executed
+  second, with a scope: **Full** (infrastructure and applications),
+  **Workload only**, or **Infrastructure only**.
 
 You can also arm automatic rollback on sustained health degradation: a
-threshold percentage, a window between one minute and one hour, and the scope
-to use. The monitor honours the null rule above — with too little evidence to
-judge the window, it does nothing rather than rolling back on the single sample
-taken while a node was restarting.
-
-## Where to go next
-
-Set an alert rule against the health readings, or point G8Deck at servers you
-already run and adopt them into the fleet.
+threshold, a window between one minute and one hour, and the scope to use.
+With too little evidence to judge the window, it does nothing rather than
+rolling back on a single sample taken while a server restarted.

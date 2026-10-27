@@ -141,3 +141,18 @@ Full documentation: https://docs.astro.build — see the guides on
 [routing](https://docs.astro.build/en/guides/routing/),
 [components](https://docs.astro.build/en/basics/astro-components/) and
 [styling](https://docs.astro.build/en/guides/styling/).
+
+## Docs
+
+- Pages are `src/docs/**/*.md`; every page names a `section` from `SECTIONS` in
+  `src/data/docs.ts`, which builds the sidebar, the index and prev/next. A
+  screenshot is a plain `![alt](/docs/<slug>/<name>.webp)` on its own line —
+  `src/components/docs/screenshots.ts` turns it into the captioned `:target`
+  lightbox and reads its size; the build fails on a missing file.
+- `src/docs/mcp/{customer,design,ops,platform,compliance}.md` are **generated**
+  by `node scripts/gen-mcp-reference.mjs [path/to/g8deck-app]` from the app's
+  `app/Mcp/Servers` and `app/Mcp/Tools`. Re-run it when tools change; never
+  hand-edit those five. `src/docs/mcp/connect.md` is hand-written.
+- Docs pages ship two small scripts, both progressive enhancements: search
+  over the prebuilt `/docs/search.json`, and Copy buttons on code blocks. The
+  rest of the site stays script-free.

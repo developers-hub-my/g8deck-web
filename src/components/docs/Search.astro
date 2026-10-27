@@ -1,0 +1,160 @@
+---
+/**
+ * Docs search: a native search input over the prebuilt /docs/search.json.
+ *
+ * The one place the docs run JavaScript, and it is progressive: without it
+ * the input is inert and the sidebar still reaches every page. The index is
+ * fetched on first focus, not on page load, so a reader who never searches
+ * never downloads it.
+ */
+interface Props {
+    /** Distinguishes the two instances (sidebar, docs index) for ids. */
+    id: string;
+    large?: boolean;
+}
+const { id, large = false } = Astro.props;
+---
+
+<div class:list={['docs-search', large && 'is-large']} data-docs-search>
+    <label for={`${id}-input`} class="sr-only">Search the documentation</label>
+    <div class="docs-search-field">
+        <svg
+            aria-hidden="true"
+            viewBox="0 0 20 20"
+            width="16"
+            height="16"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            ><circle cx="9" cy="9" r="5.5"></circle><path d="m13.5 13.5 3.5 3.5"></path></svg
+        >
+        <input
+            id={`${id}-input`}
+            type="search"
+            placeholder={large ? 'Search docs and MCP tools' : 'Search the docs'}
+            autocomplete="off"
+            spellcheck="false"
+            aria-describedby={`${id}-status`}
+            aria-controls={`${id}-results`}
+        />
+        <kbd aria-hidden="true">/</kbd>
+    </div>
+    <p id={`${id}-status`} class="sr-only" role="status" aria-live="polite"></p>
+    <ul id={`${id}-results`} class="docs-search-results" hidden></ul>
+</div>
+
+<script>
+    type Entry = { p: string; h: string; u: string; s: string; t: string };
+
+    let index: Promise<Entry[]> | null = null;
+    const load = () =>
+        (index ??= fetch('/docs/search.json')
+            .then((r) => r.json() as Promise<Entry[]>)
+            .catch(() => []));
+
+    const escape = (s: string) =>
+        s.replace(
+            /[&<>"]/g,
+            (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!
+        );
+
+    function score(entry: Entry, terms: string[]): number {
+        const head = `${entry.p} ${entry.h}`.toLowerCase();
+        const body = entry.t.toLowerCase();
+        let total = 0;
+        for (const term of terms) {
+            if (entry.h.toLowerCase() === term) total += 40;
+            if (head.includes(term)) total += 10;
+            else if (body.includes(term)) total += 2;
+            else return 0;
+        }
+        return total - (entry.h ? 0 : 1);
+    }
+
+    function snippet(text: string, term: string): string {
+        const at = text.toLowerCase().indexOf(term);
+        const start = Math.max(0, at - 50);
+        const cut = text.slice(start, start + 140);
+        return escape((start > 0 ? '…' : '') + cut + (start + 140 < text.length ? '…' : ''));
+    }
+
+    for (const root of document.querySelectorAll<HTMLElement>('[data-docs-search]')) {
+        const input = root.querySelector('input')!;
+        const list = root.querySelector('ul')!;
+        const status = root.querySelector('[role=status]')!;
+
+        const render = async () => {
+            const query = input.value.trim().toLowerCase();
+            if (query.length < 2) {
+                list.hidden = true;
+                list.innerHTML = '';
+                status.textContent = '';
+                return;
+            }
+            const terms = query.split(/\s+/);
+            const hits = (await load())
+                .map((entry) => ({ entry, s: score(entry, terms) }))
+                .filter((x) => x.s > 0)
+                .sort((a, b) => b.s - a.s)
+                .slice(0, 12);
+            list.hidden = false;
+            if (!hits.length) {
+                list.innerHTML = `<li class="docs-search-empty">Nothing matches “${escape(query)}”. Try a tool name such as <code>set-workload-env</code>, or a screen such as “Databases”.</li>`;
+                status.textContent = 'No results';
+                return;
+            }
+            list.innerHTML = hits
+                .map(
+                    ({ entry }) => `<li><a href="${entry.u}">
+                        <span class="docs-search-where">${escape(entry.s)} · ${escape(entry.p)}</span>
+                        <span class="docs-search-title">${escape(entry.h || entry.p)}</span>
+                        <span class="docs-search-text">${snippet(entry.t, terms[0])}</span>
+                    </a></li>`
+                )
+                .join('');
+            status.textContent = `${hits.length} result${hits.length === 1 ? '' : 's'}. Use the down arrow to move through them.`;
+        };
+
+        input.addEventListener('focus', load, { once: true });
+        input.addEventListener('input', render);
+        input.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowDown') {
+                const first = list.querySelector('a');
+                if (first) {
+                    event.preventDefault();
+                    first.focus();
+                }
+            } else if (event.key === 'Escape') {
+                input.value = '';
+                render();
+            }
+        });
+        list.addEventListener('keydown', (event) => {
+            const links = [...list.querySelectorAll('a')];
+            const at = links.indexOf(document.activeElement as HTMLAnchorElement);
+            if (event.key === 'ArrowDown' && at < links.length - 1) {
+                event.preventDefault();
+                links[at + 1].focus();
+            } else if (event.key === 'ArrowUp') {
+                event.preventDefault();
+                (at > 0 ? links[at - 1] : input).focus();
+            } else if (event.key === 'Escape') {
+                input.focus();
+            }
+        });
+    }
+
+    // "/" focuses the first visible search box, unless the reader is typing.
+    document.addEventListener('keydown', (event) => {
+        const target = event.target as HTMLElement;
+        if (event.key !== '/' || event.metaKey || event.ctrlKey) return;
+        if (target.closest('input, textarea, select, [contenteditable]')) return;
+        const box = [
+            ...document.querySelectorAll<HTMLInputElement>('[data-docs-search] input'),
+        ].find((el) => el.offsetParent !== null);
+        if (box) {
+            event.preventDefault();
+            box.focus();
+        }
+    });
+</script>

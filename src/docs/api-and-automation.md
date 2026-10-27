@@ -1,169 +1,155 @@
 ---
-title: API and automation
-description: Drive G8Deck from an AI client or a script — how tokens are issued, which endpoints exist, what gates each server, and what a destructive call demands.
-order: 50
-updated: 2026-09-20
+title: MCP and AI automation
+nav: Overview
+description: G8Deck's automation surface is five Model Context Protocol servers on the console. Which one to use, who can reach each, the two locks every call passes, how secrets are kept out of transcripts, and how errors read.
+section: mcp
+order: 10
+updated: 2026-10-27
 ---
 
-G8Deck's automation surface is not a REST API. It is four **MCP servers**
-mounted on the console at [g8deck.app](https://g8deck.app), authenticated with
-Sanctum personal access tokens and designed for a client that speaks Model
-Context Protocol — Claude Code, Claude Desktop, or anything else that can send
-an `Authorization` header.
+G8Deck has no REST API to script against. Its automation surface is a set of
+**MCP servers** — Model Context Protocol, the protocol AI clients such as Claude
+Code, Claude, ChatGPT, Cursor and VS Code use to call tools. An agent works with
+the same permissions and refusals as the person behind it.
 
-Everything below is reachable with a token you issue yourself. Nothing here
-needs a separate API key, a sandbox account, or an OAuth app.
+## Five servers, one per audience
 
-## 1. Issue a token
+| Server         | Endpoint                            | For                                                                                                           | Reference                          |
+| -------------- | ----------------------------------- | ------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| **Customer**   | `https://g8deck.app/mcp`            | The one URL most people add: deploy a repository in two or three calls, then status, logs, redeploy, rollback | [Customer](/docs/mcp/customer)     |
+| **Design**     | `https://g8deck.app/mcp/design`     | Organisations, teams, projects, environments, blueprints — nothing is provisioned                             | [Design](/docs/mcp/design)         |
+| **Ops**        | `https://g8deck.app/mcp/ops`        | Run and troubleshoot deployments, applications, domains, env, caches, backups, storage                        | [Ops](/docs/mcp/ops)               |
+| **Platform**   | `https://g8deck.app/mcp/platform`   | Servers, setup, cloud servers, database and storage servers, adoption, patching, quotas                       | [Platform](/docs/mcp/platform)     |
+| **Compliance** | `https://g8deck.app/mcp/compliance` | Evidence, access reviews, vulnerabilities, secret rotations, certificates                                     | [Compliance](/docs/mcp/compliance) |
 
-Tokens are self-service, under **Settings → MCP Tokens** in the console. You
-need the `mcp.access.tokens` permission, which the `user` and `member` roles
-both hold — this is a customer feature, not an administrator one.
+The server is the first privilege boundary: a tool not registered on a server
+cannot be reached through it, whatever the caller holds. Which servers a role
+reaches:
 
-<a class="shot" id="shot-1-thumb" href="#shot-1" aria-label="Enlarge: The MCP Tokens settings page: a newly generated token shown once, the ready-made client commands for each server the token may reach, and the tokens already issued"><img src="/docs/console/mcp-tokens.jpg" alt="The MCP Tokens settings page: a newly generated token shown once, the ready-made client commands for each server the token may reach, and the tokens already issued" /></a>
+| Role                                 | Customer | Design | Ops | Platform | Compliance |
+| ------------------------------------ | :------: | :----: | :-: | :------: | :--------: |
+| `user` — the role every sign-up gets |   Yes    |  Yes   | Yes |    —     |     —      |
+| `member` — the limited tier          |   Yes    |   —    | Yes |    —     |     —      |
+| G8Deck's own operators               |   Yes    |  Yes   | Yes |   Yes    |    Yes     |
 
-<div id="shot-1" class="lightbox">
-  <a class="lightbox-backdrop" href="#shot-1-thumb" aria-label="Close"></a>
-  <figure class="lightbox-figure">
-    <img src="/docs/console/mcp-tokens.jpg" alt="The MCP Tokens settings page: a newly generated token shown once, the ready-made client commands for each server the token may reach, and the tokens already issued" loading="lazy" />
-    <figcaption>The MCP Tokens settings page: a newly generated token shown once, the ready-made client commands for each server the token may reach, and the tokens already issued</figcaption>
-  </figure>
-  <a class="lightbox-close" href="#shot-1-thumb">Close</a>
-</div>
+The customer server is gated by the ops permission: every tool on it is an ops
+tool or a thin wrapper over one. Platform and compliance are for the people who
+run G8Deck itself, not for customers.
 
-Pick one of three ability tiers. Each includes the ones before it, so there is
-no write token that cannot read:
+Each reference page is **generated from the application's source**, so its
+tool list, parameters and tiers match what the server actually registers.
 
-| Tier    | Abilities on the token                 | Use it for                        |
-| ------- | -------------------------------------- | --------------------------------- |
-| Read    | `mcp:read`                             | Dashboards, diagnosis, CI checks  |
-| Write   | `mcp:read`, `mcp:write`                | Deploys, scaling, env changes     |
-| Destroy | `mcp:read`, `mcp:write`, `mcp:destroy` | Teardowns, rollbacks, revocations |
+## Two locks on every call
 
-The plaintext token is shown **once**, immediately after creation, and never
-again. Revoke it from the same page; there is no expiry, so a token lives until
-you revoke it.
+A call passes two separate checks, and the narrower one wins:
 
-## 2. Connect a client
+- **Your permissions** — what _you_ may do: which servers, which operations,
+  and as which organisation role. Write tools ask exactly the question the
+  console's own buttons ask.
+- **The token's tier** — what _this token_ may do, so a read-only token for a
+  dashboard cannot destroy anything even when its owner could.
 
-The token page prints a ready command for each server you can actually reach —
-a server your role does not grant is not offered, rather than handed to you as
-a URL that will refuse you:
+| Tier        | Abilities                              | Use it for                            |
+| ----------- | -------------------------------------- | ------------------------------------- |
+| **Read**    | `mcp:read`                             | Dashboards, diagnosis, CI checks      |
+| **Write**   | `mcp:read`, `mcp:write`                | Deploys, scaling, environment changes |
+| **Destroy** | `mcp:read`, `mcp:write`, `mcp:destroy` | Deletes, rollbacks, revocations       |
 
-```bash
-claude mcp add --transport http g8deck-ops https://g8deck.app/mcp/ops \
-  --header "Authorization: Bearer <your-token>"
-```
+A token can be narrower than you are, never wider. A tool you can see but lack
+the permission for answers `permission_denied` and names the permission to ask
+an administrator for, rather than pretending it does not exist.
 
-Any client works the same way: HTTP transport, bearer token in the header.
+## Values go in, never out
 
-## 3. The endpoints that exist
+**Secret and credential values never cross the MCP boundary outward.** Tools
+take a value inbound — an environment variable, a secret, a database
+connection — and their responses name the **key** and what happened to it:
+added, changed, unchanged, removed or generated. No read tool returns a value.
 
-This is the whole registered HTTP surface. There is no `/api/v1`, no resource
-CRUD, and no OAuth — the token transport is deliberate, and OAuth is future
-work rather than an undocumented alternative.
+- `set-workload-env` can **generate** a value where it is stored — `APP_KEY`
+  above all — so a secret nobody needs to read never enters a transcript.
+- `create-database-user` generates the password and never returns it; it is
+  revealed on the server's page, behind a permission, and audited.
+- Read tools report which credential _fields_ are set. The one exception is an
+  SSH host key fingerprint, which is trust state to compare, not a secret.
+- Logs are redacted unless you hold the raw-logs permission, and the response
+  says which you got.
+- Anything read from a repository is returned as **data**, never as
+  instructions, so a file in a repository cannot steer the agent reading it.
 
-| Endpoint                           | What it is                                       | Gated by                | Rate limit  |
-| ---------------------------------- | ------------------------------------------------ | ----------------------- | ----------- |
-| `POST /mcp/design`                 | Blueprints, projects, environments, estimates    | `mcp.access.design`     | 60/min      |
-| `POST /mcp/ops`                    | Deployments, pipelines, workloads, incidents     | `mcp.access.ops`        | 60/min      |
-| `POST /mcp/platform`               | Providers, nodes, bootstrap, quotas              | `mcp.access.platform`   | 30/min      |
-| `POST /mcp/compliance`             | Evidence, access reviews, vulnerabilities, certs | `mcp.access.compliance` | 30/min      |
-| `POST /webhooks/github/{uuid}`     | Inbound push events for one workload             | HMAC signature          | 60/min · IP |
-| `POST /webhooks/billing/{gateway}` | Payment callbacks (`billplz`, `stripe`)          | Gateway signature       | 60/min · IP |
+## Destructive calls
 
-The two lower limits are not arbitrary: the platform and compliance tools reach
-real infrastructure, and a node bootstrap is not something to retry in a tight
-loop. The webhook routes carry no auth middleware at all — the signature _is_
-the authentication.
+A tool in the destroy tier needs a token carrying `mcp:destroy`, and nearly all
+of them also need an identifying value **retyped** into a confirmation argument
+— the deployment's name, an environment's slug, a server's SSH address, a
+database server's `host:port`. The value is chosen so it cannot repeat across
+rows: environment names repeat ("Production"), so environments confirm on the
+slug. A mismatch is refused **and audited**.
 
-Of the four servers, a customer role reaches two. `user` holds design and ops;
-`member` holds ops alone, because a member cannot author blueprints on the web
-either. Platform and compliance are granted to no customer role.
+Read what each one actually destroys — the reference page says. Deleting a
+server or a database server from G8Deck removes a record; the machine keeps
+running and keeps billing unless the tool is told, explicitly, to delete a
+machine G8Deck created.
 
-## 4. Two locks, not one
+## The organisation every call acts on
 
-A token's abilities and its holder's permissions are separate gates, and both
-are checked before any tool runs:
+Every tool takes an optional `organization` (uuid or slug). Omit it and your
+default is used; the organisation actually used is **echoed on every response**,
+so check it rather than assuming. Records are identified by uuid — or a slug
+where they have one — never by an internal number.
 
-- **Permissions** say what the _human_ may do — which servers, and which
-  operations inside them.
-- **Abilities** say what _this token_ may do. A CI agent's read token must not
-  destroy, even when the person who minted it could.
+Reaching an organisation you are not a member of needs a cross-tenant
+permission no customer role holds, and every such call is written to that
+organisation's audit trail. A token from an OAuth sign-in is bound to the one
+organisation chosen at consent and cannot reach any other.
 
-A token can therefore be narrower than its holder, never wider. A tool you lack
-the server permission for is not listed at all; a tool you can see but lack the
-domain permission for answers `permission_denied` and names the permission to
-ask for, rather than pretending it does not exist.
+An organisation owner or administrator can switch **AI access** off in the
+organisation's settings. Every MCP call for that organisation is then refused —
+existing tokens are kept and work again when it is switched back on.
 
-## 5. Identifiers are uuids, never ids
+## Rate limits
 
-Every record G8Deck exposes carries an internal numeric `id` and a public
-`uuid`. The `id` is hidden at the model layer — it is never serialised, never
-in a URL, and never accepted as an argument. Tools take a `uuid` or, where a
-record has one, a `slug`.
+Two limits apply to every call:
 
-The same rule runs through the console's own routes: a deployment page is
-`/deployments/{uuid}`, and the GitHub webhook is bound by `{workload:uuid}` for
-exactly this reason.
+| Limit                                              | Read | Write | Destroy |
+| -------------------------------------------------- | :--: | :---: | :-----: |
+| Per person, per minute, across all tokens and apps |  60  |  20   |    5    |
+| Per AI app, per person, per minute (OAuth only)    |  30  |  10   |    3    |
 
-Every tool also accepts an optional `organization` argument. Omit it and your
-default is used — and the organisation actually resolved is echoed on **every**
-response, because under a token there is no session to infer one from. Reaching
-an organisation you are not a member of needs `mcp.access.cross-tenant`, which
-only the administrator role holds, and every such call is written to that
-tenant's own audit trail.
+On top of those, each endpoint has a floor: 60 requests a minute on `/mcp`,
+`/mcp/design` and `/mcp/ops`; 30 on `/mcp/platform` and `/mcp/compliance`,
+because those reach real infrastructure. Over a limit, the error says which
+budget ran out and when it refills.
 
-## 6. Destructive operations
+## Reading an error
 
-Eight tools are destructive. Each one requires a token carrying `mcp:destroy`
-**and** an exact value retyped into a named argument — and a mismatch is
-audited, not just refused:
-
-| Tool                       | Retype this             | Why that value               |
-| -------------------------- | ----------------------- | ---------------------------- |
-| `destroy-deployment`       | deployment name         | Irreversible teardown        |
-| `execute-rollback`         | workload name           | Replaces the live release    |
-| `delete-project`           | project name            | Takes environments with it   |
-| `delete-environment`       | environment **slug**    | Names repeat across projects |
-| `delete-infra-provider`    | provider name           | Removes the credential       |
-| `retire-managed-node`      | SSH **host address**    | Hostnames can be blank       |
-| `withdraw-database-server` | endpoint as `host:port` | Engine names repeat          |
-| `revoke-certificate`       | certificate domain      | Domain loses TLS             |
-
-> Read what each one actually destroys. `delete-infra-provider` destroys no
-> machine — it removes G8Deck's credential for one, so an adopted host becomes
-> unreachable rather than gone, and keeps running and keeps billing.
-> `withdraw-database-server` uninstalls nothing. Only
-> `retire-managed-node --destroy-machine` deletes hardware.
-
-## 7. Reading a failure
-
-Errors carry a stable machine code beside the human message, plus a
-`retryable` flag, so an agent can tell "you may not do this" from "this does not
-exist" from "your token is too narrow":
+Errors carry a stable code beside the message, and a `retryable` flag:
 
 ```json
 { "error": { "code": "ability_denied", "message": "…", "retryable": false } }
 ```
 
-| Code                    | What to change                                    |
-| ----------------------- | ------------------------------------------------- |
-| `server_access_denied`  | Your role — ask for the `mcp.access.*` permission |
-| `permission_denied`     | Your role — the message names the permission      |
-| `ability_denied`        | The token — mint one at a higher tier             |
-| `cross_tenant_denied`   | The `organization` argument, or your role         |
-| `confirmation_mismatch` | The retyped value; the expected shape is named    |
-| `capability_simulated`  | The provider — the capability is a declared fake  |
-| `conflict`              | The record's state, not your request              |
+| Code                    | What to change                                               | Retry? |
+| ----------------------- | ------------------------------------------------------------ | :----: |
+| `not_authenticated`     | The token — it is missing or not recognised                  |   No   |
+| `server_access_denied`  | Your role does not reach this server                         |   No   |
+| `permission_denied`     | Your role — the message names the permission                 |   No   |
+| `ability_denied`        | The token — create one at a higher tier                      |   No   |
+| `cross_tenant_denied`   | The `organization` argument                                  |   No   |
+| `ai_access_disabled`    | An administrator switched AI access off for the organisation |   No   |
+| `capability_simulated`  | The provider — the capability is a declared fake there       |   No   |
+| `conflict`              | The record's state, not your request                         |   No   |
+| `invalid_argument`      | The arguments                                                |  Yes   |
+| `confirmation_mismatch` | The retyped value; the expected shape is named               |  Yes   |
+| `not_found`             | The identifier                                               |  Yes   |
+| `rate_limited`          | Wait — the error says until when                             |  Yes   |
 
-Only `invalid_argument`, `confirmation_mismatch` and `not_found` are marked
-retryable. An authorisation failure will refuse the same call every time, so
-retrying one is noise against a boundary that has already answered.
+An authorisation failure refuses the same call every time, so retrying it only
+spends budget.
 
-## Where to go next
+## Start here
 
-Call `whoami` first on any server: it reports your roles, which servers you can
-reach, your token's abilities, and which organisation is used when you omit the
-argument. From there, `list-deployments` and `diagnose-deployment` on the ops
-server are the two calls that answer most questions.
+[Connect an AI client](/docs/mcp/connect), then call `whoami` first on any
+server: it reports your roles, the servers you can reach, your token's tier and
+which organisation is used when you omit the argument. On the ops server,
+`list-deployments` and `diagnose-deployment` answer most questions.
