@@ -1,11 +1,12 @@
 ---
 /**
  * One route for every Markdown file in `src/docs`. The layout and the
- * sidebar are settled in Docs.astro; this file only pairs a slug with its
- * rendered content.
+ * sidebar are settled in Docs.astro; this file pairs a slug with its rendered
+ * content, after screenshots are turned into enlargeable figures.
  */
 import Docs from '../../layouts/Docs.astro';
 import { docs } from '../../data/docs';
+import { withScreenshots } from '../../components/docs/screenshots';
 
 export function getStaticPaths() {
     return docs.map((doc) => ({
@@ -15,9 +16,9 @@ export function getStaticPaths() {
 }
 
 const { doc } = Astro.props;
-const { Content, getHeadings } = doc.module;
+const html = await withScreenshots(await doc.module.compiledContent());
 ---
 
-<Docs frontmatter={doc} headings={getHeadings()}>
-    <Content />
+<Docs doc={doc} headings={doc.module.getHeadings()}>
+    <Fragment set:html={html} />
 </Docs>

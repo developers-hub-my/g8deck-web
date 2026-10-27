@@ -1,14 +1,39 @@
 ---
 title: When a deployment misbehaves
 description: How to read a pipeline, a provider, a health figure and a log honestly, so a green console never convinces you of infrastructure that was never built.
-order: 40
-updated: 2026-09-20
+section: help
+order: 10
+updated: 2026-10-27
 ---
 
 Most of what goes wrong in G8Deck is not a crash — it is a screen that looks
 finished. This page works through the readings that are easy to misread, in
 the order you meet them in the console at [g8deck.app](https://g8deck.app):
 the symptom, what it actually means, and what to do about it.
+
+| Symptom                                | Jump to                                                                                      |
+| -------------------------------------- | -------------------------------------------------------------------------------------------- |
+| A step failed and the run stopped      | [A step failed](#a-step-failed)                                                              |
+| Green pipeline, but things are missing | [The pipeline finished, but nothing was built](#the-pipeline-finished-but-nothing-was-built) |
+| Nothing moves                          | [Nothing is happening at all](#nothing-is-happening-at-all)                                  |
+| Active, but the site does not answer   | [It reports active, but nothing answers](#it-reports-active-but-nothing-answers)             |
+| Health says all is well                | [Health says nothing is wrong](#health-says-nothing-is-wrong)                                |
+| A secret shows as `[redacted]`         | [The logs are missing the line you need](#the-logs-are-missing-the-line-you-need)            |
+
+## A step failed
+
+A failed run says where it stopped, at the top of the deployment page, in
+words: which step, and the error the step recorded. The steps that had already
+completed are rolled back cleanly, so nothing is left half-configured.
+
+![A failed deployment: "Provisioning stopped at Check resource quota" with the reason, the note that completed steps rolled back cleanly, and the failed step in the pipeline](/docs/troubleshooting/failed-deployment.webp)
+
+Fix the cause the message names — here, the plan's server limit — and press
+**Re-run Pipeline**. Steps are idempotent: the re-run picks up from the failed
+step and does not repeat what already succeeded. If your organisation has
+connected its own AI account, **Explain this failure** beside the failed step
+gives a plain-language reading of the error — what it sends is in [the logs
+section](#the-logs-are-missing-the-line-you-need).
 
 ## The pipeline finished, but nothing was built
 
@@ -27,16 +52,7 @@ ran in 4m 12s — 6 did no work`, in amber. Progress counts settled steps,
 skips included, so the bar does reach 100%; that is why the skip count sits
 beside it rather than behind it.
 
-<a class="shot" id="shot-1-thumb" href="#shot-1" aria-label="Enlarge: The pipeline step list: skipped steps in amber, each marked &quot;did no work&quot; with the reason recorded underneath, beside green steps reporting their duration"><img src="/docs/first-deployment/pipeline-skipped-steps.jpg" alt="The pipeline step list: skipped steps in amber, each marked &quot;did no work&quot; with the reason recorded underneath, beside green steps reporting their duration" /></a>
-
-<div id="shot-1" class="lightbox">
-  <a class="lightbox-backdrop" href="#shot-1-thumb" aria-label="Close"></a>
-  <figure class="lightbox-figure">
-    <img src="/docs/first-deployment/pipeline-skipped-steps.jpg" alt="The pipeline step list: skipped steps in amber, each marked &quot;did no work&quot; with the reason recorded underneath, beside green steps reporting their duration" loading="lazy" />
-    <figcaption>The pipeline step list: skipped steps in amber, each marked "did no work" with the reason recorded underneath, beside green steps reporting their duration</figcaption>
-  </figure>
-  <a class="lightbox-close" href="#shot-1-thumb">Close</a>
-</div>
+![The pipeline step list: skipped steps in amber, each marked 'did no work' with the reason recorded underneath, beside green steps reporting their duration](/docs/first-deployment/pipeline-skipped-steps.jpg)
 
 Expand the pipeline and read each amber row. Whatever that step would have
 configured — a firewall policy, a certificate, a load balancer — is
@@ -94,16 +110,7 @@ installs.
 > this provider type — nothing was contacted_. The provider form lists every
 > simulated capability with its reason before you save.
 
-<a class="shot" id="shot-2-thumb" href="#shot-2" aria-label="Enlarge: The server form's &quot;Not yet real on this server&quot; panel, naming the capability that is simulated and the reason recorded against it"><img src="/docs/console/provider-capabilities.jpg" alt="The server form's &quot;Not yet real on this server&quot; panel, naming the capability that is simulated and the reason recorded against it" /></a>
-
-<div id="shot-2" class="lightbox">
-  <a class="lightbox-backdrop" href="#shot-2-thumb" aria-label="Close"></a>
-  <figure class="lightbox-figure">
-    <img src="/docs/console/provider-capabilities.jpg" alt="The server form's &quot;Not yet real on this server&quot; panel, naming the capability that is simulated and the reason recorded against it" loading="lazy" />
-    <figcaption>The server form's "Not yet real on this server" panel, naming the capability that is simulated and the reason recorded against it</figcaption>
-  </figure>
-  <a class="lightbox-close" href="#shot-2-thumb">Close</a>
-</div>
+![The server form's 'Not yet real on this server' panel, naming the capability that is simulated and the reason recorded against it](/docs/console/provider-capabilities.jpg)
 
 ## It reports active, but nothing answers
 
@@ -183,16 +190,15 @@ Work outward from the deployment:
 3. **Operations** — scaling policies and the auto-rollback trigger, whose
    threshold and window decide whether it ever fires.
 
-<a class="shot" id="shot-3-thumb" href="#shot-3" aria-label="Enlarge: The incident queue: severity down one edge, the lifecycle each incident has reached, and the row actions for acknowledging or resolving one"><img src="/docs/console/incidents.jpg" alt="The incident queue: severity down one edge, the lifecycle each incident has reached, and the row actions for acknowledging or resolving one" /></a>
-
-<div id="shot-3" class="lightbox">
-  <a class="lightbox-backdrop" href="#shot-3-thumb" aria-label="Close"></a>
-  <figure class="lightbox-figure">
-    <img src="/docs/console/incidents.jpg" alt="The incident queue: severity down one edge, the lifecycle each incident has reached, and the row actions for acknowledging or resolving one" loading="lazy" />
-    <figcaption>The incident queue: severity down one edge, the lifecycle each incident has reached, and the row actions for acknowledging or resolving one</figcaption>
-  </figure>
-  <a class="lightbox-close" href="#shot-3-thumb">Close</a>
-</div>
+![The incident queue: severity down one edge, the lifecycle each incident has reached, and the row actions for acknowledging or resolving one](/docs/console/incidents.jpg)
 
 If a screen and a reading disagree, trust the one that is harder to fake: the
 step's recorded reason, the provider's capability list, the bind address.
+
+## Ask an agent
+
+`diagnose-deployment` on the [ops MCP server](/docs/mcp/ops) reads the
+pipeline, the queue, the provider's simulated capabilities, health and
+incidents in one pass and ranks the likely causes — the right first call for
+"why is this stuck". `get-pipeline-status` lists skipped steps and their
+reasons separately from successes, for the same reason this page does.

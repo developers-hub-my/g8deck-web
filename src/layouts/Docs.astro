@@ -1,153 +1,189 @@
 ---
 /**
- * Layout for every Markdown page under `src/pages/docs`, applied through the
- * file's own `layout:` frontmatter. Pages carry prose and screenshots only —
- * the chrome, the sidebar and the metadata are settled here once.
+ * Layout for every documentation page. Pages carry prose and screenshots
+ * only — the sidebar, search, contents, metadata and pagination are settled
+ * here once.
+ *
+ * Runtime JavaScript on docs pages is limited to two progressive
+ * enhancements: the search box (Search.astro) and the Copy button on code
+ * blocks (below). Neither hides content; without them every page still reads
+ * and navigates in full.
  */
 import type { MarkdownHeading } from 'astro';
 import Base from './Base.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
-import { docs, isCurrent, type DocFrontmatter } from '../data/docs';
+import Search from '../components/docs/Search.astro';
+import { docs, groups, isCurrent, SECTIONS, type DocEntry } from '../data/docs';
 import { site } from '../data/site';
+import '../styles/docs.css';
 
 interface Props {
-    frontmatter: DocFrontmatter;
+    doc: DocEntry;
     /** From the page's own Markdown, so it cannot drift from the headings. */
     headings?: MarkdownHeading[];
 }
 
-const { frontmatter, headings = [] } = Astro.props;
-
-/* h1 is the page title, already on screen; anything below h3 is detail a
-   reader scans for rather than navigates to. */
-const contents = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+const { doc, headings = [] } = Astro.props;
 const pathname = Astro.url.pathname;
 
-const updated = new Date(frontmatter.updated).toLocaleDateString('en-MY', {
+/* h1 is the page title, already on screen. A reference page with dozens of
+   tool headings lists its h2 groups only — a contents list longer than the
+   screen is not a contents list. */
+const sections = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const contents = sections.length > 30 ? sections.filter((h) => h.depth === 2) : sections;
+
+const updated = new Date(doc.updated).toLocaleDateString('en-MY', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
 });
+const sectionLabel = SECTIONS.find((s) => s.key === doc.section)?.label;
 
-const position = docs.findIndex((doc) => isCurrent(doc.href, pathname));
+const position = docs.findIndex((d) => isCurrent(d.href, pathname));
 const previous = position > 0 ? docs[position - 1] : undefined;
 const next = position >= 0 && position < docs.length - 1 ? docs[position + 1] : undefined;
 ---
 
-<Base
-    title={`${frontmatter.title} — ${site.name} documentation`}
-    description={frontmatter.description}
->
+<Base title={`${doc.title} — ${site.name} documentation`} description={doc.description}>
     <Nav />
 
-    <main id="main" class="page max-w-[100rem] py-12 lg:py-16">
-        <div
-            class="grid gap-12 lg:grid-cols-[14rem_minmax(0,1fr)] lg:gap-16 xl:grid-cols-[14rem_minmax(0,1fr)_13rem]"
-        >
-            <aside class="lg:sticky lg:top-20 lg:self-start">
-                <p class="mono-label text-muted">Documentation</p>
-                <nav class="border-line mt-4 border-t pt-4" aria-label="Documentation">
-                    <ul class="space-y-1">
-                        {
-                            docs.map((doc) => {
-                                const current = isCurrent(doc.href, pathname);
-                                return (
-                                    <li>
-                                        <a
-                                            href={doc.href}
-                                            aria-current={current ? 'page' : undefined}
-                                            class:list={[
-                                                'hover:bg-raised block rounded-[2px] px-3 py-2 text-sm transition-colors',
-                                                current
-                                                    ? 'bg-raised text-fg font-medium'
-                                                    : 'text-muted hover:text-fg',
-                                            ]}
-                                        >
-                                            {doc.title}
-                                        </a>
-                                    </li>
-                                );
-                            })
-                        }
-                    </ul>
+    <main id="main" class="page docs-shell py-10 lg:py-14">
+        <aside class="docs-sidebar">
+            <Search id="sidebar-search" />
+            <details class="docs-nav-toggle" open>
+                <summary>
+                    <span class="mono-label">Browse documentation</span>
+                </summary>
+                <nav aria-label="Documentation" class="docs-nav">
+                    <a
+                        href="/docs"
+                        class:list={['docs-nav-link', isCurrent('/docs', pathname) && 'is-current']}
+                        >Overview</a
+                    >
+                    {
+                        groups.map((group) => (
+                            <div class="docs-nav-group">
+                                <p class="mono-label docs-nav-heading">{group.label}</p>
+                                <ul>
+                                    {group.docs.map((entry) => {
+                                        const current = isCurrent(entry.href, pathname);
+                                        return (
+                                            <li>
+                                                <a
+                                                    href={entry.href}
+                                                    aria-current={current ? 'page' : undefined}
+                                                    class:list={[
+                                                        'docs-nav-link',
+                                                        current && 'is-current',
+                                                    ]}
+                                                >
+                                                    {entry.nav ?? entry.title}
+                                                </a>
+                                            </li>
+                                        );
+                                    })}
+                                </ul>
+                            </div>
+                        ))
+                    }
                 </nav>
-            </aside>
+            </details>
+        </aside>
 
-            <article>
-                <h1 class="h2">{frontmatter.title}</h1>
-                <p class="body-lg text-muted mt-5 max-w-2xl text-pretty">
-                    {frontmatter.description}
-                </p>
-                <p class="mono-label text-idle border-line mt-6 border-t pt-6">
-                    Updated {updated}
-                </p>
-
-                <div class="prose mt-10">
-                    <slot />
-                </div>
-
+        <article class="docs-article">
+            <nav aria-label="Breadcrumb" class="docs-breadcrumb mono-label">
+                <a href="/docs">Docs</a>
+                <span aria-hidden="true">/</span>
+                <span>{sectionLabel}</span>
+            </nav>
+            <h1 class="docs-title">{doc.title}</h1>
+            <p class="body-lg text-muted mt-4 max-w-3xl text-pretty">{doc.description}</p>
+            <p class="docs-meta mono-label">
+                <span>Updated {updated}</span>
                 {
-                    (previous || next) && (
-                        <nav
-                            class="border-line mt-16 grid gap-3 border-t pt-8 sm:grid-cols-2"
-                            aria-label="Pagination"
-                        >
-                            {previous ? (
-                                <a
-                                    href={previous.href}
-                                    class="card group hover:border-line-strong px-5 py-4"
-                                >
-                                    <span class="mono-label text-idle">Previous</span>
-                                    <span class="text-fg mt-2 block text-sm font-medium">
-                                        {previous.title}
-                                    </span>
-                                </a>
-                            ) : (
-                                <span />
-                            )}
-                            {next && (
-                                <a
-                                    href={next.href}
-                                    class="card group hover:border-line-strong px-5 py-4 text-right"
-                                >
-                                    <span class="mono-label text-idle">Next</span>
-                                    <span class="text-fg mt-2 block text-sm font-medium">
-                                        {next.title}
-                                    </span>
-                                </a>
-                            )}
-                        </nav>
+                    doc.generated && (
+                        <span class="docs-generated">Generated from the application source</span>
                     )
                 }
-            </article>
+            </p>
+
+            <div class="prose mt-10" data-docs-prose>
+                <slot />
+            </div>
 
             {
-                contents.length > 1 && (
-                    <aside class="hidden xl:sticky xl:top-20 xl:block xl:self-start">
-                        <p class="mono-label text-muted">On this page</p>
-                        <nav class="border-line mt-4 border-t pt-4" aria-label="On this page">
-                            <ul class="space-y-2">
-                                {contents.map((heading) => (
-                                    <li class:list={[heading.depth === 3 && 'ps-3']}>
-                                        <a
-                                            href={`#${heading.slug}`}
-                                            class:list={[
-                                                'hover:text-fg block text-sm leading-snug transition-colors',
-                                                heading.depth === 3 ? 'text-idle' : 'text-muted',
-                                            ]}
-                                        >
-                                            {heading.text}
-                                        </a>
-                                    </li>
-                                ))}
-                            </ul>
-                        </nav>
-                    </aside>
+                (previous || next) && (
+                    <nav class="docs-pager" aria-label="Previous and next page">
+                        {previous ? (
+                            <a href={previous.href} rel="prev" class="card docs-pager-link">
+                                <span class="mono-label text-idle">Previous</span>
+                                <span class="docs-pager-title">{previous.title}</span>
+                            </a>
+                        ) : (
+                            <span />
+                        )}
+                        {next && (
+                            <a href={next.href} rel="next" class="card docs-pager-link is-next">
+                                <span class="mono-label text-idle">Next</span>
+                                <span class="docs-pager-title">{next.title}</span>
+                            </a>
+                        )}
+                    </nav>
                 )
             }
-        </div>
+        </article>
+
+        {
+            contents.length > 1 && (
+                <aside class="docs-toc">
+                    <p class="mono-label text-muted">On this page</p>
+                    <nav aria-label="On this page">
+                        <ul>
+                            {contents.map((heading) => (
+                                <li class:list={[heading.depth === 3 && 'is-nested']}>
+                                    <a href={`#${heading.slug}`}>{heading.text}</a>
+                                </li>
+                            ))}
+                        </ul>
+                    </nav>
+                </aside>
+            )
+        }
     </main>
 
     <Footer />
 </Base>
+
+<script>
+    // Copy buttons on code blocks — an enhancement; the code stays selectable
+    // without it. The button announces its result by changing its own label.
+    if (navigator.clipboard) {
+        for (const pre of document.querySelectorAll<HTMLPreElement>('[data-docs-prose] pre')) {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'docs-copy';
+            button.textContent = 'Copy';
+            button.addEventListener('click', async () => {
+                try {
+                    await navigator.clipboard.writeText(
+                        pre.querySelector('code')?.innerText ?? pre.innerText
+                    );
+                    button.textContent = 'Copied';
+                } catch {
+                    button.textContent = 'Press Ctrl+C';
+                }
+                setTimeout(() => (button.textContent = 'Copy'), 2000);
+            });
+            const wrap = document.createElement('div');
+            wrap.className = 'docs-code';
+            pre.replaceWith(wrap);
+            wrap.append(pre, button);
+        }
+    }
+
+    // On narrow screens the sidebar collapses behind its summary; on wide
+    // ones it is always open. `open` is the no-JS default.
+    const toggle = document.querySelector<HTMLDetailsElement>('.docs-nav-toggle');
+    if (toggle && window.matchMedia('(max-width: 1023px)').matches) toggle.open = false;
+</script>

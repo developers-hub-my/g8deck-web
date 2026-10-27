@@ -1,8 +1,9 @@
 ---
 title: Blueprints, and when you need one
 description: The wizard composes a blueprint out of your answers, so this is the advanced path — the shapes the sentence cannot say, editing a composed topology, cloning a catalogue blueprint, and what silently provisions nothing.
-order: 20
-updated: 2026-09-20
+section: concepts
+order: 40
+updated: 2026-10-27
 ---
 
 **You do not need this page to deploy anything.** The console composes a
@@ -46,16 +47,7 @@ Two consequences are worth knowing before you open the editor:
 A composed blueprint is an ordinary blueprint of yours. It is not a system
 blueprint, not public, and you can open and edit it — with one caveat, below.
 
-<a class="shot" id="shot-1-thumb" href="#shot-1" aria-label="Enlarge: A blueprint the wizard composed: its shape slug, six layers with their roles and replica ranges, and the five directed connections between them"><img src="/docs/console/blueprint-detail.jpg" alt="A blueprint the wizard composed: its shape slug, six layers with their roles and replica ranges, and the five directed connections between them" /></a>
-
-<div id="shot-1" class="lightbox">
-  <a class="lightbox-backdrop" href="#shot-1-thumb" aria-label="Close"></a>
-  <figure class="lightbox-figure">
-    <img src="/docs/console/blueprint-detail.jpg" alt="A blueprint the wizard composed: its shape slug, six layers with their roles and replica ranges, and the five directed connections between them" loading="lazy" />
-    <figcaption>A blueprint the wizard composed: its shape slug, six layers with their roles and replica ranges, and the five directed connections between them</figcaption>
-  </figure>
-  <a class="lightbox-close" href="#shot-1-thumb">Close</a>
-</div>
+![A blueprint the wizard composed: its shape slug, six layers with their roles and replica ranges, and the five directed connections between them](/docs/console/blueprint-detail.jpg)
 
 ## When a blueprint is pinned instead
 
@@ -71,6 +63,8 @@ A blueprint is chosen explicitly in exactly two cases:
 Answering any slot of the sentence clears the pinned blueprint, so the template
 and the sentence can never disagree on screen: whatever you last touched is
 what you get.
+
+![The Blueprints list: system and custom blueprints with their topology, layer count and origin](/docs/blueprints/blueprints.webp)
 
 ## Where the editor lives
 
@@ -179,16 +173,7 @@ description, and the category chips narrow it.
 A component can be attached to a layer only once. The first one attached becomes
 the layer's primary component.
 
-<a class="shot" id="shot-2-thumb" href="#shot-2" aria-label="Enlarge: The component picker over a layer: search across all 63 components, category chips with their counts, and the already-attached component marked as such"><img src="/docs/console/component-picker.jpg" alt="The component picker over a layer: search across all 63 components, category chips with their counts, and the already-attached component marked as such" /></a>
-
-<div id="shot-2" class="lightbox">
-  <a class="lightbox-backdrop" href="#shot-2-thumb" aria-label="Close"></a>
-  <figure class="lightbox-figure">
-    <img src="/docs/console/component-picker.jpg" alt="The component picker over a layer: search across all 63 components, category chips with their counts, and the already-attached component marked as such" loading="lazy" />
-    <figcaption>The component picker over a layer: search across all 63 components, category chips with their counts, and the already-attached component marked as such</figcaption>
-  </figure>
-  <a class="lightbox-close" href="#shot-2-thumb">Close</a>
-</div>
+![The component picker over a layer: search across all 63 components, category chips with their counts, and the already-attached component marked as such](/docs/console/component-picker.jpg)
 
 > **The catalogue and the provisioner registry are not the same list.** The
 > picker offers all sixty-three types. The registry — the set of components
@@ -265,5 +250,5 @@ If you have not deployed anything yet, do that first — the wizard writes the
 blueprint and you never touch this page:
 [your first deployment](/docs/first-deployment). Both the validation check and
 the estimate live on
-[the design MCP server](/docs/api-and-automation), so an agent can check a
+[the design MCP server](/docs/mcp/design), so an agent can check a
 blueprint before it asks for anything to be built.

@@ -1,0 +1,525 @@
+/*
+ * Documentation-only styles. Imported by src/layouts/Docs.astro and
+ * src/pages/docs/index.astro, never by the landing page.
+ *
+ * Tokens come from global.css (@theme). Colour keeps meaning state: the only
+ * coloured marks here are the accent for "you are here" and the primary link,
+ * amber for the destroy tier (a warning), and the cyan focus ring.
+ */
+
+/* ---- Shell ----------------------------------------------------------- */
+
+.docs-shell {
+    display: grid;
+    gap: 2.5rem;
+    max-width: 100rem;
+}
+
+@media (min-width: 1024px) {
+    .docs-shell {
+        grid-template-columns: 15rem minmax(0, 1fr);
+        gap: 3.5rem;
+    }
+}
+
+@media (min-width: 1280px) {
+    .docs-shell {
+        grid-template-columns: 15rem minmax(0, 1fr) 13rem;
+    }
+}
+
+.docs-article {
+    min-width: 0;
+}
+
+/* ---- Sidebar --------------------------------------------------------- */
+
+.docs-sidebar {
+    min-width: 0;
+}
+
+@media (min-width: 1024px) {
+    .docs-sidebar {
+        position: sticky;
+        top: 5rem;
+        align-self: start;
+        max-height: calc(100dvh - 6rem);
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        padding-inline-end: 0.5rem;
+        scrollbar-width: thin;
+        scrollbar-color: var(--color-line-strong) transparent;
+    }
+}
+
+.docs-nav-toggle {
+    margin-top: 1.25rem;
+}
+
+.docs-nav-toggle > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 2.75rem;
+    padding-inline: 0.75rem;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+    color: var(--color-muted);
+    cursor: pointer;
+    list-style: none;
+}
+
+.docs-nav-toggle > summary::-webkit-details-marker {
+    display: none;
+}
+
+.docs-nav-toggle > summary::after {
+    content: '+';
+    font-family: var(--font-mono);
+    color: var(--color-idle);
+}
+
+.docs-nav-toggle[open] > summary::after {
+    content: '−';
+}
+
+@media (min-width: 1024px) {
+    /* Always open on wide screens; the summary is a mobile affordance. */
+    .docs-nav-toggle > summary {
+        display: none;
+    }
+}
+
+.docs-nav {
+    padding-top: 0.75rem;
+}
+
+.docs-nav-group {
+    margin-top: 1.5rem;
+}
+
+.docs-nav-heading {
+    color: var(--color-idle);
+    padding-inline: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.docs-nav-link {
+    display: block;
+    padding: 0.4375rem 0.75rem;
+    border-radius: 2px;
+    border-inline-start: 2px solid transparent;
+    font-size: 0.875rem;
+    line-height: 1.35;
+    color: var(--color-muted);
+    transition:
+        color 150ms ease,
+        background-color 150ms ease;
+}
+
+.docs-nav-link:hover {
+    color: var(--color-fg);
+    background: var(--color-raised);
+}
+
+.docs-nav-link.is-current {
+    color: var(--color-fg);
+    font-weight: 500;
+    background: var(--color-raised);
+    border-inline-start-color: var(--color-accent);
+}
+
+/* ---- Search ---------------------------------------------------------- */
+
+.docs-search {
+    position: relative;
+}
+
+.docs-search-field {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding-inline: 0.75rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+    color: var(--color-idle);
+}
+
+.docs-search-field:focus-within {
+    border-color: var(--color-line-strong);
+    outline: 2px solid var(--color-run);
+    outline-offset: 2px;
+}
+
+.docs-search-field input {
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    border: 0;
+    outline: none;
+    color: var(--color-fg);
+    font-size: 0.9375rem;
+}
+
+.docs-search-field input::placeholder {
+    color: var(--color-idle);
+}
+
+.docs-search-field kbd {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    padding: 0 0.375rem;
+    border: 1px solid var(--color-line-strong);
+    border-radius: 3px;
+    color: var(--color-muted);
+}
+
+.docs-search.is-large .docs-search-field {
+    min-height: 3.25rem;
+}
+
+.docs-search.is-large input {
+    font-size: 1.0625rem;
+}
+
+.docs-search-results {
+    position: absolute;
+    z-index: 30;
+    inset-inline: 0;
+    top: calc(100% + 0.375rem);
+    max-height: min(70dvh, 32rem);
+    overflow-y: auto;
+    background: var(--color-surface);
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-card);
+    box-shadow: 0 16px 40px rgb(0 0 0 / 0.5);
+    padding: 0.375rem;
+}
+
+/* In the sidebar the results open in the flow, pushing the page list down:
+   the sidebar scrolls on its own, and an overlay would be clipped by it. */
+.docs-sidebar .docs-search-results {
+    position: static;
+    margin-top: 0.375rem;
+    max-height: 60dvh;
+    box-shadow: none;
+}
+
+.docs-search-results a {
+    display: block;
+    padding: 0.625rem 0.75rem;
+    border-radius: 2px;
+}
+
+.docs-search-results a:hover,
+.docs-search-results a:focus-visible {
+    background: var(--color-raised);
+}
+
+.docs-search-where {
+    display: block;
+    font-family: var(--font-label);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-idle);
+}
+
+.docs-search-title {
+    display: block;
+    margin-top: 0.25rem;
+    color: var(--color-fg);
+    font-weight: 500;
+    font-size: 0.9375rem;
+}
+
+.docs-search-text {
+    display: block;
+    margin-top: 0.25rem;
+    color: var(--color-muted);
+    font-size: 0.8125rem;
+    line-height: 1.5;
+}
+
+.docs-search-empty {
+    padding: 0.75rem;
+    color: var(--color-muted);
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+.docs-search-empty code {
+    font-family: var(--font-mono);
+    color: var(--color-fg);
+}
+
+/* ---- Article header -------------------------------------------------- */
+
+.docs-breadcrumb {
+    display: flex;
+    gap: 0.5rem;
+    color: var(--color-idle);
+}
+
+.docs-breadcrumb a:hover {
+    color: var(--color-fg);
+}
+
+.docs-title {
+    margin-top: 1.25rem;
+    font-size: clamp(2rem, 1.5rem + 1.6vw, 2.75rem);
+    line-height: 1.08;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    color: var(--color-fg);
+    text-wrap: balance;
+    overflow-wrap: break-word;
+}
+
+.docs-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.25rem;
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--color-line);
+    color: var(--color-idle);
+}
+
+.docs-generated {
+    color: var(--color-muted);
+}
+
+/* ---- Contents -------------------------------------------------------- */
+
+.docs-toc {
+    display: none;
+}
+
+@media (min-width: 1280px) {
+    .docs-toc {
+        display: block;
+        position: sticky;
+        top: 5rem;
+        align-self: start;
+        max-height: calc(100dvh - 6rem);
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--color-line-strong) transparent;
+    }
+}
+
+.docs-toc ul {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-line);
+}
+
+.docs-toc li + li {
+    margin-top: 0.5rem;
+}
+
+.docs-toc li.is-nested {
+    padding-inline-start: 0.75rem;
+}
+
+.docs-toc a {
+    display: block;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: var(--color-muted);
+}
+
+.docs-toc li.is-nested a {
+    color: var(--color-idle);
+}
+
+.docs-toc a:hover {
+    color: var(--color-fg);
+}
+
+/* ---- Pager ----------------------------------------------------------- */
+
+.docs-pager {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-line);
+}
+
+@media (min-width: 640px) {
+    .docs-pager {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.docs-pager-link {
+    display: block;
+    padding: 1rem 1.25rem;
+}
+
+.docs-pager-link.is-next {
+    text-align: end;
+}
+
+.docs-pager-title {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--color-fg);
+}
+
+/* ---- Prose additions ------------------------------------------------- */
+
+.prose .shot-figure {
+    margin: 2rem 0 0;
+}
+
+.prose .shot-figure img {
+    margin-block: 0;
+}
+
+.prose .shot-figure figcaption {
+    margin-top: 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--color-muted);
+}
+
+/* The caption now carries the text; the "Click to enlarge" tag stays. */
+.prose .shot-figure .shot::after {
+    margin-top: 0.5rem;
+}
+
+.prose .shot-figure.is-pending img {
+    border-style: dashed;
+}
+
+.docs-code {
+    position: relative;
+}
+
+.docs-copy {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    min-height: 2rem;
+    padding: 0 0.625rem;
+    font-family: var(--font-label);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    background: var(--color-raised);
+    border: 1px solid var(--color-line-strong);
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.docs-copy:hover {
+    color: var(--color-fg);
+}
+
+/* Room for the button so it never sits on the first line of code. */
+.docs-code pre {
+    padding-right: 5rem;
+}
+
+/* MCP reference: per-tool facts line and the required marker. */
+.prose .tool-meta {
+    font-size: 0.8125rem;
+    color: var(--color-idle);
+}
+
+.prose .tool-meta code {
+    font-size: 0.75rem;
+}
+
+.prose .req {
+    font-family: var(--font-label);
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    white-space: nowrap;
+}
+
+.prose h3 code {
+    font-size: 0.95em;
+}
+
+.prose details.instructions {
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+    padding: 0.75rem 1rem;
+}
+
+.prose details.instructions summary {
+    cursor: pointer;
+    color: var(--color-fg);
+    font-weight: 500;
+}
+
+.prose details.instructions[open] summary {
+    margin-bottom: 1rem;
+}
+
+.prose details.instructions pre {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+/* Tables in reference pages hold long descriptions; keep the first column
+   (names) from wrapping mid-identifier. */
+.prose td:first-child code {
+    white-space: nowrap;
+}
+
+/* ---- Docs index ------------------------------------------------------ */
+
+.docs-index-group + .docs-index-group {
+    margin-top: 3.5rem;
+}
+
+.docs-index-grid {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+}
+
+@media (min-width: 640px) {
+    .docs-index-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1024px) {
+    .docs-index-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+.docs-index-card {
+    display: block;
+    height: 100%;
+    padding: 1.25rem;
+}
+
+.docs-index-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-fg);
+}
+
+.docs-index-card p {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.55;
+    color: var(--color-muted);
+}
