@@ -1,7 +1,9 @@
 ---
 import Section from '../Section.astro';
 import SectionHead from '../SectionHead.astro';
-import { problems } from '../../data/site';
+import Photo from '../art/Photo.astro';
+import kualaLumpur from '../../assets/photos/kuala-lumpur-night.jpg';
+import { photos, problems } from '../../data/site';
 
 const assumptions = [
     {
@@ -28,11 +30,20 @@ const assumptions = [
 ---
 
 <Section id="problem" index="01" label="PROBLEM">
-    <SectionHead
-        eyebrow="Why this exists"
-        title="Every hosted PaaS assumes your data can leave the building."
-        lede="For a bank, a ministry, a GLC or a university in this region, that assumption is where the evaluation ends. G8Deck starts from the opposite premise — the platform goes to the infrastructure, not the other way around."
-    />
+    <div class="grid items-end gap-10 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] lg:gap-14">
+        <SectionHead
+            eyebrow="Why this exists"
+            title="Every hosted PaaS assumes your data can leave the building."
+            lede="For a bank, a ministry, a GLC or a university in this region, that assumption is where the evaluation ends. G8Deck starts from the opposite premise — the platform goes to the infrastructure, not the other way around."
+        />
+        <Photo
+            src={kualaLumpur}
+            alt={photos.kualaLumpur.alt}
+            credit={photos.kualaLumpur.credit}
+            ratio="3 / 2"
+            sizes="(min-width: 1024px) 460px, 100vw"
+        />
+    </div>
 
     <div class="scroller mt-14" tabindex="0" role="region" aria-label="Assumptions comparison">
         <table class="w-full min-w-[42rem] border-collapse text-left">

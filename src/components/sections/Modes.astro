@@ -1,7 +1,9 @@
 ---
 import Section from '../Section.astro';
 import SectionHead from '../SectionHead.astro';
-import { deployment } from '../../data/site';
+import Photo from '../art/Photo.astro';
+import dataCentre from '../../assets/photos/data-centre-floor.jpg';
+import { deployment, photos } from '../../data/site';
 
 const { columns, rows, commercial, note } = deployment;
 
@@ -14,12 +16,21 @@ const rowLabel =
     'text-muted mono-label py-4 pr-3 align-top text-[0.5625rem] font-semibold tracking-[0.09em] sm:pr-6 sm:text-[0.6875rem] sm:tracking-[0.14em]';
 ---
 
-<Section id="deployment" index="07" label="DEPLOYMENT">
-    <SectionHead
-        eyebrow="Where it runs"
-        title="Two ways to run it. One control plane."
-        lede="The same platform, the same blueprints and the same 24-step pipeline either way. What changes is who holds the control plane — everything below it stays yours in both."
-    />
+<Section id="deployment" index="10" label="DEPLOYMENT">
+    <div class="grid items-end gap-10 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] lg:gap-14">
+        <SectionHead
+            eyebrow="Where it runs"
+            title="Two ways to run it. One control plane."
+            lede="The same platform, the same blueprints and the same 24-step pipeline either way. What changes is who holds the control plane — everything below it stays yours in both."
+        />
+        <Photo
+            src={dataCentre}
+            alt={photos.dataCentre.alt}
+            credit={photos.dataCentre.credit}
+            ratio="16 / 10"
+            sizes="(min-width: 1024px) 460px, 100vw"
+        />
+    </div>
 
     <div class="mt-14">
         <table class="w-full table-fixed border-collapse text-left">

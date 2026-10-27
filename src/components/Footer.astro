@@ -1,6 +1,5 @@
 ---
 import Logo from './Logo.astro';
-import StatusPill from '../components/StatusPill.astro';
 import { footerLinks, site } from '../data/site';
 
 const year = new Date().getFullYear();
@@ -62,7 +61,7 @@ const isExternal = (href: string) => href.startsWith('http') || href.startsWith(
         <div
             class="content border-line mt-14 flex flex-wrap items-center gap-x-8 gap-y-3 border-t pt-6"
         >
-            <p class="mono-label text-idle">
+            <p class="mono-label text-muted">
                 <a
                     href={site.company.url}
                     target="_blank"
@@ -70,9 +69,16 @@ const isExternal = (href: string) => href.startsWith('http') || href.startsWith(
                     class="hover:text-fg transition-colors">{site.company.name.toUpperCase()}</a
                 > · {site.company.country.toUpperCase()}
             </p>
-            <p class="mono-label text-idle">© {year}</p>
-            <p class="mono-label text-idle ml-auto">Platform</p>
-            <StatusPill state="ok" label="operational" />
+            <p class="mono-label text-muted">© {year}</p>
+            <!-- A static page cannot know whether the platform is up, so it
+                 does not print a status pill; it points at the docs instead. -->
+            <a href="/docs/" class="mono-label text-muted hover:text-fg ml-auto transition-colors"
+                >Docs →</a
+            >
         </div>
+        <p class="content text-muted mt-6 text-xs">
+            Photography from Unsplash, used under the Unsplash License: Catalin Pop, Taylor Vick,
+            Chirayu Trivedi, Albert Stoynov. Console screens show a sample organisation.
+        </p>
     </div>
 </footer>
