@@ -17,7 +17,7 @@ export const site = {
     // someone reading a search result, not for someone already sold.
     tagline: 'Deploy on infrastructure you own',
     description:
-        'G8Deck deploys and runs your applications on servers you already own — on-premise or in your own cloud. Provisioned, scaled, reconciled and audited, with nothing to rewrite and no data leaving the building.',
+        'G8Deck deploys and operates your applications on servers you already own — on-premise or in your own cloud. Zero-downtime releases, managed databases, restore-tested backups, security patching and an audit trail, with your applications and data staying on your machines.',
     company: {
         name: 'Developers Hub Sdn Bhd',
         url: 'https://devhub.my',
@@ -55,19 +55,25 @@ export const mailto = (subject: string): string =>
  */
 export const nav = [
     { label: 'How it works', href: '/#how' },
-    { label: 'Platform', href: '/#platform' },
+    { label: 'Platform', href: '/#operate' },
+    { label: 'AI operators', href: '/#ai' },
     { label: 'Compliance', href: '/#compliance' },
     { label: 'Pricing', href: '/#plans' },
-    { label: 'Docs', href: '/docs' },
+    { label: 'Docs', href: '/docs/' },
 ] as const;
 
 export const hero = {
-    eyebrow: 'Deploy on servers you already own',
-    title: 'Your architecture,',
-    titleAccent: 'running on your own servers.',
-    body: 'Point G8Deck at a machine you already have. It sets the whole system up, keeps it running, and nothing ever leaves your building.',
+    eyebrow: 'Servers you own · operated for you',
+    title: 'Deploy on servers you own.',
+    titleAccent: 'Stop operating them by hand.',
+    body: 'G8Deck connects to the machines you already run — in your rack or in your own cloud account — deploys your applications onto them, and keeps doing the operations work afterwards: releases without downtime, databases, restore-tested backups, security patches and an audit trail. Your applications and their data stay on your machines.',
     primaryCta: { label: 'Book a 20-minute demo', href: mailto('Book a 20-minute demo') },
-    secondaryCta: { label: 'See how it works', href: '/#how' },
+    secondaryCta: { label: 'Read the walkthrough', href: '/docs/first-deployment' },
+    /** The hero capture is real console UI with a sample organisation in it. */
+    shot: {
+        alt: 'Application overview in the G8Deck console: a Laravel app live in production and stopped in staging, its push-to-deploy webhook matching the main branch, two domains with certificate renewal, deploy scripts and its latest releases.',
+        caption: 'Console · one application, two environments · sample organisation',
+    },
     /* Every figure here is counted from platform/g8deck-app, not estimated:
        DeploymentPipeline::defaultSteps(), SimulatedCapabilities::isAdoptedVm(),
        ComponentTypeSeeder, DatabaseComplianceReporter. The labels are written
@@ -472,6 +478,9 @@ export const compliance = {
         'Every pipeline step and drift detection is recorded as change-management evidence',
         'Audit and activity records are retained for at least a year',
         'Secrets and PII scrubbed from logs before they are written',
+        // Compliance/DataResidency — enforced at deployment time against the
+        // provider's recorded location.
+        'PDPA data residency: set the regions an organisation allows and every deployment is checked against them — a server with no recorded location counts as a violation, not a pass',
     ],
 } as const;
 
@@ -606,11 +615,21 @@ export const faqs = [
     },
     {
         q: 'Which infrastructure can it actually run on today?',
-        a: 'Any machine you can reach over SSH. Machines are adopted, not created — you bring the server and G8Deck bootstraps and drives it, whether it sits on bare metal, VMware, KVM, AWS, GCP, Azure, Hetzner or DigitalOcean. The container backends — Docker, Docker Swarm, Kubernetes and k3s — have working drivers and are held for beta. Proxmox and Nomad are modelled in the registry and their drivers are unfinished. We would rather say so than let you find out during an evaluation.',
+        a: 'Any machine you can reach over SSH. You bring the server and G8Deck bootstraps and drives it, whether it sits on bare metal, VMware, KVM, AWS, GCP, Azure, Hetzner or DigitalOcean. The container backends — Docker, Docker Swarm, Kubernetes and k3s — have working drivers and are held for beta. Proxmox and Nomad are modelled in the registry and their drivers are unfinished. We would rather say so than let you find out during an evaluation.',
     },
     {
         q: 'Can I bring a server that already exists?',
-        a: 'That is the only way in today. G8Deck does not create machines — you point it at one you already run, it bootstraps the stack over SSH and takes over the lifecycle from there. Your existing Kubernetes cluster becomes a target the same way once container delivery is released.',
+        a: 'Yes — that is the main way in. You point G8Deck at a machine you already run, it bootstraps the stack over SSH and takes over the lifecycle from there. With a DigitalOcean account connected it can also create the server for you, in your account and on your bill. Your existing Kubernetes cluster becomes a target the same way once container delivery is released.',
+    },
+    {
+        // RunCloudSource + PlainNginxSource; MigrateAdoptionDataTool (#760)
+        // refuses PostgreSQL sources and remote databases.
+        q: 'We run our sites on RunCloud today. What does moving look like?',
+        a: 'Connect the server and G8Deck reads what is on it — sites, PHP versions, cron jobs, certificates — without changing anything. You decide what to adopt. For each application it copies a MySQL or MariaDB database and the directories the app writes to onto the G8Deck application that replaces it, checking row counts and file counts on both sides, and the final sync can put the old site into maintenance first. PostgreSQL sources are not migrated yet.',
+    },
+    {
+        q: 'Can an AI agent break production through the MCP servers?',
+        a: 'Not by being clever. A token carries a ceiling — read, write or destroy — and can never exceed the role of the person who made it. Destructive tools need the target retyped, data-moving writes default to a dry run, and the same policies that gate the console gate every tool call. Secrets go in and never come back out.',
     },
     {
         q: 'Which database does the platform itself need?',
@@ -643,11 +662,12 @@ export const footerLinks = [
     {
         heading: 'Platform',
         links: [
-            { label: 'How it works', href: '/#platform' },
+            { label: 'How it works', href: '/#how' },
+            { label: 'What it operates', href: '/#operate' },
             { label: 'Provisioning pipeline', href: '/#pipeline' },
-            { label: 'Components', href: '/#components' },
-            { label: 'Providers', href: '/#components' },
-            { label: 'Documentation', href: '/docs' },
+            { label: 'AI operators', href: '/#ai' },
+            { label: 'Components and providers', href: '/#components' },
+            { label: 'Docs', href: '/docs/' },
         ],
     },
     {
@@ -680,3 +700,174 @@ export const footerLinks = [
         ],
     },
 ] as const;
+
+/**
+ * "What it operates for you" — the work that used to be runbooks. Each card is
+ * a shipped surface in g8deck-app, not a roadmap item; the comment above each
+ * names where it was checked. A card that cannot point at code does not belong
+ * here — it belongs under a roadmap heading.
+ */
+export const operate = {
+    eyebrow: 'What it operates',
+    title: 'The operations work, done by the platform.',
+    lede: 'Most tools stop once nginx is installed. These are the jobs that start after that — each one shipped, each one on the machines you already run.',
+    items: [
+        {
+            // Migration/Sources/{RunCloudSource,PlainNginxSource}; discovery
+            // writes nothing (#502); MigrateAdoptionDataTool refuses PostgreSQL.
+            tag: 'Adopt',
+            title: 'Bring the servers you already run',
+            body: 'Point it at a RunCloud or plain-nginx server and it inventories the sites, PHP versions, cron jobs and certificates without writing to the machine. Adopt what you choose; a MySQL or MariaDB database and the upload directories copy across with row and file counts checked on both sides.',
+        },
+        {
+            // DatabaseEngine + DatabaseServer/Dialects; DatabaseClusterMode::Replicated;
+            // CacheEngine (Redis, Valkey); StorageEngine::Garage, G311.
+            tag: 'Data',
+            title: 'Databases, caches and buckets on your own machines',
+            body: 'Install PostgreSQL, MySQL, MariaDB, MongoDB or ClickHouse and manage databases, users and grants from the console. PostgreSQL adds read replicas with lag and manual promotion. Redis or Valkey for caching; Garage for S3-compatible storage, up to a three-way replicated cluster.',
+        },
+        {
+            // SystemdWorkloadRuntime implements BlueGreenRuntimeContract (#462);
+            // push-to-deploy webhooks; runtime version detected from the repo (#755).
+            tag: 'Release',
+            title: 'Releases that never close the port',
+            body: 'Push to the branch and the new release builds and starts beside the one serving. Traffic moves only once it is up, and requests in flight finish where they started — no containers required. The runtime version is read from your repository.',
+        },
+        {
+            // BackupSubject, BackupVerifyLevel, BackupDestinationDriver,
+            // BackupPolicy::next_drill_at (#444).
+            tag: 'Backup',
+            title: 'Backups you have actually restored',
+            body: 'Databases, applications, buckets and whole servers, on a schedule, to G8Deck storage, your own S3 bucket or Google Drive. Every run is verified — integrity, readability or a full restore — and scheduled restore drills prove a backup comes back before the day you need it.',
+        },
+        {
+            // PatchPolicyMode (automatic, notify_only, manual), patch-fleet,
+            // advisories (#728, #729), docs/04-deployment/07-fleet-patching.md.
+            tag: 'Patch',
+            title: 'Security patches, canary first',
+            body: 'A patch policy decides: automatic, notify only, or manual. PHP, nginx, Node.js, databases and OS security updates go to one canary server, then the rest — with a record of what moved and which servers still need a restart.',
+        },
+        {
+            // Team server allocation (#715, G298); move-project-to-organization
+            // (#757, #769) — dry_run defaults to true.
+            tag: 'Govern',
+            title: 'Teams get servers, not root passwords',
+            body: 'Administrators decide which servers each team may deploy to; members deploy without ever seeing a credential. A project — and the infrastructure only it uses — moves to another organisation in one step, after a dry run that lists every row.',
+        },
+    ],
+} as const;
+
+/**
+ * Real console captures. They show a SAMPLE organisation ("Northwind Bhd")
+ * seeded for the docs, and the captions say so, so nobody reads them as a
+ * customer. The files are the docs captures from public/docs/console, copied
+ * into src/assets/screens so Astro serves them as responsive WebP.
+ */
+export const tour = {
+    eyebrow: 'The console',
+    title: 'The rollout, the architecture and the alarms, in one place.',
+    lede: 'Real screens from the console. The organisation in them is sample data.',
+    shots: [
+        {
+            file: 'deployment-overview',
+            title: 'A deployment, step by step',
+            caption:
+                'Every pipeline step with its duration. A step that did no work says so, and says why — in amber, never as a green tick.',
+            alt: 'Deployment overview in the G8Deck console: two of two nodes running, two managed services, and the 24-step pipeline with completed steps ticked and two steps marked "did no work" with the reason printed beneath each.',
+        },
+        {
+            file: 'blueprint-detail',
+            title: 'A blueprint',
+            caption:
+                'The architecture as layers and connections — edge, app, workers, database, cache — with replica bounds.',
+            alt: 'Blueprint detail in the G8Deck console: six layers from Edge to Cache, each with its components and replica range, and the directed connections between them.',
+        },
+        {
+            file: 'incidents',
+            title: 'Incidents',
+            caption:
+                'Alert rules fire into one queue, each moved through detected, acknowledged, contained and resolved.',
+            alt: 'Incidents list in the G8Deck console: alerts ranked P1 to P3 with the deployment each belongs to and its lifecycle state.',
+        },
+    ],
+} as const;
+
+/**
+ * The MCP surface. Tool counts are the `$tools` arrays in app/Mcp/Servers/*
+ * on g8deck-app main; paths from routes/ai.php. Platform and Compliance need
+ * `mcp.access.platform` / `mcp.access.compliance`, which no customer role
+ * holds — the page says so rather than let a reader add the counts up.
+ */
+export const ai = {
+    eyebrow: 'AI operators',
+    title: 'Let an AI client do the routine — inside the same rules.',
+    lede: 'Five MCP servers give an AI client the console’s own actions, over OAuth 2.1 or a personal access token. A token can be narrower than the person who made it, never wider, and every call meets the same policies a click does.',
+    servers: [
+        {
+            path: '/mcp',
+            tools: 21,
+            name: 'Customer',
+            body: 'Plan, launch and watch your own applications.',
+            restricted: false,
+        },
+        {
+            path: '/mcp/design',
+            tools: 21,
+            name: 'Design',
+            body: 'Blueprints, projects, environments and members.',
+            restricted: false,
+        },
+        {
+            path: '/mcp/ops',
+            tools: 78,
+            name: 'Operations',
+            body: 'Deployments, releases, domains, backups and incidents.',
+            restricted: false,
+        },
+        {
+            path: '/mcp/platform',
+            tools: 62,
+            name: 'Platform',
+            body: 'Servers, database and storage clusters, adoption, patching.',
+            restricted: true,
+        },
+        {
+            path: '/mcp/compliance',
+            tools: 12,
+            name: 'Compliance',
+            body: 'Evidence, access reviews, vulnerabilities, certificates.',
+            restricted: true,
+        },
+    ],
+    restrictedNote: 'Operator-only — no customer role is granted these two servers.',
+    rules: [
+        'Destructive tools need the target retyped and a token allowed to destroy.',
+        'Writes that move data default to a dry run that lists every change first.',
+        'Secrets travel inbound only — tools name the keys and never return a value.',
+        'A skipped step is reported as skipped, never as a success.',
+    ],
+    shot: {
+        alt: 'MCP Tokens page in the G8Deck console: a newly created token shown once, the claude mcp add commands for the design and operations servers, and a form to generate a read-only token.',
+        caption: 'Console · MCP tokens, shown once · sample organisation',
+    },
+} as const;
+
+/** Photography — every credit and licence is in src/assets/photos/CREDITS.md. */
+export const photos = {
+    kualaLumpur: {
+        alt: 'Kuala Lumpur skyline at night, the Petronas Towers lit on the left.',
+        credit: 'Photo · Catalin Pop / Unsplash',
+    },
+    dataCentre: {
+        alt: 'A data centre floor with rows of server cabinets under blue cable trays.',
+        credit: 'Photo · Taylor Vick / Unsplash',
+    },
+    engineer: {
+        alt: 'An engineer seen from behind, working in a terminal on a laptop at night.',
+        credit: 'Photo · Chirayu Trivedi / Unsplash',
+    },
+    /** Decorative backdrop behind the closing CTA, so it carries no alt. */
+    network: {
+        credit: 'Photo · Albert Stoynov / Unsplash',
+    },
+} as const;

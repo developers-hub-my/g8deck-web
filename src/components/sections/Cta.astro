@@ -1,10 +1,25 @@
 ---
+import { Image } from 'astro:assets';
 import Section from '../Section.astro';
-import { mailto, site } from '../../data/site';
+import networkSwitch from '../../assets/photos/network-switch.jpg';
+import { mailto, photos, site } from '../../data/site';
 ---
 
-<Section id="start" index="11" label="END" terminal>
-    <div class="max-w-3xl">
+<Section id="start" index="14" label="END" terminal>
+    <!-- Decorative band: the copy sits on near-solid ink on the left, so its
+         contrast never depends on the photograph. Credit is printed below. -->
+    <div class="photo-band" aria-hidden="true">
+        <Image
+            src={networkSwitch}
+            alt=""
+            widths={[800, 1280, 1600]}
+            sizes="100vw"
+            loading="lazy"
+            decoding="async"
+        />
+    </div>
+
+    <div class="relative max-w-3xl">
         <p class="mono-label text-accent">Get started</p>
         <h2 class="h2 mt-5">See it provision a real machine.</h2>
         <p class="body-lg text-muted mt-6 text-pretty">
@@ -28,5 +43,11 @@ import { mailto, site } from '../../data/site';
                 class="text-accent hover:text-fg transition-colors">{site.contact.email}</a
             > — it reaches the engineers, not a queue.
         </p>
+
+        <p class="border-line text-muted mt-12 border-l-2 pl-4 text-sm text-pretty">
+            We run it on ourselves: the console at {site.consoleUrl.replace('https://', '')} is a G8Deck-managed
+            application, released by a push to main like any other.
+        </p>
+        <p class="mono-label text-muted mt-10">{photos.network.credit}</p>
     </div>
 </Section>

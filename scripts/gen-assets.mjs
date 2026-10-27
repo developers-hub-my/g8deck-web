@@ -74,9 +74,10 @@ const gridLines = () => {
 const ladder = () => {
     const out = [];
     const x0 = 72;
-    const w = 22;
-    const gap = 8;
-    for (let i = 0; i < 20; i++) {
+    const w = 20;
+    const gap = 5;
+    // One bar per pipeline step — DeploymentPipeline::defaultSteps() is 24.
+    for (let i = 0; i < 24; i++) {
         const done = i < 12;
         const running = i === 12;
         const h = done ? 26 : running ? 38 : 14;
@@ -103,19 +104,19 @@ const og = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" vi
   <text x="126" y="104" font-family="${SANS}" font-size="29" font-weight="700" fill="${FG}" letter-spacing="-0.6">G8Deck</text>
 
   <!-- Headline -->
-  <text x="72" y="228" font-family="${SANS}" font-size="66" font-weight="700" fill="${FG}" letter-spacing="-2.4">Describe the architecture.</text>
-  <text x="72" y="300" font-family="${SANS}" font-size="66" font-weight="700" fill="${ACCENT}" letter-spacing="-2.4">Ship the infrastructure.</text>
+  <text x="72" y="228" font-family="${SANS}" font-size="62" font-weight="700" fill="${FG}" letter-spacing="-2.2">Deploy on servers you own.</text>
+  <text x="72" y="298" font-family="${SANS}" font-size="62" font-weight="700" fill="${ACCENT}" letter-spacing="-2.2">Stop operating them by hand.</text>
 
-  <text x="72" y="358" font-family="${SANS}" font-size="24" fill="${MUTED}">Architecture-first infrastructure deployment — on-premise, cloud, or air-gapped.</text>
+  <text x="72" y="356" font-family="${SANS}" font-size="24" fill="${MUTED}">Releases, databases, backups and patching — on-premise or in your own cloud.</text>
 
   <!-- Pipeline silhouette -->
   ${ladder()}
   <line x1="72" y1="520" x2="672" y2="520" stroke="${LINE_STRONG}" stroke-width="1"/>
-  <text x="72" y="548" font-family="${MONO}" font-size="15" fill="${MUTED}" letter-spacing="2">20 STEPS · RESUMABLE · IDEMPOTENT</text>
+  <text x="72" y="548" font-family="${MONO}" font-size="15" fill="${MUTED}" letter-spacing="2">24 STEPS · RESUMABLE · IDEMPOTENT</text>
 
   <!-- Footer strip -->
   <line x1="72" y1="576" x2="1128" y2="576" stroke="${LINE}" stroke-width="1"/>
-  <text x="72" y="604" font-family="${MONO}" font-size="15" fill="${MUTED}" letter-spacing="2">G8DECK.APP</text>
+  <text x="72" y="604" font-family="${MONO}" font-size="15" fill="${MUTED}" letter-spacing="2">G8DECK.COM</text>
   <text x="1128" y="604" text-anchor="end" font-family="${MONO}" font-size="15" fill="${ACCENT}" letter-spacing="2">DEVELOPERS HUB SDN BHD</text>
 
   <!-- Corner block -->

@@ -1,0 +1,28 @@
+---
+import Section from '../Section.astro';
+import SectionHead from '../SectionHead.astro';
+import { operate } from '../../data/site';
+---
+
+<Section id="operate" index="03" label="OPERATE">
+    <SectionHead eyebrow={operate.eyebrow} title={operate.title} lede={operate.lede} />
+
+    <ol class="mt-14 grid gap-px sm:grid-cols-2 xl:grid-cols-3">
+        {
+            operate.items.map((item, i) => (
+                <li class="border-line bg-surface/40 hover:border-line-strong flex flex-col border p-6 transition-colors lg:p-7">
+                    <p class="flex items-center justify-between gap-4">
+                        <span class="mono-label text-accent">{item.tag}</span>
+                        <span class="mono-label text-muted tabular-nums" aria-hidden="true">
+                            {String(i + 1).padStart(2, '0')}
+                        </span>
+                    </p>
+                    <h3 class="mt-5 text-[1.1875rem] leading-snug font-semibold text-balance">
+                        {item.title}
+                    </h3>
+                    <p class="text-muted mt-3 text-[0.9375rem] text-pretty">{item.body}</p>
+                </li>
+            ))
+        }
+    </ol>
+</Section>

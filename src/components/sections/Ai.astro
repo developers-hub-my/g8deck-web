@@ -1,0 +1,83 @@
+---
+import ConsoleShot from '../art/ConsoleShot.astro';
+import Photo from '../art/Photo.astro';
+import Section from '../Section.astro';
+import SectionHead from '../SectionHead.astro';
+import mcpTokens from '../../assets/screens/mcp-tokens.jpg';
+import engineer from '../../assets/photos/engineer-at-night.jpg';
+import { ai, photos } from '../../data/site';
+---
+
+<Section id="ai" index="08" label="AI">
+    <div class="grid items-end gap-10 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] lg:gap-14">
+        <SectionHead eyebrow={ai.eyebrow} title={ai.title} lede={ai.lede} />
+        <Photo
+            src={engineer}
+            alt={photos.engineer.alt}
+            credit={photos.engineer.credit}
+            ratio="4 / 3"
+            sizes="(min-width: 1024px) 440px, 100vw"
+        />
+    </div>
+
+    <div class="scroller mt-14" tabindex="0" role="region" aria-label="MCP servers">
+        <table class="w-full min-w-[40rem] border-collapse text-left">
+            <caption class="sr-only"
+                >The five MCP servers, their tool counts and what each covers</caption
+            >
+            <thead>
+                <tr class="border-line border-b">
+                    <th scope="col" class="mono-label text-muted w-44 pb-3">Endpoint</th>
+                    <th scope="col" class="mono-label text-muted w-28 pb-3">Server</th>
+                    <th scope="col" class="mono-label text-muted w-20 pb-3 text-right">Tools</th>
+                    <th scope="col" class="mono-label text-accent pb-3 pl-8">Covers</th>
+                </tr>
+            </thead>
+            <tbody>
+                {
+                    ai.servers.map((server) => (
+                        <tr class="border-line hover:bg-surface border-b transition-colors">
+                            <td class="code py-4 align-top">{server.path}</td>
+                            <td class="py-4 align-top font-medium">
+                                {server.name}
+                                {server.restricted && (
+                                    <span class="mono-label text-muted mt-1.5 block">Operator</span>
+                                )}
+                            </td>
+                            <td class="py-4 text-right align-top font-semibold tabular-nums">
+                                {server.tools}
+                            </td>
+                            <td class="text-muted py-4 pl-8 align-top text-pretty">
+                                {server.body}
+                            </td>
+                        </tr>
+                    ))
+                }
+            </tbody>
+        </table>
+    </div>
+    <p class="text-muted mt-4 text-sm">{ai.restrictedNote}</p>
+
+    <div
+        class="mt-14 grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] lg:gap-14"
+    >
+        <ul class="grid gap-px">
+            {
+                ai.rules.map((rule) => (
+                    <li class="border-line bg-surface/40 flex gap-3 border p-5 text-sm">
+                        <span class="text-accent mono-label mt-[3px] shrink-0" aria-hidden="true">
+                            ✓
+                        </span>
+                        <span class="text-pretty">{rule}</span>
+                    </li>
+                ))
+            }
+        </ul>
+        <ConsoleShot
+            src={mcpTokens}
+            alt={ai.shot.alt}
+            caption={ai.shot.caption}
+            sizes="(min-width: 1024px) 640px, 100vw"
+        />
+    </div>
+</Section>
