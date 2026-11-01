@@ -688,6 +688,31 @@ export const faqs = [
     },
 ] as const;
 
+/**
+ * Sibling products from the same team. Each has its own site, which carries the
+ * detail; this block names what each one is for and links out. The one-liners
+ * are the products' own — don't add numbers or claims they don't make there.
+ */
+export const family = {
+    eyebrow: 'Also from G8Deck',
+    title: 'Two smaller tools beside the platform.',
+    lede: 'Each has its own site with the full detail. Here is what they are for.',
+    items: [
+        {
+            tag: 'Assess',
+            name: 'G8Deck Reveal',
+            body: 'Infrastructure discovery agent for IT assessments: one static binary inventories a host and seals the result into a signed, encrypted bundle.',
+            href: 'https://reveal.g8deck.com',
+        },
+        {
+            tag: 'Clean up',
+            name: 'JaneSweeper',
+            body: 'Keeps developer laptops and client servers under a disk target with scheduled, reversible cleanups — the jsweep CLI and a macOS app.',
+            href: 'https://janesweeper.g8deck.com',
+        },
+    ],
+} as const;
+
 export const footerLinks = [
     {
         heading: 'Platform',
@@ -718,6 +743,10 @@ export const footerLinks = [
             { label: 'Privacy Notice', href: '/legal/privacy' },
             { label: 'Refund policy', href: '/legal/refund-policy' },
         ],
+    },
+    {
+        heading: 'Products',
+        links: family.items.map((item) => ({ label: item.name, href: item.href })),
     },
     {
         heading: 'Company',
