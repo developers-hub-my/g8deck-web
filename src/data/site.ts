@@ -764,7 +764,7 @@ export const family = {
                 'Guards cannot be turned off',
                 'Server profile reports by default',
             ],
-            platforms: ['Linux', 'macOS'],
+            platforms: ['Linux', 'macOS', 'Windows (preview)'],
             prompt: 'aisyah@dev-laptop:~$',
             command: 'jsweep scan',
             lines: [
