@@ -1,0 +1,30 @@
+---
+import Section from '../Section.astro';
+import SectionHead from '../SectionHead.astro';
+import { family } from '../../data/site';
+---
+
+<Section id="family" index="14" label="FAMILY">
+    <SectionHead eyebrow={family.eyebrow} title={family.title} lede={family.lede} />
+
+    <ul class="mt-14 grid gap-px sm:grid-cols-2">
+        {
+            family.items.map((item) => (
+                <li class="border-line bg-surface/40 hover:border-line-strong flex flex-col border p-6 transition-colors lg:p-7">
+                    <p class="mono-label text-accent">{item.tag}</p>
+                    <h3 class="h3 mt-5">{item.name}</h3>
+                    <p class="text-muted mt-3 grow text-pretty">{item.body}</p>
+                    <a
+                        href={item.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="text-accent hover:text-fg mt-6 self-start text-sm transition-colors"
+                    >
+                        Learn more about {item.name} →
+                        <span class="sr-only"> (opens in a new tab)</span>
+                    </a>
+                </li>
+            ))
+        }
+    </ul>
+</Section>
