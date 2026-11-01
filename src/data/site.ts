@@ -54,10 +54,39 @@ export const mailto = (subject: string): string =>
  * an anchor the docs page does not have.
  */
 export const nav = [
-    { label: 'How it works', href: '/#how' },
-    { label: 'Platform', href: '/#operate' },
-    { label: 'AI operators', href: '/#ai' },
-    { label: 'Compliance', href: '/#compliance' },
+    {
+        label: 'Platform',
+        children: [
+            { label: 'How it works', href: '/#how', note: 'From your server to a running release' },
+            {
+                label: 'What it operates',
+                href: '/#operate',
+                note: 'Releases, databases, restored backups, patches',
+            },
+            { label: 'AI operators', href: '/#ai', note: 'Five MCP servers for AI clients' },
+            {
+                label: 'Compliance',
+                href: '/#compliance',
+                note: 'Controls mapped to exportable evidence',
+            },
+        ],
+    },
+    {
+        label: 'Products',
+        children: [
+            { label: 'G8Deck', href: '/', note: 'Deploy and operate on servers you own' },
+            {
+                label: 'G8Deck Reveal',
+                href: 'https://reveal.g8deck.com',
+                note: 'Inventory any host for an IT assessment',
+            },
+            {
+                label: 'JaneSweeper',
+                href: 'https://janesweeper.g8deck.com',
+                note: 'Keep disks under target, every sweep undoable',
+            },
+        ],
+    },
     { label: 'Pricing', href: '/#plans' },
     { label: 'Docs', href: '/docs/' },
 ] as const;
@@ -696,19 +725,56 @@ export const faqs = [
 export const family = {
     eyebrow: 'Also from G8Deck',
     title: 'Two smaller tools beside the platform.',
-    lede: 'Each has its own site with the full detail. Here is what they are for.',
+    lede: 'One finds out what a server really runs. The other keeps its disk from filling up. Each has its own site with the full detail.',
+    /** Terminal lines are real output, captured from throwaway demo hosts (see `caption`). */
     items: [
         {
             tag: 'Assess',
             name: 'G8Deck Reveal',
-            body: 'Infrastructure discovery agent for IT assessments: one static binary inventories a host and seals the result into a signed, encrypted bundle.',
+            domain: 'reveal.g8deck.com',
             href: 'https://reveal.g8deck.com',
+            download: 'https://reveal.g8deck.com/#download',
+            body: 'An infrastructure discovery agent for IT assessments. One static binary inventories a host and seals the result into a signed, encrypted bundle.',
+            points: ['Read-only', 'No inbound port', 'Redacted, encrypted, signed'],
+            platforms: ['Linux', 'Windows', 'macOS', 'FreeBSD'],
+            prompt: '[root@intranet01 ~]#',
+            command: 'reveal run --profile standard',
+            lines: [
+                ['ok', 'packages      284'],
+                ['ok', 'services      39'],
+                ['ok', 'databases     2'],
+                ['ok', 'web           2'],
+                ['idle', 'containers    0 · skipped: no container runtime found'],
+                [
+                    'ok',
+                    'bundle        intranet01-alma-20261101T0803Z.g8b (8.7 KB, signed, encrypted)',
+                ],
+            ],
+            caption: 'Reveal 0.1.0 on an AlmaLinux 9 demo host',
         },
         {
             tag: 'Clean up',
             name: 'JaneSweeper',
-            body: 'Keeps developer laptops and client servers under a disk target with scheduled, reversible cleanups — the jsweep CLI and a macOS app.',
+            domain: 'janesweeper.g8deck.com',
             href: 'https://janesweeper.g8deck.com',
+            download: 'https://janesweeper.g8deck.com/#download',
+            body: 'Keeps developer laptops and client servers under a disk target with scheduled cleanups you can undo. The jsweep CLI runs on servers and laptops alike, and macOS also gets a desktop app.',
+            points: [
+                'Quarantine before delete',
+                'Guards cannot be turned off',
+                'Server profile reports by default',
+            ],
+            platforms: ['Linux', 'macOS'],
+            prompt: 'aisyah@dev-laptop:~$',
+            command: 'jsweep scan',
+            lines: [
+                ['', 'Volume /  27% used  target 60%  floor 50%'],
+                ['', 'stale-deps  ~/projects/billing/vendor         75d  120 MB'],
+                ['', 'stale-deps  ~/projects/shop-api/node_modules  75d  320 MB'],
+                ['', 'stale-deps  ~/projects/shop-web/node_modules  75d  90.0 MB'],
+                ['', '3 candidates · ~530 MB estimated'],
+            ],
+            caption: 'jsweep 0.1.0 on a demo home directory',
         },
     ],
 } as const;
