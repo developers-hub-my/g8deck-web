@@ -736,7 +736,7 @@ export const family = {
             download: 'https://reveal.g8deck.com/#download',
             body: 'An infrastructure discovery agent for IT assessments. One static binary inventories a host and seals the result into a signed, encrypted bundle.',
             points: ['Read-only', 'No inbound port', 'Redacted, encrypted, signed'],
-            platforms: ['Linux', 'Windows', 'macOS', 'FreeBSD'],
+            platforms: ['Linux', 'macOS', 'FreeBSD', 'Windows (preview)'],
             prompt: '[root@intranet01 ~]#',
             command: 'reveal run --profile standard',
             lines: [
