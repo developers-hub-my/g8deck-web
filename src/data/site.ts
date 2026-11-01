@@ -702,7 +702,7 @@ export const family = {
             tag: 'Assess',
             name: 'G8Deck Reveal',
             body: 'Infrastructure discovery agent for IT assessments: one static binary inventories a host and seals the result into a signed, encrypted bundle.',
-            href: 'https://g8deck-reveal.netlify.app',
+            href: 'https://reveal.g8deck.com',
         },
         {
             tag: 'Clean up',
