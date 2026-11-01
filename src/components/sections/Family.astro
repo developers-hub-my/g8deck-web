@@ -2,29 +2,90 @@
 import Section from '../Section.astro';
 import SectionHead from '../SectionHead.astro';
 import { family } from '../../data/site';
+
+// Glyphs mirror each CLI's own output; colour carries the line's state only.
+const glyph = { ok: ['✓', 'text-ok'], warn: ['!', 'text-warn'], idle: ['−', 'text-idle'] } as const;
 ---
 
 <Section id="family" index="14" label="FAMILY">
     <SectionHead eyebrow={family.eyebrow} title={family.title} lede={family.lede} />
 
-    <ul class="mt-14 grid gap-px sm:grid-cols-2">
+    <div class="mt-14 grid grid-cols-1 gap-6 lg:grid-cols-2">
         {
-            family.items.map((item) => (
-                <li class="border-line bg-surface/40 hover:border-line-strong flex flex-col border p-6 transition-colors lg:p-7">
-                    <p class="mono-label text-accent">{item.tag}</p>
-                    <h3 class="h3 mt-5">{item.name}</h3>
-                    <p class="text-muted mt-3 grow text-pretty">{item.body}</p>
-                    <a
-                        href={item.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="text-accent hover:text-fg mt-6 self-start text-sm transition-colors"
-                    >
-                        Learn more about {item.name} →
-                        <span class="sr-only"> (opens in a new tab)</span>
-                    </a>
-                </li>
+            family.items.map((item, i) => (
+                <article
+                    class="border-line bg-surface/50 hover:border-line-strong flex min-w-0 flex-col border transition-colors"
+                    aria-labelledby={`family-${i}`}
+                >
+                    <div class="flex flex-col gap-5 p-6 lg:p-8">
+                        <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2">
+                            <p class="mono-label text-muted">{item.tag}</p>
+                            <p class="text-muted font-mono text-xs">{item.domain}</p>
+                        </div>
+
+                        <h3 id={`family-${i}`} class="h3">
+                            {item.name}
+                        </h3>
+                        <p class="text-muted text-pretty">{item.body}</p>
+
+                        <ul class="flex flex-wrap gap-2" aria-label={`${item.name} guarantees`}>
+                            {item.points.map((point) => (
+                                <li class="border-line text-fg bg-ink/60 border px-2.5 py-1 font-mono text-xs">
+                                    {point}
+                                </li>
+                            ))}
+                        </ul>
+
+                        <p class="text-muted text-sm">
+                            <span class="mono-label text-muted mr-2">Runs on</span>
+                            {item.platforms.join(' · ')}
+                        </p>
+                    </div>
+
+                    <figure class="border-line bg-ink mt-auto border-t">
+                        <div
+                            class="px-6 py-5 font-mono text-[12.5px] leading-relaxed lg:px-8"
+                            aria-label={`Sample ${item.command} output`}
+                        >
+                            <div class="break-all whitespace-pre-wrap">
+                                <span class="text-idle">{`${item.prompt} `}</span>
+                                <span class="text-fg">{item.command}</span>
+                            </div>
+                            {item.lines.map(([state, text]) => (
+                                <div class="break-all whitespace-pre-wrap">
+                                    {state && (
+                                        <span class={glyph[state][1]}>{`${glyph[state][0]} `}</span>
+                                    )}
+                                    <span class="text-muted">{text}</span>
+                                </div>
+                            ))}
+                        </div>
+                        <figcaption class="border-line text-idle border-t px-6 py-2.5 font-mono text-[11px] lg:px-8">
+                            Real output · {item.caption}
+                        </figcaption>
+                    </figure>
+
+                    <div class="border-line flex flex-wrap items-center gap-x-5 gap-y-3 border-t p-6 lg:px-8">
+                        <a
+                            href={item.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="btn btn-ghost btn-sm"
+                        >
+                            Visit {item.domain} ↗<span class="sr-only"> (opens in a new tab)</span>
+                        </a>
+                        <a
+                            href={item.download}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="text-fg decoration-line-strong hover:decoration-fg text-sm underline underline-offset-4 transition-colors"
+                        >
+                            Download {item.name}
+                            <span class="sr-only"> (opens in a new tab)</span>
+                        </a>
+                    </div>
+                </article>
             ))
         }
-    </ul>
+    </div>
 </Section>
