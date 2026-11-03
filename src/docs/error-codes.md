@@ -40,6 +40,8 @@ reference.
 | [G8-E402](#g8-e402) | The security certificate could not be issued |
 | [G8-E403](#g8-e403) | An email could not be sent                   |
 | [G8-E501](#g8-e501) | G8Deck stopped and said why                  |
+| [G8-E502](#g8-e502) | Your application failed to start             |
+| [G8-E503](#g8-e503) | Your application's build failed              |
 | [G8-E900](#g8-e900) | Something went wrong on our side             |
 
 ## G8-E101
@@ -141,6 +143,28 @@ reference.
 2. Make the change and try again.
 
 **When to contact support:** Contact support if the message is unclear or the change does not help. Quote the code and reference.
+
+## G8-E502
+
+**Your application failed to start.** Your application failed to start.
+
+**What you can do**
+
+1. Read the last lines from your application shown with the message — they come from your application, not from G8Deck.
+2. Fix the cause (a wrong password or setting in the environment, a failing migration, a missing file) and deploy again.
+
+**When to contact support:** Contact support if the steps above do not help. Quote the code and reference shown with the message.
+
+## G8-E503
+
+**Your application's build failed.** Your application's build failed.
+
+**What you can do**
+
+1. Read the last lines from the build shown with the message — they come from your project's own build commands.
+2. Fix the build in your repository (or its build settings in G8Deck) and deploy again.
+
+**When to contact support:** Contact support if the steps above do not help. Quote the code and reference shown with the message.
 
 ## G8-E900
 
