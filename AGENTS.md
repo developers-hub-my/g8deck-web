@@ -153,6 +153,10 @@ Full documentation: https://docs.astro.build — see the guides on
   by `node scripts/gen-mcp-reference.mjs [path/to/g8deck-app]` from the app's
   `app/Mcp/Servers` and `app/Mcp/Tools`. Re-run it when tools change; never
   hand-edit those five. `src/docs/mcp/connect.md` is hand-written.
+- `src/docs/error-codes.md` is **generated** by
+  `node scripts/gen-error-codes.mjs [path/to/g8deck-app]`, which runs the app's
+  `php artisan docs:error-codes --format=json` (the `PublicFailureCode` enum).
+  Re-run it whenever that enum changes; never hand-edit the page.
 - Docs pages ship two small scripts, both progressive enhancements: search
   over the prebuilt `/docs/search.json`, and Copy buttons on code blocks. The
   rest of the site stays script-free.
