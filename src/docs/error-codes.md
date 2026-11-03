@@ -46,7 +46,7 @@ reference.
 
 ## G8-E101
 
-**It took too long.** This took too long and was stopped.
+**It took too long.** G8Deck waited for the work to finish and gave up when it ran past its time limit.
 
 **What you can do**
 
@@ -57,7 +57,7 @@ reference.
 
 ## G8-E201
 
-**The server could not be reached.** G8Deck couldn't reach your server.
+**The server could not be reached.** G8Deck tried to connect to your server and got no answer.
 
 **What you can do**
 
@@ -69,7 +69,7 @@ reference.
 
 ## G8-E202
 
-**The server refused G8Deck's login.** Your server refused G8Deck's login.
+**The server refused G8Deck's login.** G8Deck reached your server, but it did not accept G8Deck's key or password.
 
 **What you can do**
 
@@ -80,7 +80,7 @@ reference.
 
 ## G8-E301
 
-**The server's disk is full.** Your server has run out of disk space.
+**The server's disk is full.** Your server has no free disk space left, so the work could not be written.
 
 **What you can do**
 
@@ -91,7 +91,7 @@ reference.
 
 ## G8-E302
 
-**A plan or quota limit was reached.** This would go over a limit on your plan or quota.
+**A plan or quota limit was reached.** This would go over a limit on your plan or quota, so G8Deck did not start it.
 
 **What you can do**
 
@@ -102,7 +102,7 @@ reference.
 
 ## G8-E401
 
-**A domain name could not be looked up.** A domain name could not be looked up.
+**A domain name could not be looked up.** G8Deck asked DNS for a domain name's address and got no usable answer.
 
 **What you can do**
 
@@ -113,7 +113,7 @@ reference.
 
 ## G8-E402
 
-**The security certificate could not be issued.** The security certificate for your domain could not be issued.
+**The security certificate could not be issued.** The certificate authority did not issue a security certificate for your domain.
 
 **What you can do**
 
@@ -124,7 +124,7 @@ reference.
 
 ## G8-E403
 
-**An email could not be sent.** An email could not be sent.
+**An email could not be sent.** G8Deck could not hand the email to its mail server.
 
 **What you can do**
 
@@ -135,7 +135,7 @@ reference.
 
 ## G8-E501
 
-**G8Deck stopped and said why.** G8Deck stopped and explained why.
+**G8Deck stopped and said why.** G8Deck checked something before going on and refused, with its reason.
 
 **What you can do**
 
@@ -146,7 +146,7 @@ reference.
 
 ## G8-E502
 
-**Your application failed to start.** Your application failed to start.
+**Your application failed to start.** Your application's process exited while starting, before it could serve traffic.
 
 **What you can do**
 
@@ -157,7 +157,7 @@ reference.
 
 ## G8-E503
 
-**Your application's build failed.** Your application's build failed.
+**Your application's build failed.** A build command for your application exited with an error, so no new release was made.
 
 **What you can do**
 
@@ -168,7 +168,7 @@ reference.
 
 ## G8-E900
 
-**Something went wrong on our side.** Something went wrong on our side.
+**Something went wrong on our side.** An error inside G8Deck stopped this. It is not something you need to fix.
 
 **What you can do**
 
