@@ -12,11 +12,11 @@ already have, **New Server** for a new one. Either way you end with a server
 G8Deck has set up and can deploy to. Both need you to be an owner or
 administrator of the organisation.
 
-| You have                                       | Use                                                 |
-| ---------------------------------------------- | --------------------------------------------------- |
-| A VPS, a bare-metal box or a VM you can SSH to | **Connect a Server**                                |
-| A DigitalOcean account and no machine yet      | **New Server**                                      |
-| A machine another panel (RunCloud) runs today  | [**Adopt**](/docs/adopt-a-server) — read-only first |
+| You have                                       | Use                                                          |
+| ---------------------------------------------- | ------------------------------------------------------------ |
+| A VPS, a bare-metal box or a VM you can SSH to | **Connect a Server**                                         |
+| A DigitalOcean account and no machine yet      | **New Server**                                               |
+| A machine another panel (RunCloud) runs today  | [**Adopt a server**](/docs/adopt-a-server) — read-only first |
 
 ## Before you start
 
@@ -124,8 +124,8 @@ DigitalOcean's console. It can delete a machine it created — see below.
 ## The host key, after a rebuild
 
 A rebuilt machine presents a new host key, and G8Deck refuses to talk to a
-machine whose key changed. On the connection's page (**Advanced →
-Connections**), **Check host key** probes the machine and **Trust this key**
+machine whose key changed. On the connection's page (**Fleet ›
+Infrastructure › Connections**, in Advanced navigation), **Check host key** probes the machine and **Trust this key**
 pins the new one — do it only if you rebuilt the machine and the fingerprint
 matches its console. If the key changes again between the check and the click,
 the trust is refused.

@@ -6,7 +6,7 @@ order: 10
 updated: 2026-10-27
 ---
 
-**Databases** in the sidebar is the organisation's fleet of database servers —
+**Services › Databases** is the organisation's fleet of database servers —
 daemons G8Deck administers on servers you have connected. They live outside any
 one deployment, so several applications can share one, and their data outlives
 every deployment that uses it.

@@ -15,7 +15,7 @@ repository, how it builds it, and how a push becomes a release.
 
 ## Create it
 
-**Applications → New application**, then on step one choose **Git
+**Apps › Applications → New application**, then on step one choose **Git
 repository**:
 
 | Field                | Notes                                                                               |
@@ -42,7 +42,8 @@ Three ways, depending on where the code lives:
 | Private, reached over SSH         | A **deploy key** the application generates — register its public half on the repository                                                    |
 | Public over HTTPS                 | Nothing to set up                                                                                                                          |
 
-**Connect GitHub** is on **Integrations** (under **Advanced**). Connecting
+**Connect GitHub** is on **Fleet › Infrastructure › Integrations** (in Advanced
+navigation). Connecting
 installs the G8Deck GitHub App on the account you pick; **Disconnect**
 uninstalls it there and deletes nothing else.
 

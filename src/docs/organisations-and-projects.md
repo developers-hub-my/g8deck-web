@@ -21,7 +21,7 @@ Organisation      who holds the servers, the data services and the bill
 
 | Container        | Holds                                                                           | Created by                                          |
 | ---------------- | ------------------------------------------------------------------------------- | --------------------------------------------------- |
-| **Organisation** | Servers, database / cache / storage servers, backups, quotas, members, the plan | You, at sign-up; more from **Organizations**        |
+| **Organisation** | Servers, database / cache / storage servers, backups, quotas, members, the plan | You, at sign-up; more from **Manage organizations** |
 | **Team**         | Projects, members with a team role, and the servers the team may deploy to      | An organisation owner or administrator              |
 | **Project**      | Applications and their environments                                             | A team lead, or an organisation owner/administrator |
 | **Environment**  | The deployments of a project in one stage                                       | A team lead, or an organisation owner/administrator |
@@ -31,9 +31,10 @@ Organisation      who holds the servers, the data services and the bill
 
 Signing up creates an organisation you own, with a first team led by you, so
 you can connect a server and deploy on day one. Joining someone else's
-organisation adds to that; it does not take it away. The switcher at the top of
-the sidebar decides which organisation every page shows — and which one a new
-application lands in.
+organisation adds to that; it does not take it away. The organisation switcher
+at the top of the rail decides which organisation every page shows — and which
+one a new application lands in. It also holds **Teams**, **Projects**,
+**Quotas**, **Organization settings** and **Manage organizations**.
 
 ![The Organizations page: every organisation you own or belong to, your role in each, and which one is current](/docs/organisations-and-projects/organizations.webp)
 
@@ -51,7 +52,7 @@ roles: **lead**, **member** and **viewer**.
 ## Projects
 
 A project groups the applications of one product. It belongs to exactly one
-team, and **Organization → Projects** lists them with their environments and
+team, and **Projects** in the organisation switcher lists them with their environments and
 live deployments. A project can be moved to another team, or to [another
 organisation](/docs/move-a-project) you also administer.
 

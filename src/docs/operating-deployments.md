@@ -9,7 +9,7 @@ updated: 2026-10-27
 
 Your deployment reports **active**. Everything from here is day two: reading
 what it is doing, changing what runs, moving it forward and putting it back.
-Open **Advanced → Build → Deployments**, or follow **Open** from an
+Open **Apps › Deployments** (in Advanced navigation, or search for it), or follow **Open** from an
 application's **Runs in** list.
 
 ![The Deployments list: each deployment with its environment, blueprint and status, with search and filters above](/docs/operating-deployments/deployments.webp)

@@ -33,12 +33,12 @@ The console is a separate site from this one — `g8deck.app`, not `g8deck.com`.
 Sign in there.
 
 Everything happens inside one **organisation**. If you belong to more than one,
-check the switcher at the top of the sidebar before you start: an application
+check the organisation switcher at the top of the rail before you start: an application
 lands in the organisation that was active when you created it.
 
 ## 2. Connect a server
 
-Open **Servers** and choose **Connect a Server**. The wizard has three steps,
+Open **Fleet › Servers** and choose **Connect a Server**. The wizard has three steps,
 and nothing is queued until the machine has answered a pre-flight probe.
 
 ![The Connect a Server wizard: server name, where the machine is hosted, its address and port, and how G8Deck should authenticate](/docs/connect-a-server/connect-wizard.webp)

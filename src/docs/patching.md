@@ -18,8 +18,8 @@ Both skip servers they must not touch, and say why.
 
 ## The patch policy
 
-An organisation owner or administrator sets the policy under **Organization →
-Settings → Patching** (the **Patch policy** button on the Patches page goes
+An organisation owner or administrator sets the policy under **Organization
+settings › Patching** in the organisation switcher (the **Patch policy** button on the Patches page goes
 there).
 
 | Setting                                          | What it decides                                                                                                                                  |

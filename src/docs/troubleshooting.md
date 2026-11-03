@@ -181,7 +181,7 @@ Two guards to know about:
 
 Work outward from the deployment:
 
-1. **Incidents** — the queue of every alert that fired across the
+1. **Alerts** — the queue of every alert that fired across the
    organisation, filterable by status and severity, acknowledgeable, with a
    post-mortem field. Remember it is only populated while the scheduler runs.
 2. **Drift** — what the infrastructure looks like now versus the desired
