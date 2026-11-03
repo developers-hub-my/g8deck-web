@@ -16,7 +16,7 @@ administrator of the organisation.
 | ---------------------------------------------- | ------------------------------------------------------------ |
 | A VPS, a bare-metal box or a VM you can SSH to | **Connect a Server**                                         |
 | A DigitalOcean account and no machine yet      | **New Server**                                               |
-| A machine another panel (RunCloud) runs today  | [**Adopt a server**](/docs/adopt-a-server) — read-only first |
+| A machine another panel runs today             | [**Adopt a server**](/docs/adopt-a-server) — read-only first |
 
 ## Before you start
 

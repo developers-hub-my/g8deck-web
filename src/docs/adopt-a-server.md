@@ -1,7 +1,7 @@
 ---
 title: Adopt a server from another panel
 nav: Adopt a server
-description: Point G8Deck at a machine RunCloud (or plain nginx) already runs. A read-only sweep inventories it, you decide what to take over, and its databases and files can be moved into G8Deck-managed applications.
+description: Point G8Deck at a machine another control panel (or plain nginx) already runs. A read-only sweep inventories it, you decide what to take over, and its databases and files can be moved into G8Deck-managed applications.
 section: servers
 order: 20
 updated: 2026-10-27
@@ -12,7 +12,7 @@ reads it first and changes nothing; you then decide, item by item, what to take
 over. Adopting leaves the machine exactly where it is — nothing is moved or
 copied until you ask for a data migration.
 
-Panels G8Deck recognises today: **RunCloud** and **plain nginx**.
+G8Deck recognises machines run by a common PHP hosting panel, or by **plain nginx**.
 
 ![The Adopt page, open from the Fleet panel: counts of machines, sweeps and applications found, and the empty state inviting you to connect a server](/docs/adopt-a-server/adopt.webp)
 
