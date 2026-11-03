@@ -64,7 +64,7 @@ Answering any slot of the sentence clears the pinned blueprint, so the template
 and the sentence can never disagree on screen: whatever you last touched is
 what you get.
 
-![The Blueprints list: system and custom blueprints with their topology, layer count and origin](/docs/blueprints/blueprints.webp)
+![The Blueprints list under Apps › Design: system and custom blueprints with their topology, layer count and origin](/docs/blueprints/blueprints.webp)
 
 ## Where the editor lives
 

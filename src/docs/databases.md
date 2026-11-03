@@ -35,7 +35,7 @@ SQLite is not a server — see [SQLite files](#sqlite-files) below.
 **Set up a database server** opens a three-step wizard: _Server & engine_,
 _Network & access_, _Review_.
 
-![Set up a database server: install a new server or adopt an existing one, the server picker, and the engine cards](/docs/databases/new-database-server.webp)
+![Set up a database server: install a new server or adopt an existing one, the server picker with its notice when no server has finished setup, and the engine cards](/docs/databases/new-database-server.webp)
 
 **Set up a new server** installs the engine on a server G8Deck has finished
 setting up, moves it to a non-default port, and opens it to exactly the
