@@ -14,7 +14,7 @@ copied until you ask for a data migration.
 
 Panels G8Deck recognises today: **RunCloud** and **plain nginx**.
 
-![The Adopt page: counts of machines, sweeps and applications found, and the empty state inviting you to connect a server](/docs/adopt-a-server/adopt.webp)
+![The Adopt page, open from the Fleet panel: counts of machines, sweeps and applications found, and the empty state inviting you to connect a server](/docs/adopt-a-server/adopt.webp)
 
 ## 1. Point G8Deck at the server
 

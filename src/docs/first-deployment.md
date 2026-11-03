@@ -41,7 +41,7 @@ lands in the organisation that was active when you created it.
 Open **Fleet › Servers** and choose **Connect a Server**. The wizard has three steps,
 and nothing is queued until the machine has answered a pre-flight probe.
 
-![The Connect a Server wizard: server name, where the machine is hosted, its address and port, and how G8Deck should authenticate](/docs/connect-a-server/connect-wizard.webp)
+![The Connect a Server wizard: an optional DigitalOcean machine picker, then server name, where the machine is hosted, its address and port, and how G8Deck should authenticate](/docs/connect-a-server/connect-wizard.webp)
 
 1. **Connection** — a name, where the machine is hosted (DigitalOcean, AWS,
    Google Cloud, Azure, Hetzner or Other — every one of them is reached over

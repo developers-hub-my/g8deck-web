@@ -21,7 +21,7 @@ runs for you, and buckets you already own somewhere else.
 | **Adopt one that already runs** | Records a Garage that already runs and changes nothing on the machine                    |
 | **Connect an existing bucket**  | Keeps a credential for a bucket you own elsewhere; your provider keeps the bucket        |
 
-![Add storage: the three modes, the server picker and the redundancy choice](/docs/object-storage/new-storage-server.webp)
+![Add storage: the three modes, the server picker with its notice when no server is available, and the redundancy choice](/docs/object-storage/new-storage-server.webp)
 
 ### A storage server
 

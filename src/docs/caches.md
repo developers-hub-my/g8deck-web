@@ -23,7 +23,7 @@ that agree can share one.
 | **Install a new instance**     | Installs the engine, writes its own unit on the port you choose, sets a generated password and opens the firewall to your allowlist |
 | **Record one already running** | Records what it finds and changes nothing — no port move, no config rewrite, no firewall change                                     |
 
-![Create a cache instance: install a new one or record one already running, then name and server](/docs/caches/new-cache.webp)
+![Create a cache instance: install a new one or record one already running, then name, server, engine and port](/docs/caches/new-cache.webp)
 
 | Field                         | Notes                                                                                   |
 | ----------------------------- | --------------------------------------------------------------------------------------- |

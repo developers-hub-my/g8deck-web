@@ -59,6 +59,8 @@ Every page you are allowed to open is in one of two lists:
 - **Advanced** lists every page you can open, including the operator pages —
   deployments in detail, blueprints, connections, security and sources.
 
+![The rail of areas with the Apps panel docked beside it, and the avatar menu open on its Navigation switch between Simple and Advanced](/docs/navigating-g8deck/navigation-mode.webp)
+
 Switch between them from your avatar menu, under **Navigation**. Members start
 in Simple; administrators start in Advanced. The choice is yours and is kept on
 your account.
@@ -74,6 +76,8 @@ Press **Cmd-K** (macOS) or **Ctrl-K** (Windows and Linux), or use the search
 icon on the rail or the top bar. Search lists every page you can open, in either
 mode, and understands everyday words — _providers_, _k8s_, _cve_, _docker_ —
 as well as page names.
+
+![Page search open over the console: every page you can open with the area it sits in, and an Advanced tag on the pages Simple hides](/docs/navigating-g8deck/search.webp)
 
 ## The Platform overview
 

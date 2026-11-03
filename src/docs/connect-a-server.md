@@ -31,7 +31,7 @@ administrator of the organisation.
 Three steps. Nothing is queued until the machine has answered a pre-flight
 probe.
 
-![Step one of Connect a Server: the server name, where it is hosted, the address and port, and the credential](/docs/connect-a-server/connect-wizard.webp)
+![Step one of Connect a Server: pick a machine from a connected DigitalOcean account or type an address, then the server name, where it is hosted, the address and port, and the credential](/docs/connect-a-server/connect-wizard.webp)
 
 ### 1. Connection
 
