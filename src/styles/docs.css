@@ -164,7 +164,8 @@
 }
 
 .docs-search-field input::placeholder {
-    color: var(--color-idle);
+    /* idle (#64748b) is 3.9:1 on the field — below AA for placeholder text. */
+    color: var(--color-muted);
 }
 
 .docs-search-field kbd {
@@ -481,45 +482,439 @@
     white-space: nowrap;
 }
 
-/* ---- Docs index ------------------------------------------------------ */
+/* ---- Docs landing (/docs) ------------------------------------------- */
 
-.docs-index-group + .docs-index-group {
-    margin-top: 3.5rem;
+/* The hero sits on the drafting sheet proper: the grid is the page's own
+   blueprint texture, faded out so it never runs under the reading column. */
+.dh-hero {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--color-line);
 }
 
-.docs-index-grid {
+.dh-hero__grid {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.6;
+    mask-image: linear-gradient(to bottom, #000 40%, transparent);
+}
+
+.dh-hero__inner {
+    position: relative;
     display: grid;
-    gap: 0.75rem;
+    gap: 3rem;
+    padding-block: 3.5rem 4rem;
+}
+
+@media (min-width: 1024px) {
+    .dh-hero__inner {
+        grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+        align-items: center;
+        gap: 4.5rem;
+        padding-block: 5rem 4.5rem;
+    }
+}
+
+.dh-hero__copy {
+    min-width: 0;
+    /* The search dropdown must paint over the capture beside it. */
+    position: relative;
+    z-index: 2;
+}
+
+.dh-hero__shot {
+    max-width: 34rem;
+}
+
+.dh-popular {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.625rem;
     margin-top: 1.25rem;
+    font-size: 0.875rem;
+}
+
+.dh-chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.25rem;
+    padding-inline: 0.75rem;
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-card);
+    color: var(--color-fg);
+    background: color-mix(in oklab, var(--color-ink) 70%, transparent);
+    transition:
+        border-color 120ms ease,
+        background-color 120ms ease;
+}
+
+.dh-chip:hover {
+    border-color: var(--color-muted);
+    background: var(--color-surface);
+}
+
+.dh-block {
+    padding-block-start: 4.5rem;
+}
+
+@media (min-width: 1024px) {
+    .dh-block {
+        padding-block-start: 6rem;
+    }
+}
+
+.dh-block:last-of-type {
+    padding-block-end: 4.5rem;
+}
+
+.dh-title {
+    font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+    line-height: 1.15;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    font-variation-settings: 'wdth' 108;
+    text-wrap: balance;
+}
+
+/* Start-here paths: five stops on one route, the same line-and-node drawing
+   as the provisioning rail. Vertical on a phone, one horizontal run on wide
+   screens. They are intents, not a sequence, so they carry no numbers. */
+.dh-paths {
+    position: relative;
+    display: grid;
+    margin-top: 2rem;
+}
+
+.dh-paths::before {
+    content: '';
+    position: absolute;
+    top: 0.75rem;
+    bottom: 0.75rem;
+    left: 5px;
+    width: 1px;
+    background: var(--color-line-strong);
+}
+
+.dh-path {
+    position: relative;
+    min-width: 0;
+    padding-inline-start: 1.75rem;
+}
+
+.dh-path__node {
+    position: absolute;
+    top: 1.375rem;
+    left: 0;
+    width: 11px;
+    height: 11px;
+    border: 1px solid var(--color-muted);
+    border-radius: 50%;
+    background: var(--color-ink);
+    transition:
+        background-color 160ms ease,
+        border-color 160ms ease;
+}
+
+.dh-path__link {
+    display: block;
+    height: 100%;
+    padding: 1rem 0.75rem 1rem 0;
+    border-radius: var(--radius-card);
+}
+
+.dh-path__verb {
+    display: block;
+    font-size: 1.0625rem;
+    line-height: 1.35;
+    font-weight: 600;
+    color: var(--color-fg);
+    text-wrap: balance;
+}
+
+/* Inline, not flex: when the verb wraps, the arrow follows the last word
+   instead of pinning itself to the column's far edge. */
+.dh-path__verb svg {
+    display: inline-block;
+    margin-inline-start: 0.375rem;
+    vertical-align: -0.15em;
+    color: var(--color-accent);
+    transition: transform 160ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dh-path__body {
+    display: block;
+    margin-top: 0.375rem;
+    font-size: 0.875rem;
+    line-height: 1.55;
+    color: var(--color-muted);
+    text-wrap: pretty;
+}
+
+.dh-path:hover .dh-path__node,
+.dh-path:focus-within .dh-path__node {
+    border-color: var(--color-accent);
+    background: var(--color-accent);
+}
+
+.dh-path__link:focus-visible {
+    outline-offset: 6px;
+}
+
+.dh-path:hover .dh-path__verb svg {
+    transform: translateX(3px);
+}
+
+@media (min-width: 1024px) {
+    .dh-paths {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 1.5rem;
+        margin-top: 2.5rem;
+    }
+
+    .dh-paths::before {
+        top: 5px;
+        bottom: auto;
+        left: 0;
+        right: 0;
+        width: auto;
+        height: 1px;
+        transform-origin: left center;
+    }
+
+    .dh-path {
+        padding-inline-start: 0;
+        padding-top: 1.5rem;
+    }
+
+    .dh-path__node {
+        top: 0;
+    }
+
+    .dh-path__link {
+        padding: 0;
+    }
+}
+
+/* The page's one authored moment: the route draws itself once on arrival.
+   The line is decoration — every stop is readable from the first frame. */
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+    .dh-paths::before {
+        animation: dh-route 900ms cubic-bezier(0.16, 1, 0.3, 1) 150ms both;
+    }
+}
+
+@keyframes dh-route {
+    from {
+        transform: scaleX(0);
+    }
+}
+
+/* Console areas: each card is a real capture of that area plus the guides
+   that live in it. The capture is decorative (alt=""), because the name and
+   the links beside it already say what it shows. */
+.dh-areas {
+    display: grid;
+    gap: 1rem;
+    margin-top: 2rem;
 }
 
 @media (min-width: 640px) {
-    .docs-index-grid {
+    .dh-areas {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 
 @media (min-width: 1024px) {
-    .docs-index-grid {
+    .dh-areas {
         grid-template-columns: repeat(3, minmax(0, 1fr));
+        margin-top: 2.5rem;
     }
 }
 
-.docs-index-card {
+.dh-area {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.dh-area__shot {
+    aspect-ratio: 16 / 7;
+    overflow: hidden;
+    border-bottom: 1px solid var(--color-line);
+    background: var(--color-raised);
+}
+
+.dh-area__shot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: left top;
+    opacity: 0.82;
+    transition:
+        opacity 200ms ease,
+        transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dh-area:hover .dh-area__shot img {
+    opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .dh-area:hover .dh-area__shot img {
+        transform: scale(1.03);
+    }
+}
+
+.dh-area__body {
+    padding: 1.25rem 1.25rem 0.75rem;
+}
+
+.dh-area__name {
+    font-size: 1.25rem;
+    line-height: 1.25;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    color: var(--color-fg);
+}
+
+.dh-area__holds {
+    margin-top: 0.375rem;
+    font-size: 0.875rem;
+    line-height: 1.55;
+    color: var(--color-muted);
+    text-wrap: pretty;
+}
+
+.dh-area__links {
+    margin-top: 0.875rem;
+}
+
+.dh-area__links li + li {
+    border-top: 1px solid var(--color-line);
+}
+
+.dh-area__links a {
+    display: flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding-block: 0.375rem;
+    font-size: 0.9375rem;
+    line-height: 1.4;
+    color: var(--color-fg);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 3px;
+    transition:
+        color 120ms ease,
+        text-decoration-color 120ms ease;
+}
+
+.dh-area__links a:hover {
+    color: var(--color-accent);
+    text-decoration-color: var(--color-accent-dim);
+}
+
+/* The shelf: four reference doors in one ruled strip. */
+.dh-shelf {
+    display: grid;
+    gap: 1px;
+    margin-top: 2rem;
+    background: var(--color-line);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+}
+
+@media (min-width: 640px) {
+    .dh-shelf {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1024px) {
+    .dh-shelf {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+.dh-shelf li {
+    min-width: 0;
+    background: var(--color-ink);
+}
+
+.dh-shelf__link {
     display: block;
     height: 100%;
     padding: 1.25rem;
+    transition: background-color 120ms ease;
 }
 
-.docs-index-card h3 {
-    font-size: 1rem;
+.dh-shelf__link:hover {
+    background: var(--color-surface);
+}
+
+.dh-shelf__label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     font-weight: 600;
     color: var(--color-fg);
 }
 
-.docs-index-card p {
-    margin-top: 0.5rem;
+.dh-shelf__label svg {
+    flex-shrink: 0;
+    color: var(--color-accent);
+}
+
+.dh-shelf__body {
+    display: block;
+    margin-top: 0.375rem;
     font-size: 0.875rem;
     line-height: 1.55;
     color: var(--color-muted);
+    text-wrap: pretty;
+}
+
+/* Every guide, densely: the full sidebar laid flat, so nothing above has to
+   be the only way to a page. */
+.dh-index {
+    display: grid;
+    gap: 2.25rem 2rem;
+    margin-top: 2rem;
+}
+
+@media (min-width: 640px) {
+    .dh-index {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1024px) {
+    .dh-index {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+.dh-index__group {
+    min-width: 0;
+}
+
+.dh-index__group ul {
+    margin-top: 0.875rem;
+}
+
+.dh-index__group a {
+    display: block;
+    padding-block: 0.3125rem;
+    font-size: 0.9375rem;
+    line-height: 1.45;
+    color: var(--color-fg);
+    text-wrap: pretty;
+    transition: color 120ms ease;
+}
+
+.dh-index__group a:hover {
+    color: var(--color-accent);
 }

@@ -160,3 +160,9 @@ Full documentation: https://docs.astro.build — see the guides on
 - Docs pages ship two small scripts, both progressive enhancements: search
   over the prebuilt `/docs/search.json`, and Copy buttons on code blocks. The
   rest of the site stays script-free.
+- The `/docs` landing (`src/pages/docs/index.astro`) reads its copy from
+  `docsHome` in `site.ts`: start-here paths, cards for the console's rail areas
+  (Apps, Fleet, Services, Alerts, Platform, plus the organisation switcher),
+  a reference shelf, then every guide from `groups`. Area cards reuse captures
+  from `public/docs/`; if one is renamed there, update `docsHome`. The "Every
+  guide" list is the guarantee that no page depends on the curated cards.

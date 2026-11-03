@@ -996,3 +996,167 @@ export const photos = {
         credit: 'Photo · Albert Stoynov / Unsplash',
     },
 } as const;
+
+/**
+ * The /docs landing. Every href is a page in src/docs; every capture is a docs
+ * screenshot already in public/docs (sample organisation). Claims follow the
+ * guides they point at — the adopt sweep recognises RunCloud and plain nginx
+ * today, so the migration path names nothing else.
+ */
+export const docsHome = {
+    title: 'Blueprint to running system.',
+    lede: 'Every guide follows the console screen by screen, in the order you would do the work. Search for a page, pick the path that matches what you came to do, or browse by the area of the console you are in.',
+    popular: [
+        { label: 'Your first deployment', href: '/docs/first-deployment' },
+        { label: 'Error codes', href: '/docs/error-codes' },
+        { label: 'Connect an AI client', href: '/docs/mcp/connect' },
+    ],
+    shot: {
+        src: '/docs/navigating-g8deck/navigation-mode.webp',
+        width: 800,
+        height: 782,
+        alt: 'The console rail of areas with the Apps panel docked beside it, and the avatar menu open on its Navigation switch between Simple and Advanced',
+        caption:
+            'The console’s rail of areas — every guide starts from one of them. Sample organisation.',
+    },
+    paths: {
+        title: 'Start with what you came to do',
+        items: [
+            {
+                verb: 'Ship your first application',
+                body: 'Connect a machine, answer three questions, watch the pipeline. About fifteen minutes, most of it waiting.',
+                href: '/docs/first-deployment',
+            },
+            {
+                verb: 'Connect a server',
+                body: 'Bring a Linux machine over SSH, or have G8Deck create a droplet in your own DigitalOcean account.',
+                href: '/docs/connect-a-server',
+            },
+            {
+                verb: 'Launch from git',
+                body: 'Connect GitHub or a deploy key, turn on push-to-deploy, or upload a version with no repository.',
+                href: '/docs/launch-from-git',
+            },
+            {
+                verb: 'Move off RunCloud',
+                body: 'Adopt a machine RunCloud or plain nginx already runs. A read-only sweep first, then you decide.',
+                href: '/docs/adopt-a-server',
+            },
+            {
+                verb: 'Operate and troubleshoot',
+                body: 'Logs, health, drift and rollback, and what to read first when a deployment misbehaves.',
+                href: '/docs/troubleshooting',
+            },
+        ],
+    },
+    areas: {
+        title: 'Browse by console area',
+        lede: 'The same areas as the rail in the console, so the guide you need sits where the page you are on does. Captures show a sample organisation.',
+        items: [
+            {
+                name: 'Apps',
+                holds: 'Applications, deployments, releases and blueprints.',
+                shot: {
+                    src: '/docs/launch-from-git/applications.webp',
+                    width: 1280,
+                    height: 665,
+                },
+                links: [
+                    { label: 'Launch an application from git', href: '/docs/launch-from-git' },
+                    { label: 'Domains and TLS', href: '/docs/domains-and-ssl' },
+                    {
+                        label: 'Environment variables and secrets',
+                        href: '/docs/environment-variables',
+                    },
+                    { label: 'Scheduled tasks', href: '/docs/scheduled-tasks' },
+                ],
+            },
+            {
+                name: 'Fleet',
+                holds: 'Servers, patches and adopting a server from another panel.',
+                shot: { src: '/docs/connect-a-server/servers.webp', width: 1280, height: 665 },
+                links: [
+                    { label: 'Connect a server or create one', href: '/docs/connect-a-server' },
+                    { label: 'Adopt a server from another panel', href: '/docs/adopt-a-server' },
+                    { label: 'Patching and upgrades', href: '/docs/patching' },
+                ],
+            },
+            {
+                name: 'Services',
+                holds: 'Databases, caches, object storage and backups.',
+                shot: { src: '/docs/databases/database-servers.webp', width: 1280, height: 665 },
+                links: [
+                    { label: 'Databases', href: '/docs/databases' },
+                    { label: 'Caches', href: '/docs/caches' },
+                    { label: 'Object storage', href: '/docs/object-storage' },
+                    { label: 'Backups and restore', href: '/docs/backups' },
+                ],
+            },
+            {
+                name: 'Alerts',
+                holds: 'What is firing now, and what to do about it.',
+                shot: { src: '/docs/console/incidents.jpg', width: 1280, height: 665 },
+                links: [
+                    { label: 'When a deployment misbehaves', href: '/docs/troubleshooting' },
+                    { label: 'Operating what is running', href: '/docs/operating-deployments' },
+                    { label: 'Error codes', href: '/docs/error-codes' },
+                ],
+            },
+            {
+                name: 'Platform',
+                holds: 'Build, security and sources — blueprints and the component registry.',
+                shot: { src: '/docs/console/blueprint-detail.jpg', width: 1280, height: 665 },
+                links: [
+                    {
+                        label: 'The Platform overview',
+                        href: '/docs/navigating-g8deck#the-platform-overview',
+                    },
+                    { label: 'Blueprints, and when you need one', href: '/docs/blueprints' },
+                ],
+            },
+            {
+                name: 'Organisation',
+                holds: 'The switcher at the top of the rail: teams, projects and quotas.',
+                shot: { src: '/docs/teams-and-access/team.webp', width: 1280, height: 665 },
+                links: [
+                    { label: 'Teams, roles and server access', href: '/docs/teams-and-access' },
+                    {
+                        label: 'Organisations, teams, projects and environments',
+                        href: '/docs/organisations-and-projects',
+                    },
+                    {
+                        label: 'Move a project to another organisation',
+                        href: '/docs/move-a-project',
+                    },
+                ],
+            },
+        ],
+    },
+    shelf: {
+        title: 'Keep within reach',
+        items: [
+            {
+                label: 'Error codes',
+                body: 'What each code means, what you can do about it, and when to contact support.',
+                href: '/docs/error-codes',
+            },
+            {
+                label: 'MCP and AI automation',
+                body: 'Drive G8Deck from an AI client: five servers, every tool listed.',
+                href: '/docs/api-and-automation',
+            },
+            {
+                label: 'Reference',
+                body: 'Statuses, the provisioning steps, presets, engines and roles in one place.',
+                href: '/docs/reference',
+            },
+            {
+                label: 'Changelog',
+                body: 'What changed in the console, release by release. Opens in the console; sign in first.',
+                href: 'https://g8deck.app/changelog',
+            },
+        ],
+    },
+    allTitle: 'Every guide',
+    footnote: 'These pages describe what the console does today, checked against its source.',
+} as const;
