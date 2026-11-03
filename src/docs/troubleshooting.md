@@ -14,6 +14,7 @@ the symptom, what it actually means, and what to do about it.
 | Symptom                                | Jump to                                                                                      |
 | -------------------------------------- | -------------------------------------------------------------------------------------------- |
 | A step failed and the run stopped      | [A step failed](#a-step-failed)                                                              |
+| A message ends in `Code G8-E…`         | [Error codes](/docs/error-codes)                                                             |
 | Green pipeline, but things are missing | [The pipeline finished, but nothing was built](#the-pipeline-finished-but-nothing-was-built) |
 | Nothing moves                          | [Nothing is happening at all](#nothing-is-happening-at-all)                                  |
 | Active, but the site does not answer   | [It reports active, but nothing answers](#it-reports-active-but-nothing-answers)             |
