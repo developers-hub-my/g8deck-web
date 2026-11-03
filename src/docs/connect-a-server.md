@@ -78,7 +78,7 @@ Setup runs sixteen steps, in order, and logs every one:
 | 7   | Set kernel parameters                | 15  | Write node manifest         |
 | 8   | Configure swap                       | 16  | Verify node ready           |
 
-![A setup run: the server, its template and attempts, and the log of each step as it ran, including a step that was skipped with its reason](/docs/connect-a-server/setup-run.webp)
+![A setup run: the server, its template and when it started, and the log of each step as it ran, including steps skipped with their reason](/docs/connect-a-server/setup-run.webp)
 
 A step that has nothing to do says so — "The machine already has active swap;
 G8Deck does not add a second area" — rather than doing it twice. When the run
@@ -87,7 +87,7 @@ wizard.
 
 **Reconnect**
 
-![A set-up server: Ready, its stack version and how far behind it is, the CPU, memory and disk readings, and the Overview tab](/docs/connect-a-server/server-overview.webp)
+![A set-up server: Ready, its CPU, memory and disk readings, what is placed on it, and the Overview tab with its capacity and application footprints](/docs/connect-a-server/server-overview.webp)
 , in a server's menu, runs a short version — verify SSH, detect
 OS, register, write the manifest, verify ready — for a machine that is already
 set up.

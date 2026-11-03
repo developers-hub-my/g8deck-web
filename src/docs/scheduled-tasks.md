@@ -72,7 +72,7 @@ Some build presets bring a scheduler task of their own — Laravel's
 `schedule:run`, for example. You can edit or disable it, but not delete or
 rename it, because the preset expects it to exist.
 
-![The Tasks tab with no tasks yet: Read status, New task, and the note that saving writes the unit straight away](/docs/scheduled-tasks/tasks.webp)
+![The Tasks tab for Production: three tasks with their last run, exit code and duration, Read status, and New task](/docs/scheduled-tasks/tasks.webp)
 
 ## From an AI client
 

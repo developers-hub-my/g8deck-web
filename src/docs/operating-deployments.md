@@ -102,7 +102,7 @@ Evaluating the policies now **is a dry run by default** — it reports what the
 policies make of the current load without resizing anything. Applying is a
 second, deliberate action.
 
-![The Operations page: estimated monthly cost, scaling policies and recent scaling events, drift detection and rollback](/docs/operating-deployments/operations.webp)
+![The Operations page: estimated monthly cost, a scaling policy and recent scaling events, drift detection and rollback](/docs/operating-deployments/operations.webp)
 
 ## Drift
 

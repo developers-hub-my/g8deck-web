@@ -70,7 +70,7 @@ application writes to **exactly one** source, per environment:
   read-write grant, named from the deployment and the application.
 - **A bucket you already own** — G8Deck creates nothing and uses that bucket.
 
-![Attaching object storage from an application's Storage tab](/docs/object-storage/attach-storage.webp)
+![An application's Storage tab: Production wired to a managed bucket with its endpoint and access key, and Attach storage for Staging](/docs/object-storage/attach-storage.webp)
 
 The S3 settings are written into the application's environment and apply on the
 next deploy, and that deploy waits until the bucket and key are actually active.

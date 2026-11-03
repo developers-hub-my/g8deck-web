@@ -16,7 +16,7 @@ of that one deployment and lives and dies with it. The two meet in the
 application wizard, where you can point an application at a server from this
 fleet instead.
 
-![The Databases page: server, active, setting-up and failed counts, one PostgreSQL server with its endpoint, and the Files section for SQLite below](/docs/databases/database-servers.webp)
+![The Databases page: server, active, setting-up and failed counts, one healthy PostgreSQL server with its endpoint, and the Files section for SQLite below](/docs/databases/database-servers.webp)
 
 ## Engines
 
@@ -65,7 +65,7 @@ A database server's page has the tabs **Databases**, **Users**, **Access** and
 is queued: a new database or user shows **pending** until the daemon has
 converged, and **failed** carries the daemon's own reason.
 
-![A PostgreSQL server: its endpoint and TLS state, the tabs, and one database with its owner](/docs/databases/database-server.webp)
+![A PostgreSQL server: its endpoint, health and TLS state, the tabs, and two databases with the users granted on each](/docs/databases/database-server.webp)
 
 ### Databases and users
 

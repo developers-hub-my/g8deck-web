@@ -20,7 +20,7 @@ lets one application run in several environments — production and staging are
 two deployments of the same application, each with its own environment
 variables, domains and releases.
 
-![An application's page: its source and build on the left, push-to-deploy and domains on the right, the environments it runs in, and its latest release](/docs/launch-from-git/application.webp)
+![An application's page: alerts and its source and build on the left, push-to-deploy with recent deliveries and its domain on the right, and the environments it runs in](/docs/launch-from-git/application.webp)
 
 ## The application page
 
@@ -52,7 +52,7 @@ keeps them. **Roll back to this** reruns that release's exact image with
 freshly resolved environment tokens, without rebuilding — and a release with
 no image cannot be rolled back to.
 
-![The Releases tab: a successful release with its environment and time, and the note that a rollback reruns the exact image](/docs/launch-from-git/releases.webp)
+![The Releases tab: successful and failed releases per environment with their time, and the note that a rollback reruns the exact image](/docs/launch-from-git/releases.webp)
 
 To redeploy the current code, use **Re-run Pipeline** on the deployment page —
 there is no separate redeploy button on the application.

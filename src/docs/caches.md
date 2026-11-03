@@ -43,7 +43,7 @@ Attach from the **application**, not from the instance: open the application's
 prefix**. The attachment is per environment, so production and staging can use
 different instances.
 
-![Attaching a cache instance from an application's Cache tab](/docs/caches/attach-cache.webp)
+![An application's Cache tab: Production using a shared cache instance with its host, key prefix and memory limit, and Attach a cache for Staging](/docs/caches/attach-cache.webp)
 
 A key prefix keeps two applications' keys apart, but not their data: a
 `FLUSHALL` from either still empties the instance for both. The connection is

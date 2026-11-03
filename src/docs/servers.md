@@ -18,7 +18,7 @@ behind every one, and the console shows both:
 Connecting a server creates both. A connection can also stand for something
 larger than one machine — a Docker host, a Swarm or a Kubernetes cluster.
 
-![The Servers page: one row per machine with its address, OS, stack version and metrics, and the Connect a Server, New Server and Upgrade actions](/docs/connect-a-server/servers.webp)
+![The Servers page under the Fleet panel: one row per machine with its address, OS, stack version and metrics, and the New Server and Connect a Server actions](/docs/connect-a-server/servers.webp)
 
 ## Three ways a server arrives
 
@@ -73,7 +73,7 @@ and these tabs:
 
 ![A server's Access tab: the management login, the rotated node credential, the pinned host key and its setup history](/docs/connect-a-server/server-access.webp)
 
-![A server's Firewall tab: custom rules applied on top of the baseline, and the baseline the last setup applied](/docs/connect-a-server/server-firewall.webp)
+![A server's Firewall tab: two custom rules applied on top of the baseline, the baseline the last setup applied, and the live check against the machine](/docs/connect-a-server/server-firewall.webp)
 
 ## Who sees which servers
 
