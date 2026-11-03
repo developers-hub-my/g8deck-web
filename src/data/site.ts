@@ -683,7 +683,7 @@ export const faqs = [
     {
         // RunCloudSource + PlainNginxSource; MigrateAdoptionDataTool (#760)
         // refuses PostgreSQL sources and remote databases.
-        q: 'We run our sites on RunCloud today. What does moving look like?',
+        q: 'Our sites already run on another control panel. What does moving look like?',
         a: 'Connect the server and G8Deck reads what is on it — sites, PHP versions, cron jobs, certificates — without changing anything. You decide what to adopt. For each application it copies a MySQL or MariaDB database and the directories the app writes to onto the G8Deck application that replaces it, checking row counts and file counts on both sides, and the final sync can put the old site into maintenance first. PostgreSQL sources are not migrated yet.',
     },
     {
@@ -842,7 +842,7 @@ export const operate = {
             // writes nothing (#502); MigrateAdoptionDataTool refuses PostgreSQL.
             tag: 'Adopt',
             title: 'Bring the servers you already run',
-            body: 'Point it at a RunCloud or plain-nginx server and it inventories the sites, PHP versions, cron jobs and certificates without writing to the machine. Adopt what you choose; a MySQL or MariaDB database and the upload directories copy across with row and file counts checked on both sides.',
+            body: 'Point it at a server another panel (or plain nginx) runs and it inventories the sites, PHP versions, cron jobs and certificates without writing to the machine. Adopt what you choose; a MySQL or MariaDB database and the upload directories copy across with row and file counts checked on both sides.',
         },
         {
             // DatabaseEngine + DatabaseServer/Dialects; DatabaseClusterMode::Replicated;
@@ -1000,8 +1000,7 @@ export const photos = {
 /**
  * The /docs landing. Every href is a page in src/docs; every capture is a docs
  * screenshot already in public/docs (sample organisation). Claims follow the
- * guides they point at — the adopt sweep recognises RunCloud and plain nginx
- * today, so the migration path names nothing else.
+ * guides they point at. The migration path names no other vendor.
  */
 export const docsHome = {
     title: 'Blueprint to running system.',
@@ -1038,8 +1037,8 @@ export const docsHome = {
                 href: '/docs/launch-from-git',
             },
             {
-                verb: 'Move off RunCloud',
-                body: 'Adopt a machine RunCloud or plain nginx already runs. A read-only sweep first, then you decide.',
+                verb: 'Bring an existing server',
+                body: 'Adopt a machine another panel or plain nginx already runs. A read-only sweep first, then you decide.',
                 href: '/docs/adopt-a-server',
             },
             {
