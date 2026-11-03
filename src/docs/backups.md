@@ -10,7 +10,7 @@ updated: 2026-10-27
 back. The **Unprotected** panel lists everything that has no backup policy at
 all — start there.
 
-![The Backups page: policy, failing, paused and unprotected counts, the Unprotected panel, and the policy list](/docs/backups/backups.webp)
+![The Backups page: policy, failing, paused and unprotected counts, the Unprotected panel, and the policy list with each health](/docs/backups/backups.webp)
 
 ## What a backup captures
 
@@ -26,7 +26,7 @@ A policy protects one **subject**:
 An application's **Backups** tab and a server's **Backups** tab show the same
 picture from their side.
 
-![An application's Backups tab: which of its parts are protected, and Create policy for those that are not](/docs/backups/application-backups.webp)
+![An application's Backups tab: its parts with no policy yet, and Create policy](/docs/backups/application-backups.webp)
 
 ## Create a policy
 

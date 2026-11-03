@@ -124,7 +124,7 @@ Two guards fire here rather than halfway through the pipeline:
 - A container workload aimed at a server that runs applications natively under
   systemd, which has no container daemon to pull an image with.
 
-![Step three of the wizard: the server, database and object-storage selects above a review of everything the application is about to be created with](/docs/first-deployment/where-it-runs.jpg)
+![Step three of the wizard: the provider, database and object-storage selects, environment and size, above a review of everything the application is about to be created with](/docs/first-deployment/where-it-runs.jpg)
 
 Finish with **Save only** — the application exists, nothing runs — or **Save &
 deploy**.

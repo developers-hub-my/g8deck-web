@@ -111,7 +111,7 @@ installs.
 > this provider type — nothing was contacted_. The provider form lists every
 > simulated capability with its reason before you save.
 
-![The server form's 'Not yet real on this server' panel, naming the capability that is simulated and the reason recorded against it](/docs/console/provider-capabilities.jpg)
+![The server form's 'Not yet real on this hypervisor' panel, naming each capability that is simulated and the reason recorded against it](/docs/console/provider-capabilities.jpg)
 
 ## It reports active, but nothing answers
 
@@ -191,7 +191,7 @@ Work outward from the deployment:
 3. **Operations** — scaling policies and the auto-rollback trigger, whose
    threshold and window decide whether it ever fires.
 
-![The incident queue: severity down one edge, the lifecycle each incident has reached, and the row actions for acknowledging or resolving one](/docs/console/incidents.jpg)
+![The alert queue: severity down one edge, the lifecycle each incident has reached, who it is assigned to, and the row actions](/docs/console/incidents.jpg)
 
 If a screen and a reading disagree, trust the one that is harder to fake: the
 step's recorded reason, the provider's capability list, the bind address.

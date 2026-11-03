@@ -43,7 +43,7 @@ row menu on the Patches page — never a looser one.
 **Patches** lists every server with its policy, what was patched last, and
 whether something is waiting for a restart. Status chips filter by mode.
 
-![The Patches page: servers, scheduled, not scheduled and waiting-for-restart counts, the mode filters, and each server with its policy and last patch](/docs/patching/patches.webp)
+![The Patches page: servers, scheduled, not scheduled and waiting-for-restart counts, the last run, the mode filters, and each server with its policy and last patch](/docs/patching/patches.webp)
 
 ## Patch the fleet now
 

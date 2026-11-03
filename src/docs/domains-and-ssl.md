@@ -30,7 +30,7 @@ Open the application's **Domains & TLS** tab and choose **Ports & domains**
 the DNS and certificate steps again, and the re-run is what routes, records and
 certifies the domain.
 
-![The Domains & TLS tab with nothing routed yet: the empty state and the Ports & domains button](/docs/domains-and-ssl/domains.webp)
+![The Domains & TLS tab: a routed domain with its container port, certificate and expiry, and the manual DNS notice](/docs/domains-and-ssl/domains.webp)
 
 ## DNS: automatic, manual or unconfirmed
 
@@ -74,7 +74,7 @@ Renewal runs twice a day, at 03:00 and 15:00, and renews anything within 30
 days of expiry. Port 80 keeps serving plain HTTP for those renewals — that is
 deliberate; redirecting it would break the challenge.
 
-![The Certificates page for a deployment, with the Let's Encrypt staging notice and no certificates issued yet](/docs/domains-and-ssl/certificates.webp)
+![The Certificates page for a deployment, with the Let's Encrypt staging notice and an active certificate with its expiry](/docs/domains-and-ssl/certificates.webp)
 
 > If the page shows **Let's Encrypt staging is on**, certificates issued now are
 > not trusted by browsers. Staging is how an installation proves issuance works
@@ -110,4 +110,4 @@ The tab needs the application to be attached to a deployment with a domain, and
 it is not available on Kubernetes, where these settings belong on the cluster's
 ingress.
 
-![The Web server tab: upload size, response timeout, buffering and compression, with the notice that the application has no domain yet](/docs/domains-and-ssl/web-server.webp)
+![The Web server tab: upload size, response timeout, buffering, compression and index files, with the domain it applies to and its change history](/docs/domains-and-ssl/web-server.webp)

@@ -11,7 +11,7 @@ An application has one set of environment variables **per environment** it runs
 in — production and staging do not share a set. Edit them on the application's
 **Environment** tab; there is one card per environment.
 
-![The Environment tab: one card per environment, its variables, and the Edit button](/docs/environment-variables/environment.webp)
+![The Environment tab: one card per environment, its variables with secrets masked and tokens shown unresolved, and the Edit button](/docs/environment-variables/environment.webp)
 
 ## Edit and save
 
@@ -71,7 +71,7 @@ value.
 - **Resolved tokens** lists what each token resolved to when the pipeline last
   ran, masked. Revealing them needs the raw-logs permission.
 
-![The Secrets page: declared secrets and resolved tokens, both empty before the pipeline has stamped any](/docs/environment-variables/secrets.webp)
+![The Secrets page: declared secrets the pipeline has injected, and the resolved tokens with their values redacted](/docs/environment-variables/secrets.webp)
 
 Tokens are resolved after provisioning, so an application never carries a
 hard-coded address: `{{ postgres.connection_string }}` resolves to the

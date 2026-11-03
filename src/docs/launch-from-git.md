@@ -64,7 +64,7 @@ Every git application has its own webhook. On **Settings**, switch
 too. A repository covered by the GitHub App needs no webhook of its own; the
 panel says so.
 
-![An application's Settings tab: name, branch and description, the push-to-deploy webhook and its tracked branch, and the SSH deploy key panel](/docs/launch-from-git/settings.webp)
+![An application's Settings tab: name, repository, branch and build preset, the push-to-deploy webhook and its tracked branch, and the SSH deploy key panel](/docs/launch-from-git/settings.webp)
 
 What a delivery does:
 
@@ -79,7 +79,7 @@ The **Push-to-deploy** tab keeps the last 50 deliveries with their status,
 reason, whether the signature was valid, and the release each one caused. The
 raw request body is never stored.
 
-![The Push-to-deploy tab before any delivery: the empty list and where to find the webhook settings](/docs/launch-from-git/push-to-deploy.webp)
+![The Push-to-deploy tab: deliveries newest first, the release each push produced, and an ignored push to another branch with its reason](/docs/launch-from-git/push-to-deploy.webp)
 
 ## Upload instead of a repository
 

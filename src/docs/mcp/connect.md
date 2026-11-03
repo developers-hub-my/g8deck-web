@@ -26,7 +26,7 @@ Open **[g8deck.app/settings/mcp-tokens](https://g8deck.app/settings/mcp-tokens)*
 Every sign-up's role can create tokens; the page may not be in your navigation, so
 use the address.
 
-![The MCP Tokens page: a newly created token shown once, the ready-made Claude commands for each server the token reaches, and the tokens already issued](/docs/console/mcp-tokens.jpg)
+![The MCP Tokens page: a newly created token shown once (replaced with a placeholder here) and the ready-made Claude commands for each server the token reaches](/docs/console/mcp-tokens.jpg)
 
 1. **Name** — where the token will be used, such as `claude-code-laptop`.
 2. **Access** — **Read only**, **Read and write**, or **Read, write and
