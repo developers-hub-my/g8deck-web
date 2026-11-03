@@ -19,7 +19,7 @@ organisations you administer. A **locked** project cannot be moved.
 
 ## Move it
 
-On **Organization → Projects**, open a project's row menu and choose **Move to
+On **Projects** in the organisation switcher, open a project's row menu and choose **Move to
 organisation…** — or select several projects and use the bulk action. Projects
 that share infrastructure should move together.
 

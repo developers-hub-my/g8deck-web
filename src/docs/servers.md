@@ -10,10 +10,10 @@ updated: 2026-10-27
 A **server** is a machine G8Deck can reach and run things on. Two records sit
 behind every one, and the console shows both:
 
-| Record                      | What it holds                                                         | Where you see it           |
-| --------------------------- | --------------------------------------------------------------------- | -------------------------- |
-| **Connection** (a provider) | How to reach the machine: its type, credentials and pinned host key   | **Advanced → Connections** |
-| **Server** (a managed node) | The machine itself: its OS, stack version, health and what runs on it | **Servers**                |
+| Record                      | What it holds                                                         | Where you see it                                    |
+| --------------------------- | --------------------------------------------------------------------- | --------------------------------------------------- |
+| **Connection** (a provider) | How to reach the machine: its type, credentials and pinned host key   | **Fleet › Infrastructure › Connections** (Advanced) |
+| **Server** (a managed node) | The machine itself: its OS, stack version, health and what runs on it | **Fleet › Servers**                                 |
 
 Connecting a server creates both. A connection can also stand for something
 larger than one machine — a Docker host, a Swarm or a Kubernetes cluster.
@@ -26,7 +26,7 @@ larger than one machine — a Docker host, a Swarm or a Kubernetes cluster.
 | -------------------- | ----------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
 | **Connect a Server** | Logs in over SSH and sets the machine up — management user, key, packages, agent, firewall      | [Connect a server](/docs/connect-a-server)                       |
 | **New Server**       | Creates a droplet in your own DigitalOcean account, then sets it up the same way                | [Connect a server](/docs/connect-a-server#create-a-cloud-server) |
-| **Adopt**            | Reads a machine another panel runs, without changing it, and takes it over only when you say so | [Adopt a server](/docs/adopt-a-server)                           |
+| **Adopt a server**   | Reads a machine another panel runs, without changing it, and takes it over only when you say so | [Adopt a server](/docs/adopt-a-server)                           |
 
 A server that was set up by G8Deck is **stack-managed**: G8Deck knows which
 versions it installed and can [upgrade and patch](/docs/patching) them. An

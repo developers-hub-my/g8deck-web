@@ -6,7 +6,7 @@ order: 30
 updated: 2026-10-27
 ---
 
-**Storage** in the sidebar holds everywhere your objects live: storage G8Deck
+**Services › Storage** holds everywhere your objects live: storage G8Deck
 runs for you, and buckets you already own somewhere else.
 
 ![The Storage page before anything is added: run it here, or bring your own bucket](/docs/object-storage/storage.webp)

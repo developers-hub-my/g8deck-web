@@ -7,7 +7,7 @@ order: 20
 updated: 2026-10-27
 ---
 
-**Adopt** is for a machine another control panel already administers. G8Deck
+**Adopt a server** is for a machine another control panel already administers. G8Deck
 reads it first and changes nothing; you then decide, item by item, what to take
 over. Adopting leaves the machine exactly where it is — nothing is moved or
 copied until you ask for a data migration.
@@ -18,7 +18,7 @@ Panels G8Deck recognises today: **RunCloud** and **plain nginx**.
 
 ## 1. Point G8Deck at the server
 
-Open **Adopt** and choose **Connect a server**.
+Open **Fleet › Adopt a server** and choose **Connect a server**.
 
 | Field          | Notes                                                            |
 | -------------- | ---------------------------------------------------------------- |

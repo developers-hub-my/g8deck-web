@@ -68,8 +68,8 @@ what you get.
 
 ## Where the editor lives
 
-**Advanced → Build → Blueprints** in the console sidebar, next to the component
-registry. It is not in the application flow, and it is not a step on the way to
+**Apps › Design › Blueprints** in Advanced navigation, next to the component
+registry — or on the **Platform** overview, under Build. It is not in the application flow, and it is not a step on the way to
 deploying — it is a shelf you reach for deliberately.
 
 Four reasons to reach for it:

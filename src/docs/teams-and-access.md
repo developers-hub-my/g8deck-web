@@ -120,7 +120,7 @@ organisation, an administrator or a team lead adds them on the team's page with
 
 These are two different things.
 
-- **Quotas** are yours to set, under **Quotas**. CPU, memory, storage, backup
+- **Quotas** are yours to set, under **Quotas** in the organisation switcher. CPU, memory, storage, backup
   storage, bandwidth, app environments and nodes can be capped per organisation, per
   team or per user, with per-deployment caps too. For each field, the nearest
   scope wins — a user's own quota, then their team's, then the organisation's —

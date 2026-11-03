@@ -6,7 +6,7 @@ order: 20
 updated: 2026-10-27
 ---
 
-**Cache** in the sidebar holds Valkey and Redis instances that live outside any
+**Services › Cache** holds Valkey and Redis instances that live outside any
 deployment — one instance per purpose, shareable by any number of
 applications. A memory limit and an eviction policy belong to the process, so
 two applications that want different answers want different instances, and two
