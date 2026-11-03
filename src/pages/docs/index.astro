@@ -4,8 +4,12 @@ import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
 import Search from '../../components/docs/Search.astro';
 import { groups } from '../../data/docs';
-import { site } from '../../data/site';
+import { site, docsHome as home } from '../../data/site';
 import '../../styles/docs.css';
+
+/* Drawn once, in the search icon's stroke, so the page has one icon voice. */
+const arrow = 'M4 10h11m-4-4 4 4-4 4';
+const external = 'M8 5H5v10h10v-3M11 4h5v5m0-5-7 7';
 ---
 
 <Base
@@ -15,43 +19,157 @@ import '../../styles/docs.css';
     <Nav />
 
     <main id="main" class="relative">
-        <div
-            class="drafting-grid pointer-events-none absolute inset-x-0 top-0 h-64 opacity-30"
-            aria-hidden="true"
-        >
-        </div>
-
-        <div class="page relative py-16 lg:py-20">
-            <div class="max-w-6xl">
-                <p class="mono-label text-accent">Documentation</p>
-                <h1 class="h1 mt-6 max-w-3xl">Blueprint to running system.</h1>
-                <p class="body-lg text-muted mt-6 max-w-2xl text-pretty">
-                    Every guide follows the console screen by screen, in the order you would do the
-                    work. New here? Start with your first deployment — about fifteen minutes, most
-                    of it waiting on the pipeline.
-                </p>
-
-                <div class="mt-10 max-w-2xl">
-                    <Search id="index-search" large />
+        <section class="dh-hero" aria-labelledby="docs-title">
+            <div class="dh-hero__grid drafting-grid" aria-hidden="true"></div>
+            <div class="page dh-hero__inner">
+                <div class="dh-hero__copy">
+                    <h1 id="docs-title" class="h1">{home.title}</h1>
+                    <p class="body-lg text-muted mt-6 max-w-xl text-pretty">{home.lede}</p>
+                    <div class="mt-9 max-w-xl">
+                        <Search id="index-search" large />
+                    </div>
+                    <p class="dh-popular">
+                        <span class="text-muted">Popular</span>
+                        {
+                            home.popular.map((link) => (
+                                <a href={link.href} class="dh-chip">
+                                    {link.label}
+                                </a>
+                            ))
+                        }
+                    </p>
                 </div>
 
-                <div class="mt-16">
+                <figure class="shot-frame dh-hero__shot">
+                    <div class="shot-frame__sheet">
+                        <img
+                            src={home.shot.src}
+                            width={home.shot.width}
+                            height={home.shot.height}
+                            alt={home.shot.alt}
+                            loading="eager"
+                            fetchpriority="high"
+                            decoding="async"
+                            class="block h-auto w-full"
+                        />
+                    </div>
+                    <figcaption class="text-muted mt-3 text-sm text-pretty">
+                        {home.shot.caption}
+                    </figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <div class="page">
+            <section class="dh-block" aria-labelledby="paths-title">
+                <h2 id="paths-title" class="dh-title">{home.paths.title}</h2>
+                <ul class="dh-paths">
+                    {
+                        home.paths.items.map((path) => (
+                            <li class="dh-path">
+                                <span class="dh-path__node" aria-hidden="true" />
+                                <a href={path.href} class="dh-path__link">
+                                    <span class="dh-path__verb">
+                                        {path.verb}
+                                        <svg
+                                            aria-hidden="true"
+                                            viewBox="0 0 20 20"
+                                            width="16"
+                                            height="16"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="1.6"
+                                        >
+                                            <path d={arrow} />
+                                        </svg>
+                                    </span>
+                                    <span class="dh-path__body">{path.body}</span>
+                                </a>
+                            </li>
+                        ))
+                    }
+                </ul>
+            </section>
+
+            <section class="dh-block" aria-labelledby="areas-title">
+                <h2 id="areas-title" class="dh-title">{home.areas.title}</h2>
+                <p class="text-muted mt-3 max-w-2xl text-pretty">{home.areas.lede}</p>
+                <ul class="dh-areas">
+                    {
+                        home.areas.items.map((area) => (
+                            <li class="card dh-area">
+                                <div class="dh-area__shot">
+                                    <img
+                                        src={area.shot.src}
+                                        width={area.shot.width}
+                                        height={area.shot.height}
+                                        alt=""
+                                        loading="lazy"
+                                        decoding="async"
+                                    />
+                                </div>
+                                <div class="dh-area__body">
+                                    <h3 class="dh-area__name">{area.name}</h3>
+                                    <p class="dh-area__holds">{area.holds}</p>
+                                    <ul class="dh-area__links">
+                                        {area.links.map((link) => (
+                                            <li>
+                                                <a href={link.href}>{link.label}</a>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </li>
+                        ))
+                    }
+                </ul>
+            </section>
+
+            <section class="dh-block" aria-labelledby="shelf-title">
+                <h2 id="shelf-title" class="dh-title">{home.shelf.title}</h2>
+                <ul class="dh-shelf">
+                    {
+                        home.shelf.items.map((item) => {
+                            const isExternal = item.href.startsWith('http');
+                            return (
+                                <li>
+                                    <a href={item.href} class="dh-shelf__link">
+                                        <span class="dh-shelf__label">
+                                            {item.label}
+                                            <svg
+                                                aria-hidden="true"
+                                                viewBox="0 0 20 20"
+                                                width="15"
+                                                height="15"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="1.6"
+                                            >
+                                                <path d={isExternal ? external : arrow} />
+                                            </svg>
+                                        </span>
+                                        <span class="dh-shelf__body">{item.body}</span>
+                                    </a>
+                                </li>
+                            );
+                        })
+                    }
+                </ul>
+            </section>
+
+            <section class="dh-block" aria-labelledby="all-title">
+                <h2 id="all-title" class="dh-title">{home.allTitle}</h2>
+                <div class="dh-index">
                     {
                         groups.map((group) => (
-                            <section
-                                class="docs-index-group"
-                                aria-labelledby={`group-${group.key}`}
-                            >
-                                <h2 id={`group-${group.key}`} class="mono-label text-muted">
+                            <section class="dh-index__group" aria-labelledby={`group-${group.key}`}>
+                                <h3 id={`group-${group.key}`} class="mono-label text-muted">
                                     {group.label}
-                                </h2>
-                                <ul class="docs-index-grid">
+                                </h3>
+                                <ul>
                                     {group.docs.map((doc) => (
                                         <li>
-                                            <a href={doc.href} class="card docs-index-card">
-                                                <h3>{doc.title}</h3>
-                                                <p class="text-pretty">{doc.description}</p>
-                                            </a>
+                                            <a href={doc.href}>{doc.nav ?? doc.title}</a>
                                         </li>
                                     ))}
                                 </ul>
@@ -59,16 +177,16 @@ import '../../styles/docs.css';
                         ))
                     }
                 </div>
+            </section>
 
-                <div class="border-line mt-16 border-t pt-8">
-                    <p class="text-muted text-sm text-pretty">
-                        The console itself lives at <a
-                            href={site.consoleUrl}
-                            class="text-accent hover:text-fg transition-colors"
-                            >{new URL(site.consoleUrl).host}</a
-                        >. These pages describe what it does today, checked against its source.
-                    </p>
-                </div>
+            <div class="border-line mb-16 border-t pt-8 lg:mb-20">
+                <p class="text-muted text-sm text-pretty">
+                    {home.footnote} The console itself lives at <a
+                        href={site.consoleUrl}
+                        class="text-accent hover:text-fg transition-colors"
+                        >{new URL(site.consoleUrl).host}</a
+                    >.
+                </p>
             </div>
         </div>
     </main>
