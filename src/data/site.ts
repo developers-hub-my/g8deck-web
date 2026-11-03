@@ -100,7 +100,7 @@ export const hero = {
     secondaryCta: { label: 'Read the walkthrough', href: '/docs/first-deployment' },
     /** The hero capture is real console UI with a sample organisation in it. */
     shot: {
-        alt: 'Application overview in the G8Deck console: a Laravel app live in production and stopped in staging, its push-to-deploy webhook matching the main branch, two domains with certificate renewal, deploy scripts and its latest releases.',
+        alt: 'Application overview in the G8Deck console: a Laravel app live in production and staging, a firing alert, its push-to-deploy webhook tracking the main branch with recent deliveries, a domain with certificate renewal, deploy scripts and its latest releases.',
         caption: 'Console · one application, two environments · sample organisation',
     },
     /* Every figure here is counted from platform/g8deck-app, not estimated:
@@ -898,21 +898,21 @@ export const tour = {
             title: 'A deployment, step by step',
             caption:
                 'Every pipeline step with its duration. A step that did no work says so, and says why — in amber, never as a green tick.',
-            alt: 'Deployment overview in the G8Deck console: two of two nodes running, two managed services, and the 24-step pipeline with completed steps ticked and two steps marked "did no work" with the reason printed beneath each.',
+            alt: 'Deployment overview in the G8Deck console: one of one node running, one application running, and the 24-step pipeline with completed steps ticked and steps marked "did no work" in amber with the reason printed beneath each.',
         },
         {
             file: 'blueprint-detail',
             title: 'A blueprint',
             caption:
                 'The architecture as layers and connections — edge, app, workers, database, cache — with replica bounds.',
-            alt: 'Blueprint detail in the G8Deck console: six layers from Edge to Cache, each with its components and replica range, and the directed connections between them.',
+            alt: 'Blueprint detail in the G8Deck console: an interactive topology of six layers (Edge, App, Workers, Storage, Cache, Database), each with its component and replica range, and the directed connections between them.',
         },
         {
             file: 'incidents',
             title: 'Incidents',
             caption:
                 'Alert rules fire into one queue, each moved through detected, acknowledged, contained and resolved.',
-            alt: 'Incidents list in the G8Deck console: alerts ranked P1 to P3 with the deployment each belongs to and its lifecycle state.',
+            alt: 'Alerts list in the G8Deck console: incidents ranked P2 and P3 with the server or application each belongs to, who it is assigned to, and its lifecycle state.',
         },
     ],
 } as const;
@@ -972,7 +972,7 @@ export const ai = {
         'A skipped step is reported as skipped, never as a success.',
     ],
     shot: {
-        alt: 'MCP Tokens page in the G8Deck console: a newly created token shown once, the claude mcp add commands for the design and operations servers, and a form to generate a read-only token.',
+        alt: 'MCP Tokens page in the G8Deck console: a newly created token shown once (replaced with a placeholder), the claude mcp add commands for the design, operations, platform and compliance servers, and a form to generate a read-only token.',
         caption: 'Console · MCP tokens, shown once · sample organisation',
     },
 } as const;
