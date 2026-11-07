@@ -85,6 +85,12 @@ export const nav = [
                 href: 'https://janesweeper.g8deck.com',
                 note: 'Keep disks under target, every sweep undoable',
             },
+            {
+                label: 'Heartping',
+                href: 'https://heartping.g8deck.com',
+                note: 'Every server. Every 30 seconds. Read-only.',
+            },
+            { label: 'The G8Deck family', href: '/#family', note: 'All three, side by side' },
         ],
     },
     { label: 'Pricing', href: '/#plans' },
@@ -723,14 +729,41 @@ export const faqs = [
  * are the products' own — don't add numbers or claims they don't make there.
  */
 export const family = {
-    eyebrow: 'Also from G8Deck',
-    title: 'Two smaller tools beside the platform.',
-    lede: 'One finds out what a server really runs. The other keeps its disk from filling up. Each has its own site with the full detail.',
+    eyebrow: 'The G8Deck family',
+    title: 'Three smaller products around the platform.',
+    lede: 'One watches every server from inside G8Deck. One finds out what a server really runs. One keeps its disk from filling up. Each has its own site with the full detail.',
+    /**
+     * Heartping comes first and spans the row: it runs inside the control plane,
+     * the other two run on your server. Its sample is the authorized_keys line
+     * from its own site (placeholders), not output — the caption says which.
+     */
+    featured: {
+        tag: 'Watch',
+        name: 'Heartping',
+        logo: '/products/heartping-mark.svg',
+        role: 'Every server. Every 30 seconds. Read-only.',
+        where: 'G8Deck control plane',
+        status: 'Rolling out · shadow mode',
+        domain: 'heartping.g8deck.com',
+        href: 'https://heartping.g8deck.com',
+        body: 'A small service on the G8Deck control plane reads load, memory, disk and uptime from every server in your fleet every 30 seconds, over pooled SSH, through a locked, read-only login.',
+        points: ['Locked heartping user', 'No sudo', 'One read-only script'],
+        note: 'Comes with G8Deck. Nothing to download or install.',
+        lines: [
+            'restrict,',
+            'from="<control-plane IPs>",',
+            'command="<read-only script>"',
+            "ssh-ed25519 <Heartping's own key>",
+        ],
+        caption: 'The authorized_keys line on each server, owned by root · placeholders shown',
+    },
     /** Terminal lines are real output, captured from throwaway demo hosts (see `caption`). */
     items: [
         {
             tag: 'Assess',
             name: 'G8Deck Reveal',
+            logo: '/products/reveal-mark.svg',
+            role: 'Inventory any host for an IT assessment.',
             domain: 'reveal.g8deck.com',
             href: 'https://reveal.g8deck.com',
             download: 'https://reveal.g8deck.com/#download',
@@ -755,6 +788,8 @@ export const family = {
         {
             tag: 'Clean up',
             name: 'JaneSweeper',
+            logo: '/products/janesweeper-mark.svg',
+            role: 'Disk under target. Every sweep undoable.',
             domain: 'janesweeper.g8deck.com',
             href: 'https://janesweeper.g8deck.com',
             download: 'https://janesweeper.g8deck.com/#download',
@@ -812,7 +847,13 @@ export const footerLinks = [
     },
     {
         heading: 'Products',
-        links: family.items.map((item) => ({ label: item.name, href: item.href })),
+        links: [
+            { label: 'The G8Deck family', href: '/#family' },
+            ...[family.featured, ...family.items].map((item) => ({
+                label: item.name,
+                href: item.href,
+            })),
+        ],
     },
     {
         heading: 'Company',
