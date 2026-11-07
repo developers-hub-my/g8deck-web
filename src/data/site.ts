@@ -88,7 +88,7 @@ export const nav = [
             {
                 label: 'Heartping',
                 href: 'https://heartping.g8deck.com',
-                note: 'Every server. Every 30 seconds. Read-only.',
+                note: "We monitor your servers' heartbeat",
             },
             { label: 'The G8Deck family', href: '/#family', note: 'All three, side by side' },
         ],
@@ -734,28 +734,28 @@ export const family = {
     lede: 'One watches every server from inside G8Deck. One finds out what a server really runs. One keeps its disk from filling up. Each has its own site with the full detail.',
     /**
      * Heartping comes first and spans the row: it runs inside the control plane,
-     * the other two run on your server. Its sample is the authorized_keys line
-     * from its own site (placeholders), not output — the caption says which.
+     * the other two run on your server. Its sample is the Check → Read → Act
+     * strip from its own site, in plain words; not output — the caption says so.
      */
     featured: {
         tag: 'Watch',
         name: 'Heartping',
         logo: '/products/heartping-mark.svg',
-        role: 'Every server. Every 30 seconds. Read-only.',
+        role: "We monitor your servers' heartbeat. Checks every server, changes nothing.",
         where: 'G8Deck control plane',
-        status: 'Rolling out · shadow mode',
+        status: 'Rolling out',
         domain: 'heartping.g8deck.com',
         href: 'https://heartping.g8deck.com',
-        body: 'A small service on the G8Deck control plane reads load, memory, disk and uptime from every server in your fleet every 30 seconds, over pooled SSH, through a locked, read-only login.',
-        points: ['Locked heartping user', 'No sudo', 'One read-only script'],
+        body: 'A heartbeat check for every server G8Deck runs. Every 30 seconds it asks each server how it is doing and passes the answer to G8Deck. It can only look; it never changes anything.',
+        points: ['Only looks', 'No password, no admin rights', 'Only answers to G8Deck'],
         note: 'Comes with G8Deck. Nothing to download or install.',
         lines: [
-            'restrict,',
-            'from="<control-plane IPs>",',
-            'command="<read-only script>"',
-            "ssh-ed25519 <Heartping's own key>",
+            'Check · every 30 seconds, every server',
+            'Read   · CPU load, memory, disk, up-time',
+            'Act    · health, alerts, scaling in G8Deck',
+            'Quiet  · no answer is shown grey, never "fine"',
         ],
-        caption: 'The authorized_keys line on each server, owned by root · placeholders shown',
+        caption: 'How Heartping works, in four lines · the technical setup is on its site'
     },
     /** Terminal lines are real output, captured from throwaway demo hosts (see `caption`). */
     items: [
