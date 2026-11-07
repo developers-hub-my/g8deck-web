@@ -88,7 +88,7 @@ export const nav = [
             {
                 label: 'Heartping',
                 href: 'https://heartping.g8deck.com',
-                note: 'Checks every server. Changes nothing.',
+                note: "We monitor your servers' heartbeat",
             },
             { label: 'The G8Deck family', href: '/#family', note: 'All three, side by side' },
         ],
@@ -741,7 +741,7 @@ export const family = {
         tag: 'Watch',
         name: 'Heartping',
         logo: '/products/heartping-mark.svg',
-        role: 'Checks every server. Changes nothing.',
+        role: "We monitor your servers' heartbeat. Checks every server, changes nothing.",
         where: 'G8Deck control plane',
         status: 'Rolling out',
         domain: 'heartping.g8deck.com',
