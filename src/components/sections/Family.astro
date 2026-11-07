@@ -1,7 +1,10 @@
 ---
 import Section from '../Section.astro';
 import SectionHead from '../SectionHead.astro';
+import StatusPill from '../StatusPill.astro';
 import { family } from '../../data/site';
+
+const hp = family.featured;
 
 // Glyphs mirror each CLI's own output; colour carries the line's state only.
 const glyph = { ok: ['✓', 'text-ok'], warn: ['!', 'text-warn'], idle: ['−', 'text-idle'] } as const;
@@ -11,6 +14,77 @@ const glyph = { ok: ['✓', 'text-ok'], warn: ['!', 'text-warn'], idle: ['−', 
     <SectionHead eyebrow={family.eyebrow} title={family.title} lede={family.lede} />
 
     <div class="mt-14 grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <article
+            class="border-line bg-surface/50 hover:border-line-strong grid min-w-0 border transition-colors lg:col-span-2 lg:grid-cols-2"
+            aria-labelledby="family-hp"
+        >
+            <div class="flex min-w-0 flex-col gap-5 p-6 lg:p-8">
+                <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2">
+                    <p class="mono-label text-muted">{hp.tag}</p>
+                    <p class="text-muted font-mono text-xs">{hp.domain}</p>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    {/* The name sits beside the mark, so the image adds nothing to read aloud. */}
+                    <img src={hp.logo} alt="" width="40" height="40" class="size-10 shrink-0" />
+                    <h3 id="family-hp" class="h3">{hp.name}</h3>
+                </div>
+                <p class="text-fg font-medium text-pretty">{hp.role}</p>
+                <p class="text-muted text-pretty">{hp.body}</p>
+
+                <ul class="flex flex-wrap gap-2" aria-label={`${hp.name} guarantees`}>
+                    {
+                        hp.points.map((point) => (
+                            <li class="border-line text-fg bg-ink/60 border px-2.5 py-1 font-mono text-xs">
+                                {point}
+                            </li>
+                        ))
+                    }
+                </ul>
+
+                <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
+                    <p class="text-muted">
+                        <span class="mono-label text-muted mr-2">Runs on</span>
+                        {hp.where}
+                    </p>
+                    <StatusPill state="run" label={hp.status} />
+                </div>
+            </div>
+
+            <div class="border-line flex min-w-0 flex-col border-t lg:border-t-0 lg:border-l">
+                <figure class="bg-ink flex flex-1 flex-col">
+                    <div
+                        class="flex-1 px-6 py-5 font-mono text-[12.5px] leading-relaxed lg:px-8"
+                        aria-label={`${hp.name} authorized_keys line`}
+                    >
+                        {
+                            hp.lines.map((line) => (
+                                <div class="text-muted break-all whitespace-pre-wrap">{line}</div>
+                            ))
+                        }
+                    </div>
+                    <figcaption
+                        class="border-line text-idle border-t px-6 py-2.5 font-mono text-[11px] lg:px-8"
+                    >
+                        {hp.caption}
+                    </figcaption>
+                </figure>
+                <div
+                    class="border-line flex flex-wrap items-center gap-x-5 gap-y-3 border-t p-6 lg:px-8"
+                >
+                    <a
+                        href={hp.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="btn btn-ghost btn-sm"
+                    >
+                        Visit {hp.domain} ↗<span class="sr-only"> (opens in a new tab)</span>
+                    </a>
+                    <p class="text-muted text-sm">{hp.note}</p>
+                </div>
+            </div>
+        </article>
+
         {
             family.items.map((item, i) => (
                 <article
@@ -23,9 +97,19 @@ const glyph = { ok: ['✓', 'text-ok'], warn: ['!', 'text-warn'], idle: ['−', 
                             <p class="text-muted font-mono text-xs">{item.domain}</p>
                         </div>
 
-                        <h3 id={`family-${i}`} class="h3">
-                            {item.name}
-                        </h3>
+                        <div class="flex items-center gap-4">
+                            <img
+                                src={item.logo}
+                                alt=""
+                                width="40"
+                                height="40"
+                                class="size-10 shrink-0"
+                            />
+                            <h3 id={`family-${i}`} class="h3">
+                                {item.name}
+                            </h3>
+                        </div>
+                        <p class="text-fg font-medium text-pretty">{item.role}</p>
                         <p class="text-muted text-pretty">{item.body}</p>
 
                         <ul class="flex flex-wrap gap-2" aria-label={`${item.name} guarantees`}>
