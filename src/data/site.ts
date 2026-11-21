@@ -101,7 +101,7 @@ export const hero = {
     eyebrow: 'Production-ready · on servers you own',
     title: 'Deploy for production,',
     titleAccent: 'made simple.',
-    body: 'Most apps go live on one server — the app, the database and the files in one place — so one fault takes everything down. G8Deck sets up the right structure on the machines you already run, with applications, data and storage on their own servers, and keeps running it after launch: releases without downtime, one-click rollback, restore-tested backups, security patches and an audit trail. Your applications and their data stay on your machines.',
+    body: 'One server for everything means one fault takes everything down. G8Deck puts your apps, data and storage on their own servers — yours — and runs them after launch.',
     primaryCta: { label: 'Book a 20-minute demo', href: mailto('Book a 20-minute demo') },
     secondaryCta: { label: 'Read the walkthrough', href: '/docs/first-deployment' },
     /** The hero capture is real console UI with a sample organisation in it. */
