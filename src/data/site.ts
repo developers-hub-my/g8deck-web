@@ -15,9 +15,9 @@ export const site = {
     consoleUrl: 'https://g8deck.app',
     // The tagline is the <title> suffix on every page, so it is written for
     // someone reading a search result, not for someone already sold.
-    tagline: 'Deploy on infrastructure you own',
+    tagline: 'Deploy for production, made simple',
     description:
-        'G8Deck deploys and operates your applications on servers you already own — on-premise or in your own cloud. Zero-downtime releases, managed databases, restore-tested backups, security patching and an audit trail, with your applications and data staying on your machines.',
+        'Deploy for production, made simple. G8Deck sets up the right structure for your applications, databases and storage on servers you own — on-premise or in your own cloud — and keeps running it after launch: zero-downtime releases, one-click rollback, restore-tested backups, security patching and an audit trail.',
     company: {
         name: 'Developers Hub Sdn Bhd',
         url: 'https://devhub.my',
@@ -74,7 +74,7 @@ export const nav = [
     {
         label: 'Products',
         children: [
-            { label: 'G8Deck', href: '/', note: 'Deploy and operate on servers you own' },
+            { label: 'G8Deck', href: '/', note: 'Deploy for production, made simple' },
             {
                 label: 'G8Deck Reveal',
                 href: 'https://reveal.g8deck.com',
@@ -98,10 +98,10 @@ export const nav = [
 ] as const;
 
 export const hero = {
-    eyebrow: 'Servers you own · operated for you',
-    title: 'Deploy on servers you own.',
-    titleAccent: 'Stop operating them by hand.',
-    body: 'G8Deck connects to the machines you already run — in your rack or in your own cloud account — deploys your applications onto them, and keeps doing the operations work afterwards: releases without downtime, databases, restore-tested backups, security patches and an audit trail. Your applications and their data stay on your machines.',
+    eyebrow: 'Production-ready · on servers you own',
+    title: 'Deploy for production,',
+    titleAccent: 'made simple.',
+    body: 'Most apps go live on one server — the app, the database and the files in one place — so one fault takes everything down. G8Deck sets up the right structure on the machines you already run, with applications, data and storage on their own servers, and keeps running it after launch: releases without downtime, one-click rollback, restore-tested backups, security patches and an audit trail. Your applications and their data stay on your machines.',
     primaryCta: { label: 'Book a 20-minute demo', href: mailto('Book a 20-minute demo') },
     secondaryCta: { label: 'Read the walkthrough', href: '/docs/first-deployment' },
     /** The hero capture is real console UI with a sample organisation in it. */

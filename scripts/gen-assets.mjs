@@ -104,10 +104,10 @@ const og = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" vi
   <text x="126" y="104" font-family="${SANS}" font-size="29" font-weight="700" fill="${FG}" letter-spacing="-0.6">G8Deck</text>
 
   <!-- Headline -->
-  <text x="72" y="228" font-family="${SANS}" font-size="62" font-weight="700" fill="${FG}" letter-spacing="-2.2">Deploy on servers you own.</text>
-  <text x="72" y="298" font-family="${SANS}" font-size="62" font-weight="700" fill="${ACCENT}" letter-spacing="-2.2">Stop operating them by hand.</text>
+  <text x="72" y="228" font-family="${SANS}" font-size="62" font-weight="700" fill="${FG}" letter-spacing="-2.2">Deploy for production,</text>
+  <text x="72" y="298" font-family="${SANS}" font-size="62" font-weight="700" fill="${ACCENT}" letter-spacing="-2.2">made simple.</text>
 
-  <text x="72" y="356" font-family="${SANS}" font-size="24" fill="${MUTED}">Releases, databases, backups and patching — on-premise or in your own cloud.</text>
+  <text x="72" y="356" font-family="${SANS}" font-size="24" fill="${MUTED}">The right setup for apps, data and storage — on servers you own.</text>
 
   <!-- Pipeline silhouette -->
   ${ladder()}
